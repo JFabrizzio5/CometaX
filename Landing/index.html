@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CometaX | Future Engineered</title>
+    
+    <!-- External Resources -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        black: '#020202',
+                        'cometa-dark': '#0a0a0a',
+                        'cometa-gray': '#1a1a1a',
+                        'rankit-purple': '#7c3aed',
+                        'eventotes-gold': '#fbbf24', 
+                        'neon-cyan': '#00f3ff',
+                    },
+                    fontFamily: {
+                        'brand': ['"Archivo Black"', 'sans-serif'],
+                        'body': ['"Space Grotesk"', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'spin-slow': 'spin 12s linear infinite',
+                        'scan': 'scan 4s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        scan: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020202;
+            color: #ffffff;
+            overflow-x: hidden;
+            margin: 0;
+        }
+
+        /* Typography Styling */
+        .euro-style {
+            font-family: 'Archivo Black', sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.04em;
+            transform: scaleX(1.1); 
+            display: inline-block;
+        }
+        
+        .euro-wrapper {
+            display: inline-block;
+            transform-origin: left;
+            margin-right: 5px; 
+        }
+
+        /* Geometric Shapes */
+        .clip-tech {
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+        }
+        
+        .clip-button {
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        /* HERO CANVAS */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        .hero-glass-panel {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-glow-text {
+            background: linear-gradient(90deg, #fff, #888, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: scan 5s linear infinite;
+        }
+
+        /* Cards High Tech */
+        .card-tech {
+            background: rgba(10, 10, 10, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* New Card Style for Recruitment */
+        .card-recruit {
+            position: relative;
+            background: #080808;
+            border: 1px solid rgba(255,255,255,0.1);
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            min-height: 400px; /* Asegura altura mínima pero permite crecer */
+        }
+        .card-recruit:hover {
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-5px);
+        }
+        .card-recruit::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-25deg);
+            transition: 0.7s;
+        }
+        .card-recruit:hover::after {
+            left: 150%;
+        }
+
+        /* Leader Card Specifics */
+        .leader-card {
+            position: relative;
+            overflow: hidden;
+        }
+        .leader-frame {
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 20;
+            pointer-events: none;
+        }
+        .leader-frame::before, .leader-frame::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 1px solid white;
+            transition: all 0.3s ease;
+        }
+        .leader-frame::before { top: 0; left: 0; border-right: none; border-bottom: none; }
+        .leader-frame::after { bottom: 0; right: 0; border-left: none; border-top: none; }
+        
+        .leader-card:hover .leader-frame::before { width: 100%; height: 100%; border-color: rgba(255,255,255,0.2); }
+        .leader-card:hover .leader-frame::after { width: 100%; height: 100%; border-color: rgba(255,255,255,0.2); }
+
+
+        /* Scroll Animation Base Classes */
+        .reveal-node {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: blur(5px);
+        }
+
+        .reveal-node.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+
+        /* UI Elements */
+        .lang-switch-container {
+            position: relative;
+            display: inline-flex;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 3px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-switch-container:hover {
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .lang-option {
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 16px;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+        
+        .lang-option.active {
+            background: white;
+            color: black;
+            opacity: 1;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
+        }
+
+        #mobile-menu {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .form-input {
+            width: 100%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 12px 16px;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            transition: all 0.3s ease;
+            outline: none;
+            border-radius: 4px;
+        }
+        .form-input:focus {
+            border-color: #fbbf24; 
+            background: rgba(255,255,255,0.05);
+        }
+        .form-select option {
+            background-color: #000;
+            color: white;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- NAVBAR -->
+    <nav class="fixed w-full z-50 bg-black/80 backdrop-blur-xl border-b border-white/5 transition-all duration-500" id="navbar">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex items-center justify-between h-24">
+                
+                <!-- LOGO -->
+                <a href="#" onclick="showPage('home')" class="flex items-center gap-4 group cursor-pointer relative z-50">
+                    <img src="https://raw.githubusercontent.com/JFabrizzio5/CometaX/bbeb654b90e817236d9d64009b33618065fbba91/image_2025-12-16_083018257-removebg-preview%20(1).png" 
+                         alt="CometaX Icon" 
+                         class="h-10 w-auto invert transition-transform group-hover:scale-110 duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]">
+                    
+                    <div class="euro-wrapper hidden sm:block">
+                        <span class="euro-style text-2xl text-white group-hover:text-gray-200 transition-colors tracking-tighter">
+                            COMETA<span class="text-gray-500">X</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-10 font-body text-xs font-bold tracking-[0.2em] uppercase">
+                    
+                    <div class="lang-switch-container" onclick="toggleLanguage()">
+                        <span id="lang-en" class="lang-option active">EN</span>
+                        <span id="lang-es" class="lang-option">ES</span>
+                    </div>
+
+                    <a href="#" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
+                        <span data-i18n="nav_home">Home</span>
+                        <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#projects" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
+                        <span data-i18n="nav_ventures">Ventures</span>
+                        <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    
+                    <a href="#" onclick="showPage('hub')" class="text-white/70 hover:text-eventotes-gold transition-colors duration-300" data-i18n="nav_hub">
+                        Social Hub
+                    </a>
+                    
+                    <a href="#alliances" class="bg-white text-black px-8 py-3 clip-button hover:bg-gray-200 transition-all duration-300 font-brand italic shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1 transform" data-i18n="nav_contact">
+                        PARTNERS
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden relative z-50 text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-black z-40 transform translate-x-full flex flex-col items-center justify-center space-y-8 font-brand italic text-2xl uppercase">
+        <a href="#" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_home">Home</a>
+        <a href="#projects" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_ventures">Ventures</a>
+        <a href="#" onclick="showPage('hub'); toggleMobileMenu()" class="text-white hover:text-eventotes-gold" data-i18n="nav_hub">Social Hub</a>
+        <a href="#alliances" onclick="toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_contact">Partners</a>
+        <div class="lang-switch-container scale-150 mt-8" onclick="toggleLanguage()">
+            <span id="lang-en-mobile" class="lang-option active">EN</span>
+            <span id="lang-es-mobile" class="lang-option">ES</span>
+        </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- VIEW: HOME PAGE                           -->
+    <!-- ========================================= -->
+    <main id="view-home" class="fade-in">
+        
+        <!-- HERO SECTION (INTERACTIVE CANVAS) -->
+        <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
+            
+            <!-- THE INTERACTIVE CANVAS -->
+            <canvas id="hero-canvas"></canvas>
+            
+            <!-- Vignette Overlay -->
+            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020202_100%)] pointer-events-none z-10"></div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-20 w-full pointer-events-none"> 
+                <div class="max-w-5xl pointer-events-auto">
+                    <div class="euro-wrapper mb-6 reveal-node active">
+                        <div class="hero-glass-panel inline-block px-4 py-2 rounded-lg mb-6 backdrop-blur-md border-l-4 border-eventotes-gold animate-pulse">
+                             <span class="text-eventotes-gold font-mono text-xs tracking-[0.3em] uppercase">
+                                System Online // Neural Link Active
+                            </span>
+                        </div>
+                        <h1 class="euro-style text-6xl md:text-8xl lg:text-9xl leading-[0.85] tracking-tight text-white drop-shadow-2xl">
+                            <span data-i18n="hero_title_1">FUTURE</span><br>
+                            <span class="hero-glow-text" data-i18n="hero_title_2">ENGINEERED.</span>
+                        </h1>
+                    </div>
+
+                    <div class="mt-8 hero-glass-panel p-6 rounded-xl max-w-2xl reveal-node delay-200 active">
+                        <p class="text-lg md:text-xl text-gray-200 font-body font-light leading-relaxed" data-i18n="hero_desc">
+                            Redefining the boundaries of software architecture and commercial strategy. We build ecosystems, not just applications.
+                        </p>
+                    </div>
+
+                    <div class="mt-12 flex flex-wrap gap-6 reveal-node delay-300 active">
+                        <a href="#projects" class="px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-gray-200 transition-all clip-button hover:scale-105 duration-300 shadow-[0_0_40px_rgba(255,255,255,0.3)] relative overflow-hidden group">
+                            <span class="relative z-10" data-i18n="hero_cta">Explore Ventures</span>
+                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                        </a>
+                        <a href="#alliances" class="px-10 py-4 bg-black/50 backdrop-blur border border-white/30 text-white font-brand italic uppercase hover:bg-white/10 transition-all clip-button hover:border-white hover:text-eventotes-gold" data-i18n="nav_contact">
+                            Partners
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50 z-20">
+                <i class="fas fa-chevron-down text-xl"></i>
+            </div>
+        </header>
+
+        <!-- LEADERSHIP (MEJORADO) -->
+        <section class="relative z-10 py-32 bg-[#050505]">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="mb-20 reveal-node">
+                    <div class="euro-wrapper">
+                        <h2 class="euro-style text-4xl md:text-5xl text-white" data-i18n="lead_title">CORE LEADERSHIP</h2>
+                    </div>
+                    <div class="h-1 w-20 bg-white mt-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- Leader 1 -->
+                    <div class="group relative reveal-node delay-100 leader-card rounded-xl">
+                        <!-- Tech Frame -->
+                        <div class="leader-frame"></div>
+                        
+                        <div class="bg-neutral-900 border border-white/5 group-hover:border-white/20 transition-all duration-700 h-[500px] relative overflow-hidden">
+                            <!-- Image -->
+                            <img src="https://media.licdn.com/dms/image/v2/D4E03AQE8S7kVKvRzwQ/profile-displayphoto-crop_800_800/B4EZg0PDAsGYAI-/0/1753223017811?e=1767225600&v=beta&t=G6uMIJ17XcIImLOc7O2Aii4STKO-npJDhNvwXHxxnOM" 
+                                 class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 group-hover:contrast-100 transition duration-1000 transform group-hover:scale-105">
+                            
+                            <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition duration-500"></div>
+                            
+                            <!-- Info Panel (Glass) -->
+                            <div class="absolute bottom-0 left-0 w-full p-8 backdrop-blur-md bg-white/5 border-t border-white/10 translate-y-2 group-hover:translate-y-0 transition duration-500">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-2 h-2 bg-eventotes-gold rounded-full animate-pulse"></div>
+                                    <p class="text-[10px] font-mono text-eventotes-gold tracking-[0.2em] uppercase">Executive Profile</p>
+                                </div>
+                                <h3 class="font-brand italic text-3xl uppercase text-white mb-1 tracking-tight">Joseph Fabrizzio</h3>
+                                <p class="text-xs font-mono text-gray-400 mb-4 tracking-widest uppercase">CEO & FOUNDER | Ex-Sr. Tech Lead</p>
+                                <p class="text-sm text-gray-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 transition delay-100 duration-500 transform translate-y-2 group-hover:translate-y-0" data-i18n="bio_joseph">
+                                    Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Leader 2 -->
+                    <div class="group relative reveal-node delay-300 lg:mt-24 leader-card rounded-xl">
+                         <!-- Tech Frame -->
+                         <div class="leader-frame"></div>
+
+                        <div class="bg-neutral-900 border border-white/5 group-hover:border-white/20 transition-all duration-700 h-[500px] relative overflow-hidden">
+                            <!-- Image -->
+                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1887&auto=format&fit=crop" 
+                                 class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 group-hover:contrast-100 transition duration-1000 transform group-hover:scale-105">
+                            
+                             <!-- Gradient Overlay -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition duration-500"></div>
+
+                            <!-- Info Panel (Glass) -->
+                            <div class="absolute bottom-0 left-0 w-full p-8 backdrop-blur-md bg-white/5 border-t border-white/10 translate-y-2 group-hover:translate-y-0 transition duration-500">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-2 h-2 bg-neon-cyan rounded-full animate-pulse"></div>
+                                    <p class="text-[10px] font-mono text-neon-cyan tracking-[0.2em] uppercase">Executive Profile</p>
+                                </div>
+                                <h3 class="font-brand italic text-3xl uppercase text-white mb-1 tracking-tight">Jose Angel Soriano</h3>
+                                <p class="text-xs font-mono text-gray-400 mb-4 tracking-widest uppercase">CO-FOUNDER | Sales Solution Specialist</p>
+                                <p class="text-sm text-gray-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 transition delay-100 duration-500 transform translate-y-2 group-hover:translate-y-0" data-i18n="bio_jose">
+                                    Global Growth Strategist. Bridging complex technology with real-world market demands.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section id="projects" class="relative z-10 py-32 border-t border-white/10 bg-[#020202]">
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#111] to-transparent pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal-node">
+                    <div>
+                        <h2 class="euro-style text-5xl md:text-7xl text-white" data-i18n="proj_title">VENTURES</h2>
+                        <p class="text-gray-500 font-mono mt-2 tracking-widest uppercase text-xs" data-i18n="proj_sub">/ INNOVATION PORTFOLIO</p>
+                    </div>
+                    <div class="hidden md:block w-32 h-[1px] bg-white/20 mb-4"></div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    <!-- EVENTOTES CARD -->
+                    <div class="group relative card-tech reveal-node delay-100 rounded-lg">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition duration-500">
+                            <i class="fas fa-arrow-up-right-from-square text-white text-xl"></i>
+                        </div>
+                        <div class="p-10 h-full flex flex-col relative z-10">
+                            <div class="mb-8">
+                                <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase border border-eventotes-gold/30 px-2 py-1 rounded">Logistics SaaS</span>
+                                <h3 class="font-brand italic text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">Eventotes</h3>
+                            </div>
+                            <div class="flex-grow border-l border-white/10 pl-6 mt-4">
+                                <p class="text-gray-400 text-sm leading-relaxed group-hover:text-white transition duration-300" data-i18n="desc_eventotes">
+                                    The definitive suite for premium event management. From guest list curation to real-time logistic deployment.
+                                </p>
+                            </div>
+                            <div class="mt-8 pt-8 border-t border-white/5 flex gap-4 text-2xl text-white/20">
+                                <i class="fas fa-calendar-check hover:text-white transition"></i>
+                                <i class="fas fa-qrcode hover:text-white transition"></i>
+                                <i class="fas fa-chart-line hover:text-white transition"></i>
+                            </div>
+                        </div>
+                        <!-- Hover Glow -->
+                        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-eventotes-gold/20 blur-[100px] rounded-full group-hover:bg-eventotes-gold/30 transition duration-500"></div>
+                    </div>
+
+                    <!-- RANKIT CARD -->
+                    <div class="group relative card-tech reveal-node delay-200 rounded-lg">
+                        <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition duration-500">
+                            <i class="fas fa-arrow-up-right-from-square text-white text-xl"></i>
+                        </div>
+                        <div class="p-10 h-full flex flex-col relative z-10">
+                            <div class="mb-8">
+                                <span class="text-rankit-purple font-mono text-[10px] tracking-[0.2em] uppercase border border-rankit-purple/30 px-2 py-1 rounded">Competitive Tech</span>
+                                <h3 class="font-brand italic text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">RanKIT</h3>
+                            </div>
+                            <div class="flex-grow border-l border-white/10 pl-6 mt-4">
+                                <p class="text-gray-400 text-sm leading-relaxed group-hover:text-white transition duration-300" data-i18n="desc_rankit">
+                                    Automated tournament organization system for Esports and traditional athletics. Skill-based matchmaking engine.
+                                </p>
+                            </div>
+                            <div class="mt-8 pt-8 border-t border-white/5 flex gap-4 text-2xl text-white/20">
+                                <i class="fas fa-trophy hover:text-white transition"></i>
+                                <i class="fas fa-gamepad hover:text-white transition"></i>
+                                <i class="fas fa-users hover:text-white transition"></i>
+                            </div>
+                        </div>
+                        <!-- Hover Glow -->
+                        <div class="absolute -bottom-20 -right-20 w-64 h-64 bg-rankit-purple/20 blur-[100px] rounded-full group-hover:bg-rankit-purple/30 transition duration-500"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- PHILANTHROPY -->
+        <section class="relative z-10 py-32 bg-white text-black clip-tech overflow-hidden">
+            <!-- Animated Background Noise -->
+            <div class="absolute inset-0 opacity-5 bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+
+            <div class="max-w-7xl mx-auto px-6 relative">
+                <div class="flex flex-col lg:flex-row items-center gap-20">
+                    <div class="lg:w-1/2 relative z-10 reveal-node">
+                        <div class="inline-flex items-center gap-2 border border-black px-3 py-1 mb-6 rounded-full">
+                            <div class="w-2 h-2 bg-black rounded-full animate-pulse"></div>
+                            <span class="text-[10px] font-bold uppercase tracking-widest">CometaX Foundation</span>
+                        </div>
+                        
+                        <div class="euro-wrapper block mb-6">
+                            <h2 class="euro-style text-5xl md:text-6xl leading-[0.9]" data-i18n="pledge_title">THE 10%<br>PLEDGE</h2>
+                        </div>
+                        
+                        <p class="text-lg font-medium text-gray-800 leading-relaxed max-w-md mb-8" data-i18n="pledge_text">
+                            We view technology as the ultimate vehicle for social mobility. That is why 10% of gross revenue from every commercial project directly funds scholarships at the CometaX Academy.
+                        </p>
+                        
+                        <div class="grid grid-cols-2 gap-6 border-t border-black/10 pt-6">
+                            <div>
+                                <h4 class="font-bold text-2xl mb-1">150+</h4>
+                                <p class="text-xs uppercase tracking-wide text-gray-500" data-i18n="impact_students">Students Impacted</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-2xl mb-1">$0</h4>
+                                <p class="text-xs uppercase tracking-wide text-gray-500" data-i18n="impact_cost">Cost to Students</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3D-like Element -->
+                    <div class="lg:w-1/2 flex justify-center lg:justify-end reveal-node delay-200">
+                         <div class="relative w-full max-w-md aspect-square flex items-center justify-center">
+                             <!-- Glowing rings -->
+                             <div class="absolute w-64 h-64 border border-black/10 rounded-full animate-[spin_10s_linear_infinite]"></div>
+                             <div class="absolute w-80 h-80 border border-black/5 rounded-full animate-[spin_15s_linear_infinite_reverse]"></div>
+                             
+                             <img src="https://raw.githubusercontent.com/JFabrizzio5/CometaX/bbeb654b90e817236d9d64009b33618065fbba91/image_2025-12-16_083018257-removebg-preview%20(1).png" 
+                                  class="h-48 w-auto relative z-10 animate-float drop-shadow-2xl" alt="CometaX Philanthropy">
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STRATEGIC ALLIANCES & FORM -->
+        <section id="alliances" class="relative z-10 py-32 bg-[#080808] border-t border-white/10">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="text-center mb-16 reveal-node">
+                    <h2 class="euro-style text-4xl text-white" data-i18n="alliances_title">STRATEGIC ALLIANCES</h2>
+                    <p class="text-xs text-gray-500 font-mono mt-3 uppercase tracking-[0.3em]" data-i18n="alliances_sub">Expansion & Impact</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch max-w-6xl mx-auto">
+                    
+                    <!-- Left Column: Information -->
+                    <div class="flex flex-col gap-6 reveal-node delay-100 justify-center">
+                         <!-- Investor Info -->
+                         <div class="card-tech p-8 rounded-xl border-l-4 border-l-eventotes-gold group cursor-pointer hover:bg-white/5">
+                            <div class="flex items-center gap-6 mb-4">
+                                <div class="bg-eventotes-gold/20 p-4 rounded-full group-hover:bg-eventotes-gold group-hover:text-black transition duration-300">
+                                    <i class="fas fa-chart-pie text-2xl text-eventotes-gold group-hover:text-black"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase font-mono text-gray-500 block mb-1">Growth Equity</span>
+                                    <h3 class="font-brand italic text-xl text-white" data-i18n="investor_title">Become an Investor</h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-400 leading-relaxed pl-20" data-i18n="investor_desc">
+                                Join our aggressive expansion. We are seeking strategic partners to scale our SaaS ecosystem across Latin America and the US.
+                            </p>
+                         </div>
+
+                         <!-- Charity Info -->
+                         <div class="card-tech p-8 rounded-xl border-l-4 border-l-pink-500 group cursor-pointer hover:bg-white/5">
+                            <div class="flex items-center gap-6 mb-4">
+                                <div class="bg-pink-500/20 p-4 rounded-full group-hover:bg-pink-500 group-hover:text-black transition duration-300">
+                                    <i class="fas fa-hand-holding-heart text-2xl text-pink-500 group-hover:text-black"></i>
+                                </div>
+                                <div>
+                                    <span class="text-[10px] uppercase font-mono text-gray-500 block mb-1">Philanthropy</span>
+                                    <h3 class="font-brand italic text-xl text-white" data-i18n="charity_title">Apply for Aid</h3>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-400 leading-relaxed pl-20" data-i18n="charity_desc">
+                                Are you a Non-Profit or Educational Association? Apply for our 10% Pledge grant for technological acceleration.
+                            </p>
+                         </div>
+                    </div>
+
+                    <!-- Right Column: Contact Form -->
+                    <div class="card-tech p-8 md:p-10 rounded-xl relative overflow-hidden reveal-node delay-200 shadow-2xl flex flex-col justify-center">
+                        <!-- Decorative glow -->
+                        <div class="absolute -top-10 -right-10 w-40 h-40 bg-white/5 blur-[50px] rounded-full"></div>
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+                        <h3 class="font-brand italic text-2xl text-white mb-6 uppercase flex items-center gap-3">
+                            <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                            <span data-i18n="form_header">Start the conversation</span>
+                        </h3>
+                        
+                        <form onsubmit="event.preventDefault();" class="space-y-5">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_name">Full Name</label>
+                                    <input type="text" class="form-input" placeholder="John Doe">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_email">Email</label>
+                                    <input type="email" class="form-input" placeholder="john@example.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_type">Alliance Type</label>
+                                <select class="form-input form-select">
+                                    <option value="investor" data-i18n="form_opt_investor">Investor / VC</option>
+                                    <option value="grant" data-i18n="form_opt_grant">Grant / NGO Support</option>
+                                    <option value="other" data-i18n="form_opt_other">Other Inquiry</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_msg">Message</label>
+                                <textarea class="form-input resize-none h-24 font-mono text-xs" placeholder="..."></textarea>
+                            </div>
+                            
+                            <button class="w-full bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-gray-200 transition tracking-widest text-sm shadow-[0_0_15px_rgba(255,255,255,0.3)]" data-i18n="form_btn_send">
+                                Send Request
+                            </button>
+                        </form>
+
+                        <div class="mt-6 text-center pt-6 border-t border-white/10">
+                            <p class="text-xs text-gray-500 font-mono" data-i18n="form_fallback">
+                                Prefer email? Write to us at <span class="text-white hover:underline cursor-pointer">direccionejemplo@gmail.com</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ========================================= -->
+    <!-- VIEW: SOCIAL HUB & CAREERS (Hidden)       -->
+    <!-- ========================================= -->
+    <main id="view-hub" class="hidden fade-in min-h-screen pt-32 pb-24 bg-[#0a0a0a]">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-24 reveal-node active">
+                <div class="euro-wrapper">
+                    <h1 class="euro-style text-5xl md:text-8xl text-white" data-i18n="hub_title">SOCIAL HUB</h1>
+                </div>
+                <p class="text-gray-500 font-mono mt-4 tracking-[0.5em] uppercase text-xs" data-i18n="hub_subtitle">/ COMMUNITY & CAREERS</p>
+            </div>
+            
+            <!-- Social Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
+                <!-- Instagram -->
+                <a href="#" class="group block card-tech p-8 rounded-xl hover:border-pink-500 transition duration-500 reveal-node delay-100">
+                    <div class="flex items-center justify-between mb-6 text-pink-500">
+                        <i class="fab fa-instagram text-3xl group-hover:scale-110 transition"></i>
+                        <i class="fas fa-external-link-alt opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                    <span class="font-bold text-white text-lg block mb-2">@CometaX_Official</span>
+                    <p class="text-xs text-gray-400">Behind the scenes, product launches, and company culture.</p>
+                </a>
+                
+                <!-- LinkedIn -->
+                <a href="#" class="group block card-tech p-8 rounded-xl hover:border-blue-500 transition duration-500 reveal-node delay-200">
+                    <div class="flex items-center justify-between mb-6 text-blue-500">
+                        <i class="fab fa-linkedin text-3xl group-hover:scale-110 transition"></i>
+                        <i class="fas fa-external-link-alt opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                    <span class="font-bold text-white text-lg block mb-2">CometaX Inc.</span>
+                    <p class="text-xs text-gray-400">Corporate announcements, B2B partnerships, and recruitment.</p>
+                </a>
+                
+                 <!-- TikTok -->
+                 <a href="#" class="group block card-tech p-8 rounded-xl hover:border-neon-cyan transition duration-500 reveal-node delay-300">
+                    <div class="flex items-center justify-between mb-6 text-neon-cyan">
+                        <i class="fab fa-tiktok text-3xl group-hover:scale-110 transition"></i>
+                        <i class="fas fa-external-link-alt opacity-0 group-hover:opacity-100 transition"></i>
+                    </div>
+                    <span class="font-bold text-white text-lg block mb-2">@CometaX_Dev</span>
+                    <p class="text-xs text-gray-400">Coding tips, quick tutorials, and dev lifestyle.</p>
+                </a>
+            </div>
+
+            <!-- Recruitment Section (MAJOR REDESIGN - FIXED LAYOUT) -->
+            <div class="max-w-6xl mx-auto border-t border-white/10 pt-24">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    
+                    <!-- Sales Partner Card -->
+                    <div class="card-recruit p-10 relative group flex flex-col justify-between">
+                        <!-- Icon watermark background -->
+                        <div class="absolute -top-10 -right-10 text-9xl text-white/5 group-hover:text-eventotes-gold/10 transition duration-500 rotate-12 pointer-events-none">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        
+                        <!-- Content Wrapper -->
+                        <div class="relative z-10 flex flex-col h-full">
+                            <div>
+                                <span class="inline-block bg-eventotes-gold/20 text-eventotes-gold border border-eventotes-gold/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded mb-6" data-i18n="badge_sales">Sales Program</span>
+                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-eventotes-gold transition-colors duration-300" data-i18n="partner_title">PARTNER WITH US</h2>
+                                <p class="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-sm" data-i18n="partner_desc">
+                                    Join our external sales network. High commissions for closing enterprise SaaS contracts.
+                                </p>
+                            </div>
+                            <!-- Button at the bottom -->
+                            <div class="mt-auto">
+                                <button class="bg-white text-black px-8 py-3 clip-button hover:bg-eventotes-gold hover:text-black transition uppercase font-bold text-xs tracking-widest flex items-center gap-3 w-max">
+                                    <span data-i18n="apply_partner">Apply as Partner</span> <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Careers Card -->
+                    <div class="card-recruit p-10 relative group flex flex-col justify-between">
+                         <!-- Icon watermark background -->
+                         <div class="absolute -top-10 -right-10 text-9xl text-white/5 group-hover:text-neon-cyan/10 transition duration-500 rotate-12 pointer-events-none">
+                            <i class="fas fa-code"></i>
+                        </div>
+
+                        <!-- Content Wrapper -->
+                        <div class="relative z-10 flex flex-col h-full">
+                            <div>
+                                <span class="inline-block bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded mb-6" data-i18n="badge_careers">Careers</span>
+                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-neon-cyan transition-colors duration-300" data-i18n="join_team_title">JOIN THE TEAM</h2>
+                                <p class="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-sm" data-i18n="careers_desc">
+                                    We are looking for Full Stack Developers and Solution Architects. Remote first culture.
+                                </p>
+                            </div>
+                            <!-- Button at the bottom -->
+                            <div class="mt-auto">
+                                <button class="border border-white text-white px-8 py-3 clip-button hover:bg-neon-cyan hover:border-neon-cyan hover:text-black transition uppercase font-bold text-xs tracking-widest flex items-center gap-3 w-max">
+                                    <span data-i18n="view_openings">View Openings</span> <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black pt-24 pb-12 border-t border-white/10 relative z-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
+                <!-- Brand -->
+                <div class="md:col-span-1">
+                    <a href="#" class="flex items-center gap-3 mb-6 group opacity-80 hover:opacity-100 transition">
+                        <img src="https://raw.githubusercontent.com/JFabrizzio5/CometaX/bbeb654b90e817236d9d64009b33618065fbba91/image_2025-12-16_083018257-removebg-preview%20(1).png" 
+                             class="h-8 invert" alt="Logo">
+                        <span class="euro-style text-xl text-white">COMETAX</span>
+                    </a>
+                    <p class="text-gray-500 text-xs leading-relaxed font-mono" data-i18n="footer_desc">
+                        Forging the digital future through engineering excellence and strategic innovation.
+                    </p>
+                </div>
+                
+                <!-- Links -->
+                <div>
+                    <h4 class="font-brand italic text-white mb-6 uppercase text-sm tracking-wider" data-i18n="footer_connect">Connect</h4>
+                    <ul class="space-y-4 text-xs text-gray-400">
+                        <li><a href="#" onclick="showPage('hub')" class="hover:text-white transition flex items-center gap-2" data-i18n="nav_hub">Social Hub</a></li>
+                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">Instagram</a></li>
+                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">LinkedIn</a></li>
+                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">GitHub</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                     <h4 class="font-brand italic text-white mb-6 uppercase text-sm tracking-wider" data-i18n="footer_biz">Business</h4>
+                     <ul class="space-y-4 text-xs text-gray-400">
+                         <li><a href="#" class="hover:text-eventotes-gold transition" data-i18n="partner_program">Partner Program</a></li>
+                         <li><a href="#alliances" class="hover:text-white transition" data-i18n="investor_relations">Investor Relations</a></li>
+                         <li><a href="#" class="hover:text-white transition" data-i18n="careers_link">Careers</a></li>
+                     </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-brand italic text-white mb-6 uppercase text-sm tracking-wider" data-i18n="footer_edu">Education</h4>
+                    <ul class="space-y-4 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">CometaX Academy</a></li>
+                        <li><a href="#alliances" class="hover:text-pink-500 transition" data-i18n="apply_grant">Apply for Grant</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Copyright -->
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-gray-600 uppercase tracking-wider">
+                <p>© 2024 COMETAX INC. EST. MEXICO CITY.</p>
+                <div class="flex gap-8 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-white transition" data-i18n="privacy">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition" data-i18n="terms">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. SCROLL REVEAL OBSERVER
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.15 
+        };
+
+        const observer = new IntersectionObserver((entries, obs) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
+
+
+        // 2. HERO CANVAS ANIMATION (Network Effect)
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        
+        // Settings
+        const particleCount = 60; // Less is cleaner
+        const connectionDistance = 150;
+        const mouseDistance = 200;
+
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5; // Slow movement
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update(mouseX, mouseY) {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+
+                // Mouse interaction (gentle attraction)
+                if (mouseX != null) {
+                    let dx = mouseX - this.x;
+                    let dy = mouseY - this.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < mouseDistance) {
+                        const forceDirectionX = dx / distance;
+                        const forceDirectionY = dy / distance;
+                        const force = (mouseDistance - distance) / mouseDistance;
+                        const attractionStrength = 0.05;
+                        this.vx += forceDirectionX * force * attractionStrength;
+                        this.vy += forceDirectionY * force * attractionStrength;
+                    }
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Init Particles
+        for(let i=0; i<particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        // Mouse tracking
+        let mouseX = null;
+        let mouseY = null;
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.x;
+            mouseY = e.y;
+        });
+        window.addEventListener('mouseout', () => {
+            mouseX = null;
+            mouseY = null;
+        });
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Update and draw particles
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update(mouseX, mouseY);
+                particles[i].draw();
+
+                // Draw connections
+                for (let j = i; j < particles.length; j++) {
+                    let dx = particles[i].x - particles[j].x;
+                    let dy = particles[i].y - particles[j].y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance/connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+
+        // 3. LANGUAGE DICTIONARY
+        const translations = {
+            en: {
+                nav_home: "Home",
+                nav_ventures: "Ventures",
+                nav_hub: "Social Hub",
+                nav_contact: "PARTNERS",
+                hero_title_1: "FUTURE",
+                hero_title_2: "ENGINEERED.",
+                hero_desc: "Redefining the boundaries of software architecture and commercial strategy. We build ecosystems, not just applications.",
+                hero_cta: "Explore Ventures",
+                lead_title: "CORE LEADERSHIP",
+                bio_joseph: "Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.",
+                bio_jose: "Global Growth Strategist. Bridging complex technology with real-world market demands.",
+                proj_title: "VENTURES",
+                proj_sub: "/ INNOVATION PORTFOLIO",
+                desc_eventotes: "The definitive suite for premium event management. From guest list curation to real-time logistic deployment.",
+                desc_rankit: "Automated tournament organization system for Esports and traditional athletics. Skill-based matchmaking engine.",
+                pledge_title: "THE 10%\nPLEDGE",
+                pledge_text: "We view technology as the ultimate vehicle for social mobility. That is why 10% of gross revenue from every commercial project directly funds scholarships at the CometaX Academy.",
+                impact_students: "Students Impacted",
+                impact_cost: "Cost to Students",
+                alliances_title: "STRATEGIC ALLIANCES",
+                alliances_sub: "Expansion & Impact",
+                investor_title: "Become an Investor",
+                investor_desc: "Join our aggressive expansion. We are seeking strategic partners to scale our SaaS ecosystem across Latin America and the US.",
+                charity_title: "Apply for Aid",
+                charity_desc: "Are you a Non-Profit or Educational Association? Apply for our 10% Pledge grant for technological acceleration and software support.",
+                form_header: "Start the conversation",
+                form_label_name: "Full Name",
+                form_label_email: "Email Address",
+                form_label_type: "Alliance Type",
+                form_label_msg: "Message",
+                form_opt_investor: "Investor / VC",
+                form_opt_grant: "Grant / NGO Support",
+                form_opt_other: "Other Inquiry",
+                form_btn_send: "Send Request",
+                form_fallback: "Prefer email? Write to us at ",
+                hub_title: "SOCIAL HUB",
+                hub_subtitle: "/ COMMUNITY & CAREERS",
+                partner_title: "PARTNER WITH US",
+                partner_desc: "Join our external sales network. High commissions for closing enterprise SaaS contracts.",
+                apply_partner: "Apply as Partner",
+                join_team_title: "JOIN THE TEAM",
+                careers_desc: "We are looking for Full Stack Developers and Solution Architects. Remote first culture.",
+                view_openings: "View Openings",
+                badge_sales: "Sales Program",
+                badge_careers: "Careers",
+                footer_desc: "Forging the digital future through engineering excellence and strategic innovation.",
+                footer_connect: "Connect",
+                footer_biz: "Business",
+                footer_edu: "Education",
+                partner_program: "Partner Program",
+                investor_relations: "Investor Relations",
+                careers_link: "Careers",
+                apply_grant: "Apply for Grant",
+                privacy: "Privacy Policy",
+                terms: "Terms of Service"
+            },
+            es: {
+                nav_home: "Inicio",
+                nav_ventures: "Proyectos",
+                nav_hub: "Comunidad",
+                nav_contact: "ALIADOS",
+                hero_title_1: "FUTURO",
+                hero_title_2: "DISEÑADO.",
+                hero_desc: "Redefiniendo los límites de la arquitectura de software y la estrategia comercial. Construimos ecosistemas, no solo aplicaciones.",
+                hero_cta: "Explorar Proyectos",
+                lead_title: "LIDERAZGO",
+                bio_joseph: "Arquitecto de Sistemas Escalables. La visión técnica diseñando la infraestructura del mañana.",
+                bio_jose: "Estratega de Crecimiento Global. Conectando tecnología compleja con las demandas reales del mercado.",
+                proj_title: "PROYECTOS",
+                proj_sub: "/ PORTAFOLIO DE INNOVACIÓN",
+                desc_eventotes: "La suite definitiva para la gestión de eventos premium. Desde la curaduría de listas hasta la logística en tiempo real.",
+                desc_rankit: "Sistema automatizado de organización de torneos para Esports y deportes. Motor de emparejamiento basado en habilidades.",
+                pledge_title: "LA PROMESA\nDEL 10%",
+                pledge_text: "Vemos la tecnología como el vehículo definitivo para la movilidad social. Por eso, el 10% de los ingresos de cada proyecto comercial financia becas en la Academia CometaX.",
+                impact_students: "Estudiantes Impactados",
+                impact_cost: "Costo para Estudiantes",
+                alliances_title: "ALIANZAS ESTRATÉGICAS",
+                alliances_sub: "Expansión e Impacto",
+                investor_title: "Inversionistas",
+                investor_desc: "Únete a nuestra expansión agresiva. Buscamos socios estratégicos para escalar nuestro ecosistema SaaS en LatAm y EE. UU.",
+                charity_title: "Solicitar Apoyo",
+                charity_desc: "¿Eres una ONG o Asociación Educativa? Solicita nuestra beca del 10% para aceleración tecnológica y soporte de software.",
+                form_header: "Inicia la conversación",
+                form_label_name: "Nombre Completo",
+                form_label_email: "Correo Electrónico",
+                form_label_type: "Tipo de Alianza",
+                form_label_msg: "Mensaje",
+                form_opt_investor: "Inversionista / VC",
+                form_opt_grant: "Beca / Apoyo ONG",
+                form_opt_other: "Otra Consulta",
+                form_btn_send: "Enviar Solicitud",
+                form_fallback: "¿Prefieres email? Escríbenos a ",
+                hub_title: "COMUNIDAD",
+                hub_subtitle: "/ COMUNIDAD Y CARRERA",
+                partner_title: "ASÓCIATE",
+                partner_desc: "Únete a nuestra red de ventas externa. Altas comisiones por cerrar contratos SaaS empresariales.",
+                apply_partner: "Aplicar como Socio",
+                join_team_title: "ÚNETE AL EQUIPO",
+                careers_desc: "Buscamos Desarrolladores Full Stack y Arquitectos de Soluciones. Cultura remota.",
+                view_openings: "Ver Vacantes",
+                badge_sales: "Programa de Ventas",
+                badge_careers: "Carreras",
+                footer_desc: "Forjando el futuro digital a través de la excelencia en ingeniería y la innovación estratégica.",
+                footer_connect: "Conectar",
+                footer_biz: "Negocios",
+                footer_edu: "Educación",
+                partner_program: "Programa de Socios",
+                investor_relations: "Relación con Inversionistas",
+                careers_link: "Bolsa de Trabajo",
+                apply_grant: "Solicitar Beca",
+                privacy: "Política de Privacidad",
+                terms: "Términos de Servicio"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'es' : 'en';
+            
+            document.getElementById('lang-en').classList.toggle('active');
+            document.getElementById('lang-es').classList.toggle('active');
+            document.getElementById('lang-en-mobile').classList.toggle('active');
+            document.getElementById('lang-es-mobile').classList.toggle('active');
+            
+            const elements = document.querySelectorAll('[data-i18n]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[currentLang][key]) {
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                            el.placeholder = translations[currentLang][key];
+                        } else if (el.tagName === 'OPTION') {
+                            el.text = translations[currentLang][key];
+                        } else {
+                             if (key === 'pledge_title') {
+                                el.innerHTML = translations[currentLang][key].replace('\n', '<br>');
+                            } else {
+                                el.innerHTML = translations[currentLang][key];
+                            }
+                        }
+                        el.style.opacity = '1';
+                    }, 200);
+                }
+            });
+        }
+
+        function showPage(pageId) {
+            const homeView = document.getElementById('view-home');
+            const hubView = document.getElementById('view-hub');
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            if (pageId === 'home') {
+                homeView.classList.remove('hidden');
+                hubView.classList.add('hidden');
+            } else if (pageId === 'hub') {
+                homeView.classList.add('hidden');
+                hubView.classList.remove('hidden');
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            if (menu.classList.contains('translate-x-full')) {
+                menu.classList.remove('translate-x-full');
+            } else {
+                menu.classList.add('translate-x-full');
+            }
+        }
+    </script>
+</body>
+</html>
