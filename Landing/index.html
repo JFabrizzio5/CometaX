@@ -9,6 +9,9 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
+    <!-- Three.js for 3D Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,15 +89,19 @@
             clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
         }
 
-        /* HERO CANVAS */
-        #hero-canvas {
+        /* HERO CANVAS CONTAINER */
+        #hero-canvas-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
-            opacity: 0.6;
+            /* No opacity needed for Three.js usually, but we can adjust if needed */
+        }
+        
+        #hero-canvas {
+            display: block; /* Removes default inline spacing */
         }
 
         .hero-glass-panel {
@@ -129,7 +136,7 @@
             border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
             transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-            min-height: 400px; /* Asegura altura mínima pero permite crecer */
+            min-height: 450px; 
         }
         .card-recruit:hover {
             border-color: rgba(255,255,255,0.3);
@@ -148,33 +155,21 @@
             left: 150%;
         }
 
-        /* Leader Card Specifics */
-        .leader-card {
-            position: relative;
-            overflow: hidden;
+        /* Leader Card Specifics - ORBITAL STYLE */
+        .leader-orbital {
+            transition: all 0.5s ease;
         }
-        .leader-frame {
-            position: absolute;
-            inset: 0;
-            border: 1px solid rgba(255,255,255,0.1);
-            z-index: 20;
-            pointer-events: none;
+        .leader-bg-card {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none; /* Let clicks pass through */
         }
-        .leader-frame::before, .leader-frame::after {
-            content: '';
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border: 1px solid white;
-            transition: all 0.3s ease;
+        .leader-orbital:hover .leader-bg-card {
+            opacity: 1;
+            transform: scale(1);
         }
-        .leader-frame::before { top: 0; left: 0; border-right: none; border-bottom: none; }
-        .leader-frame::after { bottom: 0; right: 0; border-left: none; border-top: none; }
         
-        .leader-card:hover .leader-frame::before { width: 100%; height: 100%; border-color: rgba(255,255,255,0.2); }
-        .leader-card:hover .leader-frame::after { width: 100%; height: 100%; border-color: rgba(255,255,255,0.2); }
-
-
         /* Scroll Animation Base Classes */
         .reveal-node {
             opacity: 0;
@@ -263,12 +258,6 @@
                     <img src="https://raw.githubusercontent.com/JFabrizzio5/CometaX/bbeb654b90e817236d9d64009b33618065fbba91/image_2025-12-16_083018257-removebg-preview%20(1).png" 
                          alt="CometaX Icon" 
                          class="h-10 w-auto invert transition-transform group-hover:scale-110 duration-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]">
-                    
-                    <div class="euro-wrapper hidden sm:block">
-                        <span class="euro-style text-2xl text-white group-hover:text-gray-200 transition-colors tracking-tighter">
-                            COMETA<span class="text-gray-500">X</span>
-                        </span>
-                    </div>
                 </a>
 
                 <!-- Desktop Menu -->
@@ -325,8 +314,8 @@
         <!-- HERO SECTION (INTERACTIVE CANVAS) -->
         <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
             
-            <!-- THE INTERACTIVE CANVAS -->
-            <canvas id="hero-canvas"></canvas>
+            <!-- THE INTERACTIVE 3D CANVAS -->
+            <div id="hero-canvas-container"></div>
             
             <!-- Vignette Overlay -->
             <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020202_100%)] pointer-events-none z-10"></div>
@@ -339,24 +328,25 @@
                                 System Online // Neural Link Active
                             </span>
                         </div>
-                        <h1 class="euro-style text-6xl md:text-8xl lg:text-9xl leading-[0.85] tracking-tight text-white drop-shadow-2xl">
+                        <!-- Mejora Responsiva: Títulos que escalan desde text-4xl en móvil -->
+                        <h1 class="euro-style text-4xl sm:text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter text-white drop-shadow-2xl">
                             <span data-i18n="hero_title_1">FUTURE</span><br>
-                            <span class="hero-glow-text" data-i18n="hero_title_2">ENGINEERED.</span>
+                            <span class="hero-glow-text break-words" data-i18n="hero_title_2">ENGINEERED.</span>
                         </h1>
                     </div>
 
                     <div class="mt-8 hero-glass-panel p-6 rounded-xl max-w-2xl reveal-node delay-200 active">
-                        <p class="text-lg md:text-xl text-gray-200 font-body font-light leading-relaxed" data-i18n="hero_desc">
+                        <p class="text-base sm:text-lg md:text-xl text-gray-200 font-body font-light leading-relaxed" data-i18n="hero_desc">
                             Redefining the boundaries of software architecture and commercial strategy. We build ecosystems, not just applications.
                         </p>
                     </div>
 
                     <div class="mt-12 flex flex-wrap gap-6 reveal-node delay-300 active">
-                        <a href="#projects" class="px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-gray-200 transition-all clip-button hover:scale-105 duration-300 shadow-[0_0_40px_rgba(255,255,255,0.3)] relative overflow-hidden group">
+                        <a href="#projects" class="px-8 sm:px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-gray-200 transition-all clip-button hover:scale-105 duration-300 shadow-[0_0_40px_rgba(255,255,255,0.3)] relative overflow-hidden group text-sm sm:text-base">
                             <span class="relative z-10" data-i18n="hero_cta">Explore Ventures</span>
                             <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
                         </a>
-                        <a href="#alliances" class="px-10 py-4 bg-black/50 backdrop-blur border border-white/30 text-white font-brand italic uppercase hover:bg-white/10 transition-all clip-button hover:border-white hover:text-eventotes-gold" data-i18n="nav_contact">
+                        <a href="#alliances" class="px-8 sm:px-10 py-4 bg-black/50 backdrop-blur border border-white/30 text-white font-brand italic uppercase hover:bg-white/10 transition-all clip-button hover:border-white hover:text-eventotes-gold text-sm sm:text-base" data-i18n="nav_contact">
                             Partners
                         </a>
                     </div>
@@ -369,72 +359,104 @@
             </div>
         </header>
 
-        <!-- LEADERSHIP (MEJORADO) -->
+        <!-- LEADERSHIP (REDESIGNED: CIRCULAR ORBITAL STYLE) -->
         <section class="relative z-10 py-32 bg-[#050505]">
             <div class="max-w-7xl mx-auto px-6">
-                <div class="mb-20 reveal-node">
+                <div class="mb-24 reveal-node text-center">
                     <div class="euro-wrapper">
-                        <h2 class="euro-style text-4xl md:text-5xl text-white" data-i18n="lead_title">CORE LEADERSHIP</h2>
+                        <!-- Responsive title text -->
+                        <h2 class="euro-style text-3xl sm:text-4xl md:text-5xl text-white" data-i18n="lead_title">CORE LEADERSHIP</h2>
                     </div>
-                    <div class="h-1 w-20 bg-white mt-4"></div>
+                    <div class="h-1 w-20 bg-white mt-4 mx-auto"></div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
-                    <!-- Leader 1 -->
-                    <div class="group relative reveal-node delay-100 leader-card rounded-xl">
-                        <!-- Tech Frame -->
-                        <div class="leader-frame"></div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-start">
+                    
+                    <!-- Leader 1: Joseph (Gold Theme) -->
+                    <div class="leader-orbital group relative flex flex-col items-center text-center reveal-node delay-100">
                         
-                        <div class="bg-neutral-900 border border-white/5 group-hover:border-white/20 transition-all duration-700 h-[500px] relative overflow-hidden">
-                            <!-- Image -->
-                            <img src="https://media.licdn.com/dms/image/v2/D4E03AQE8S7kVKvRzwQ/profile-displayphoto-crop_800_800/B4EZg0PDAsGYAI-/0/1753223017811?e=1767225600&v=beta&t=G6uMIJ17XcIImLOc7O2Aii4STKO-npJDhNvwXHxxnOM" 
-                                 class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 group-hover:contrast-100 transition duration-1000 transform group-hover:scale-105">
+                        <!-- CARD BACKGROUND (Appears on Hover) -->
+                        <div class="leader-bg-card absolute top-12 bottom-[-2rem] left-0 right-0 bg-[#111] border border-eventotes-gold/30 rounded-2xl -z-10 shadow-[0_0_50px_rgba(251,191,36,0.1)]">
+                             <!-- Glass effect overlay -->
+                             <div class="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-2xl"></div>
+                        </div>
+
+                        <!-- CIRCULAR AVATAR -->
+                        <div class="relative w-48 h-48 md:w-64 md:h-64 mb-8">
+                            <!-- Rotating Ring -->
+                            <div class="absolute inset-[-10px] rounded-full border border-dashed border-eventotes-gold/40 animate-spin-slow"></div>
+                            <!-- Static Ring -->
+                            <div class="absolute inset-[-4px] rounded-full border border-eventotes-gold/20 scale-110"></div>
                             
-                            <!-- Gradient Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition duration-500"></div>
+                            <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#111] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://media.licdn.com/dms/image/v2/D4E03AQE8S7kVKvRzwQ/profile-displayphoto-crop_800_800/B4EZg0PDAsGYAI-/0/1753223017811?e=1767225600&v=beta&t=G6uMIJ17XcIImLOc7O2Aii4STKO-npJDhNvwXHxxnOM" 
+                                     class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 transition duration-500">
+                            </div>
                             
-                            <!-- Info Panel (Glass) -->
-                            <div class="absolute bottom-0 left-0 w-full p-8 backdrop-blur-md bg-white/5 border-t border-white/10 translate-y-2 group-hover:translate-y-0 transition duration-500">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-2 h-2 bg-eventotes-gold rounded-full animate-pulse"></div>
-                                    <p class="text-[10px] font-mono text-eventotes-gold tracking-[0.2em] uppercase">Executive Profile</p>
-                                </div>
-                                <h3 class="font-brand italic text-3xl uppercase text-white mb-1 tracking-tight">Joseph Fabrizzio</h3>
-                                <p class="text-xs font-mono text-gray-400 mb-4 tracking-widest uppercase">CEO & FOUNDER | Ex-Sr. Tech Lead</p>
-                                <p class="text-sm text-gray-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 transition delay-100 duration-500 transform translate-y-2 group-hover:translate-y-0" data-i18n="bio_joseph">
-                                    Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.
-                                </p>
+                            <!-- Status Indicator -->
+                            <div class="absolute bottom-4 right-4 w-6 h-6 bg-[#111] rounded-full flex items-center justify-center z-20">
+                                <div class="w-3 h-3 bg-eventotes-gold rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- TEXT CONTENT -->
+                        <div class="px-6 pb-6 relative z-10">
+                            <h3 class="font-brand italic text-3xl md:text-4xl uppercase text-white mb-2 tracking-tight group-hover:text-eventotes-gold transition-colors duration-300">Joseph Fabrizzio</h3>
+                            <p class="text-xs font-mono text-gray-500 mb-6 tracking-widest uppercase">CEO & FOUNDER | Ex-Sr. Tech Lead</p>
+                            
+                            <p class="text-sm text-gray-300 font-light leading-relaxed max-w-md mx-auto opacity-70 group-hover:opacity-100 transition duration-300" data-i18n="bio_joseph">
+                                Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.
+                            </p>
+                            
+                            <!-- Social Icon (Optional) -->
+                            <div class="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                                <a href="#" class="text-white hover:text-eventotes-gold"><i class="fab fa-linkedin text-xl"></i></a>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Leader 2 -->
-                    <div class="group relative reveal-node delay-300 lg:mt-24 leader-card rounded-xl">
-                         <!-- Tech Frame -->
-                         <div class="leader-frame"></div>
+                    <!-- Leader 2: Jose Angel (Cyan Theme) -->
+                    <div class="leader-orbital group relative flex flex-col items-center text-center reveal-node delay-200 lg:mt-24">
+                        
+                         <!-- CARD BACKGROUND (Appears on Hover) -->
+                         <div class="leader-bg-card absolute top-12 bottom-[-2rem] left-0 right-0 bg-[#111] border border-neon-cyan/30 rounded-2xl -z-10 shadow-[0_0_50px_rgba(0,243,255,0.1)]">
+                            <div class="absolute inset-0 bg-white/5 backdrop-blur-sm rounded-2xl"></div>
+                       </div>
 
-                        <div class="bg-neutral-900 border border-white/5 group-hover:border-white/20 transition-all duration-700 h-[500px] relative overflow-hidden">
-                            <!-- Image -->
-                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1887&auto=format&fit=crop" 
-                                 class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 group-hover:contrast-100 transition duration-1000 transform group-hover:scale-105">
+                        <!-- CIRCULAR AVATAR -->
+                        <div class="relative w-48 h-48 md:w-64 md:h-64 mb-8">
+                             <!-- Rotating Ring -->
+                             <div class="absolute inset-[-10px] rounded-full border border-dashed border-neon-cyan/40 animate-spin-slow" style="animation-direction: reverse;"></div>
+                             <!-- Static Ring -->
+                             <div class="absolute inset-[-4px] rounded-full border border-neon-cyan/20 scale-110"></div>
+
+                            <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#111] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-500">
+                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1887&auto=format&fit=crop" 
+                                     class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 transition duration-500">
+                            </div>
+
+                             <!-- Status Indicator -->
+                             <div class="absolute bottom-4 right-4 w-6 h-6 bg-[#111] rounded-full flex items-center justify-center z-20">
+                                <div class="w-3 h-3 bg-neon-cyan rounded-full animate-pulse"></div>
+                            </div>
+                        </div>
+
+                        <!-- TEXT CONTENT -->
+                        <div class="px-6 pb-6 relative z-10">
+                            <h3 class="font-brand italic text-3xl md:text-4xl uppercase text-white mb-2 tracking-tight group-hover:text-neon-cyan transition-colors duration-300">Jose Angel Soriano</h3>
+                            <p class="text-xs font-mono text-gray-500 mb-6 tracking-widest uppercase">CO-FOUNDER | Sales Solution Specialist</p>
                             
-                             <!-- Gradient Overlay -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90 group-hover:opacity-80 transition duration-500"></div>
-
-                            <!-- Info Panel (Glass) -->
-                            <div class="absolute bottom-0 left-0 w-full p-8 backdrop-blur-md bg-white/5 border-t border-white/10 translate-y-2 group-hover:translate-y-0 transition duration-500">
-                                <div class="flex items-center gap-3 mb-2">
-                                    <div class="w-2 h-2 bg-neon-cyan rounded-full animate-pulse"></div>
-                                    <p class="text-[10px] font-mono text-neon-cyan tracking-[0.2em] uppercase">Executive Profile</p>
-                                </div>
-                                <h3 class="font-brand italic text-3xl uppercase text-white mb-1 tracking-tight">Jose Angel Soriano</h3>
-                                <p class="text-xs font-mono text-gray-400 mb-4 tracking-widest uppercase">CO-FOUNDER | Sales Solution Specialist</p>
-                                <p class="text-sm text-gray-300 font-light leading-relaxed opacity-0 group-hover:opacity-100 transition delay-100 duration-500 transform translate-y-2 group-hover:translate-y-0" data-i18n="bio_jose">
-                                    Global Growth Strategist. Bridging complex technology with real-world market demands.
-                                </p>
+                            <p class="text-sm text-gray-300 font-light leading-relaxed max-w-md mx-auto opacity-70 group-hover:opacity-100 transition duration-300" data-i18n="bio_jose">
+                                Global Growth Strategist. Bridging complex technology with real-world market demands.
+                            </p>
+                            
+                             <!-- Social Icon (Optional) -->
+                             <div class="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
+                                <a href="#" class="text-white hover:text-neon-cyan"><i class="fab fa-linkedin text-xl"></i></a>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
@@ -446,8 +468,9 @@
 
             <div class="max-w-7xl mx-auto px-6 relative z-10">
                 <div class="flex flex-col md:flex-row justify-between items-end mb-20 reveal-node">
-                    <div>
-                        <h2 class="euro-style text-5xl md:text-7xl text-white" data-i18n="proj_title">VENTURES</h2>
+                    <div class="w-full md:w-auto">
+                        <!-- Responsive Project Title -->
+                        <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="proj_title">VENTURES</h2>
                         <p class="text-gray-500 font-mono mt-2 tracking-widest uppercase text-xs" data-i18n="proj_sub">/ INNOVATION PORTFOLIO</p>
                     </div>
                     <div class="hidden md:block w-32 h-[1px] bg-white/20 mb-4"></div>
@@ -459,10 +482,10 @@
                         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition duration-500">
                             <i class="fas fa-arrow-up-right-from-square text-white text-xl"></i>
                         </div>
-                        <div class="p-10 h-full flex flex-col relative z-10">
+                        <div class="p-8 sm:p-10 h-full flex flex-col relative z-10">
                             <div class="mb-8">
                                 <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase border border-eventotes-gold/30 px-2 py-1 rounded">Logistics SaaS</span>
-                                <h3 class="font-brand italic text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">Eventotes</h3>
+                                <h3 class="font-brand italic text-4xl sm:text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">Eventotes</h3>
                             </div>
                             <div class="flex-grow border-l border-white/10 pl-6 mt-4">
                                 <p class="text-gray-400 text-sm leading-relaxed group-hover:text-white transition duration-300" data-i18n="desc_eventotes">
@@ -484,10 +507,10 @@
                         <div class="absolute top-0 right-0 p-4 opacity-20 group-hover:opacity-100 transition duration-500">
                             <i class="fas fa-arrow-up-right-from-square text-white text-xl"></i>
                         </div>
-                        <div class="p-10 h-full flex flex-col relative z-10">
+                        <div class="p-8 sm:p-10 h-full flex flex-col relative z-10">
                             <div class="mb-8">
                                 <span class="text-rankit-purple font-mono text-[10px] tracking-[0.2em] uppercase border border-rankit-purple/30 px-2 py-1 rounded">Competitive Tech</span>
-                                <h3 class="font-brand italic text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">RanKIT</h3>
+                                <h3 class="font-brand italic text-4xl sm:text-5xl text-white mt-4 group-hover:translate-x-2 transition duration-300">RanKIT</h3>
                             </div>
                             <div class="flex-grow border-l border-white/10 pl-6 mt-4">
                                 <p class="text-gray-400 text-sm leading-relaxed group-hover:text-white transition duration-300" data-i18n="desc_rankit">
@@ -697,7 +720,7 @@
                 </a>
             </div>
 
-            <!-- Recruitment Section (MAJOR REDESIGN - FIXED LAYOUT) -->
+            <!-- Recruitment Section -->
             <div class="max-w-6xl mx-auto border-t border-white/10 pt-24">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                     
@@ -711,8 +734,11 @@
                         <!-- Content Wrapper -->
                         <div class="relative z-10 flex flex-col h-full">
                             <div>
-                                <span class="inline-block bg-eventotes-gold/20 text-eventotes-gold border border-eventotes-gold/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded mb-6" data-i18n="badge_sales">Sales Program</span>
-                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-eventotes-gold transition-colors duration-300" data-i18n="partner_title">PARTNER WITH US</h2>
+                                <!-- Bloque separado para badge -->
+                                <div class="mb-8 block">
+                                    <span class="inline-block bg-eventotes-gold/20 text-eventotes-gold border border-eventotes-gold/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded" data-i18n="badge_sales">Sales Program</span>
+                                </div>
+                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-eventotes-gold transition-colors duration-300 leading-tight block" data-i18n="partner_title">PARTNER WITH US</h2>
                                 <p class="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-sm" data-i18n="partner_desc">
                                     Join our external sales network. High commissions for closing enterprise SaaS contracts.
                                 </p>
@@ -736,8 +762,11 @@
                         <!-- Content Wrapper -->
                         <div class="relative z-10 flex flex-col h-full">
                             <div>
-                                <span class="inline-block bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded mb-6" data-i18n="badge_careers">Careers</span>
-                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-neon-cyan transition-colors duration-300" data-i18n="join_team_title">JOIN THE TEAM</h2>
+                                <!-- Bloque separado para badge -->
+                                <div class="mb-8 block">
+                                    <span class="inline-block bg-neon-cyan/20 text-neon-cyan border border-neon-cyan/50 px-3 py-1 text-[10px] font-mono uppercase tracking-widest rounded" data-i18n="badge_careers">Careers</span>
+                                </div>
+                                <h2 class="euro-style text-4xl mb-6 text-white group-hover:text-neon-cyan transition-colors duration-300 leading-tight block" data-i18n="join_team_title">JOIN THE TEAM</h2>
                                 <p class="text-gray-400 text-sm font-light leading-relaxed mb-8 max-w-sm" data-i18n="careers_desc">
                                     We are looking for Full Stack Developers and Solution Architects. Remote first culture.
                                 </p>
@@ -831,109 +860,123 @@
         document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
 
 
-        // 2. HERO CANVAS ANIMATION (Network Effect)
-        const canvas = document.getElementById('hero-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        let particles = [];
-        
-        // Settings
-        const particleCount = 60; // Less is cleaner
-        const connectionDistance = 150;
-        const mouseDistance = 200;
+        // 2. HERO ANIMATION: DIGITAL NEURAL SPHERE (THREE.JS)
+        function initHeroAnimation() {
+            const container = document.getElementById('hero-canvas-container');
+            if (!container) return;
 
-        function resize() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
+            // Scene setup
+            const scene = new THREE.Scene();
+            // Optional: Fog for depth
+            scene.fog = new THREE.FogExp2(0x000000, 0.001);
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * width;
-                this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5; // Slow movement
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.size = Math.random() * 2 + 1;
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30; // Move back to see the sphere
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // --- CREATE THE NEURAL SPHERE ---
+            // 1. Particles (The "Nodes")
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 2000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // Spread particles in a sphere shape mostly, with some randomness
+                // Using spherical coordinates to cartesian for better globe distribution
+                const r = 15 + Math.random() * 2; // Radius around 15
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos((Math.random() * 2) - 1);
+                
+                posArray[i] = r * Math.sin(phi) * Math.cos(theta); // x
+                posArray[i+1] = r * Math.sin(phi) * Math.sin(theta); // y
+                posArray[i+2] = r * Math.cos(phi); // z
             }
-
-            update(mouseX, mouseY) {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                // Bounce off edges
-                if (this.x < 0 || this.x > width) this.vx *= -1;
-                if (this.y < 0 || this.y > height) this.vy *= -1;
-
-                // Mouse interaction (gentle attraction)
-                if (mouseX != null) {
-                    let dx = mouseX - this.x;
-                    let dy = mouseY - this.y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-                    if (distance < mouseDistance) {
-                        const forceDirectionX = dx / distance;
-                        const forceDirectionY = dy / distance;
-                        const force = (mouseDistance - distance) / mouseDistance;
-                        const attractionStrength = 0.05;
-                        this.vx += forceDirectionX * force * attractionStrength;
-                        this.vy += forceDirectionY * force * attractionStrength;
-                    }
-                }
-            }
-
-            draw() {
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        // Init Particles
-        for(let i=0; i<particleCount; i++) {
-            particles.push(new Particle());
-        }
-
-        // Mouse tracking
-        let mouseX = null;
-        let mouseY = null;
-        window.addEventListener('mousemove', (e) => {
-            mouseX = e.x;
-            mouseY = e.y;
-        });
-        window.addEventListener('mouseout', () => {
-            mouseX = null;
-            mouseY = null;
-        });
-
-        function animate() {
-            ctx.clearRect(0, 0, width, height);
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
             
-            // Update and draw particles
-            for (let i = 0; i < particles.length; i++) {
-                particles[i].update(mouseX, mouseY);
-                particles[i].draw();
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.08,
+                color: 0xffffff, // White
+                transparent: true,
+                opacity: 0.8,
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
 
-                // Draw connections
-                for (let j = i; j < particles.length; j++) {
-                    let dx = particles[i].x - particles[j].x;
-                    let dy = particles[i].y - particles[j].y;
-                    let distance = Math.sqrt(dx*dx + dy*dy);
-
-                    if (distance < connectionDistance) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance/connectionDistance})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.stroke();
-                    }
-                }
+            // 2. Wireframe Icosahedron (The "Structure")
+            const geometry = new THREE.IcosahedronGeometry(15, 1);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x333333, 
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const wireframeSphere = new THREE.Mesh(geometry, material);
+            scene.add(wireframeSphere);
+            
+            // 3. Floating "Data" Cubes (Optional clutter for "World" feel)
+            const cubesGroup = new THREE.Group();
+            for (let i = 0; i < 20; i++) {
+                const geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+                const mat = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }); // Gold
+                const cube = new THREE.Mesh(geo, mat);
+                
+                // Random position further out
+                const r = 20 + Math.random() * 10;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+                cube.position.set(
+                    r * Math.sin(phi) * Math.cos(theta),
+                    r * Math.sin(phi) * Math.sin(theta),
+                    r * Math.cos(phi)
+                );
+                
+                cubesGroup.add(cube);
             }
-            requestAnimationFrame(animate);
+            scene.add(cubesGroup);
+
+
+            // --- ANIMATION LOOP ---
+            let mouseX = 0;
+            let mouseY = 0;
+            
+            // Mouse Interaction
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Rotations
+                particlesMesh.rotation.y += 0.001;
+                wireframeSphere.rotation.y -= 0.0015;
+                wireframeSphere.rotation.x += 0.0005;
+                cubesGroup.rotation.y += 0.002;
+                cubesGroup.rotation.z += 0.001;
+
+                // Mouse influence on camera/scene
+                particlesMesh.rotation.x += mouseY * 0.001;
+                particlesMesh.rotation.y += mouseX * 0.001;
+
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize Handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
         }
-        animate();
+        
+        // Start Three.js when window loads
+        window.addEventListener('load', initHeroAnimation);
 
 
         // 3. LANGUAGE DICTIONARY
@@ -989,7 +1032,7 @@
                 footer_biz: "Business",
                 footer_edu: "Education",
                 partner_program: "Partner Program",
-                investor_relations: "Investor Relations",
+                investor_relations: "Relación con Inversionistas",
                 careers_link: "Careers",
                 apply_grant: "Apply for Grant",
                 privacy: "Privacy Policy",
