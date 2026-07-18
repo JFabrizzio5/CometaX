@@ -244,6 +244,52 @@
             background-color: #000;
             color: white;
         }
+
+        /* ---- ONE CONTINUOUS SPACE FIELD ----
+           Per-section backgrounds created hard seams: an opaque section clipped
+           the previous section's glow. Instead the whole page shares a single
+           field (gradient + stars + drifting orbs) and the sections are
+           transparent, so nothing ever looks cut at a boundary. */
+        .space-field {
+            position: relative;
+            background:
+                linear-gradient(180deg,
+                    #020202 0%,
+                    #070512 22%,
+                    #0a0718 42%,
+                    #060410 62%,
+                    #08050f 80%,
+                    #020202 100%);
+        }
+        .space-field::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                radial-gradient(1.5px 1.5px at 12% 8%, rgba(255,255,255,.40), transparent 55%),
+                radial-gradient(1px 1px at 33% 27%, rgba(255,255,255,.30), transparent 55%),
+                radial-gradient(1.5px 1.5px at 58% 13%, rgba(196,181,253,.40), transparent 55%),
+                radial-gradient(1px 1px at 74% 33%, rgba(255,255,255,.26), transparent 55%),
+                radial-gradient(1px 1px at 88% 18%, rgba(255,255,255,.32), transparent 55%),
+                radial-gradient(1.5px 1.5px at 46% 41%, rgba(196,181,253,.28), transparent 55%),
+                radial-gradient(1px 1px at 22% 37%, rgba(255,255,255,.24), transparent 55%),
+                radial-gradient(1px 1px at 66% 5%, rgba(255,255,255,.28), transparent 55%);
+            background-repeat: repeat;
+            background-size: 680px 520px;
+            opacity: .55;
+        }
+        /* Big soft violet clouds, staggered down the page */
+        .space-orb {
+            position: absolute;
+            border-radius: 9999px;
+            pointer-events: none;
+            z-index: 0;
+            filter: blur(70px);
+            background: radial-gradient(circle, rgba(124,58,237,.24), transparent 70%);
+        }
+
     </style>
 </head>
 <body class="antialiased selection:bg-white selection:text-black">
@@ -269,21 +315,29 @@
                         <span id="lang-es" class="lang-option">ES</span>
                     </div>
 
-                    <a href="#" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
-                        <span data-i18n="nav_home">Home</span>
+                    <a href="#services" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
+                        <span data-i18n="nav_services">Services</span>
+                        <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#cases" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
+                        <span data-i18n="nav_cases">Work</span>
+                        <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#plans" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
+                        <span data-i18n="nav_plans">Plans</span>
                         <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#projects" onclick="showPage('home')" class="text-white/70 hover:text-white transition-colors duration-300 relative group">
                         <span data-i18n="nav_ventures">Ventures</span>
                         <span class="absolute -bottom-2 left-0 w-0 h-[1px] bg-white transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    
+
                     <a href="#" onclick="showPage('hub')" class="text-white/70 hover:text-eventotes-gold transition-colors duration-300" data-i18n="nav_hub">
                         Social Hub
                     </a>
-                    
-                    <a href="#alliances" class="bg-white text-black px-8 py-3 clip-button hover:bg-gray-200 transition-all duration-300 font-brand italic shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)] hover:-translate-y-1 transform" data-i18n="nav_contact">
-                        PARTNERS
+
+                    <a href="#alliances" class="bg-white text-black px-6 py-3 clip-button hover:bg-eventotes-gold transition-all duration-300 font-brand italic hover:-translate-y-1 transform whitespace-nowrap" data-i18n="nav_cta">
+                        FREE DIAGNOSIS
                     </a>
                 </div>
 
@@ -296,11 +350,14 @@
     </nav>
 
     <!-- Mobile Menu Overlay -->
-    <div id="mobile-menu" class="fixed inset-0 bg-black z-40 transform translate-x-full flex flex-col items-center justify-center space-y-8 font-brand italic text-2xl uppercase">
-        <a href="#" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_home">Home</a>
+    <div id="mobile-menu" class="fixed inset-0 bg-black z-40 transform translate-x-full flex flex-col items-center justify-center space-y-6 font-brand italic text-2xl uppercase">
+        <a href="#services" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_services">Services</a>
+        <a href="#cases" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_cases">Work</a>
+        <a href="#plans" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_plans">Plans</a>
+        <a href="#faq" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="faq_title">FAQ</a>
         <a href="#projects" onclick="showPage('home'); toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_ventures">Ventures</a>
         <a href="#" onclick="showPage('hub'); toggleMobileMenu()" class="text-white hover:text-eventotes-gold" data-i18n="nav_hub">Social Hub</a>
-        <a href="#alliances" onclick="toggleMobileMenu()" class="text-white hover:text-gray-400" data-i18n="nav_contact">Partners</a>
+        <a href="#alliances" onclick="toggleMobileMenu()" class="text-eventotes-gold" data-i18n="nav_cta">Free diagnosis</a>
         <div class="lang-switch-container scale-150 mt-8" onclick="toggleLanguage()">
             <span id="lang-en-mobile" class="lang-option active">EN</span>
             <span id="lang-es-mobile" class="lang-option">ES</span>
@@ -310,7 +367,13 @@
     <!-- ========================================= -->
     <!-- VIEW: HOME PAGE                           -->
     <!-- ========================================= -->
-    <main id="view-home" class="fade-in">
+    <main id="view-home" class="fade-in space-field">
+
+        <!-- Drifting violet clouds, spread down the page -->
+        <div class="space-orb" style="width:52rem;height:52rem;top:14%;right:-16rem"></div>
+        <div class="space-orb" style="width:46rem;height:46rem;top:34%;left:-18rem"></div>
+        <div class="space-orb" style="width:50rem;height:50rem;top:56%;right:-14rem"></div>
+        <div class="space-orb" style="width:44rem;height:44rem;top:76%;left:-16rem"></div>
         
         <!-- HERO SECTION (INTERACTIVE CANVAS) -->
         <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
@@ -318,37 +381,36 @@
             <!-- THE INTERACTIVE 3D CANVAS -->
             <div id="hero-canvas-container"></div>
             
-            <!-- Vignette Overlay -->
-            <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,#020202_100%)] pointer-events-none z-10"></div>
+            <!-- Legibility scrim: darkens the left where the text sits, fades right -->
+            <div class="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/70 to-transparent pointer-events-none z-10"></div>
+            <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020202] to-transparent pointer-events-none z-10"></div>
 
-            <div class="max-w-7xl mx-auto px-6 relative z-20 w-full pointer-events-none"> 
-                <div class="max-w-5xl pointer-events-auto">
-                    <div class="euro-wrapper mb-6 reveal-node active">
-                        <div class="hero-glass-panel inline-block px-4 py-2 rounded-lg mb-6 backdrop-blur-md border-l-4 border-eventotes-gold animate-pulse">
-                             <span class="text-eventotes-gold font-mono text-xs tracking-[0.3em] uppercase">
-                                System Online // Neural Link Active
-                            </span>
-                        </div>
-                        <!-- Mejora Responsiva: Títulos que escalan desde text-4xl en móvil -->
-                        <h1 class="euro-style text-4xl sm:text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter text-white drop-shadow-2xl">
-                            <span data-i18n="hero_title_1">FUTURE</span><br>
-                            <span class="hero-glow-text break-words" data-i18n="hero_title_2">ENGINEERED.</span>
-                        </h1>
+            <div class="max-w-7xl mx-auto px-6 relative z-20 w-full pointer-events-none">
+                <div class="max-w-3xl pointer-events-auto">
+                    <!-- Clean status badge -->
+                    <div class="inline-flex items-center gap-3 mb-8 reveal-node active">
+                        <span class="relative flex h-2.5 w-2.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-eventotes-gold opacity-60"></span>
+                            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-eventotes-gold"></span>
+                        </span>
+                        <span class="text-gray-300 font-mono text-[11px] tracking-[0.25em] uppercase" data-i18n="hero_badge">Available for new projects</span>
                     </div>
 
-                    <div class="mt-8 hero-glass-panel p-6 rounded-xl max-w-2xl reveal-node delay-200 active">
-                        <p class="text-base sm:text-lg md:text-xl text-gray-200 font-body font-light leading-relaxed" data-i18n="hero_desc">
-                            Redefining the boundaries of software architecture and commercial strategy. We build ecosystems, not just applications.
-                        </p>
-                    </div>
+                    <h1 class="euro-style text-5xl sm:text-7xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tighter text-white reveal-node active">
+                        <span data-i18n="hero_title_1">FUTURE</span><br>
+                        <span class="hero-glow-text break-words" data-i18n="hero_title_2">ENGINEERED.</span>
+                    </h1>
 
-                    <div class="mt-12 flex flex-wrap gap-6 reveal-node delay-300 active">
-                        <a href="#projects" class="px-8 sm:px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-gray-200 transition-all clip-button hover:scale-105 duration-300 shadow-[0_0_40px_rgba(255,255,255,0.3)] relative overflow-hidden group text-sm sm:text-base">
-                            <span class="relative z-10" data-i18n="hero_cta">Explore Ventures</span>
-                            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700"></div>
+                    <p class="mt-8 text-base sm:text-lg text-gray-400 font-body font-light leading-relaxed max-w-xl reveal-node delay-200 active" data-i18n="hero_desc">
+                        Technology that gets delivered, not just promised. We take SMBs where a single developer can't — architecture, development and maintenance from a team of 6+ specialists, at the cost of one in-house hire.
+                    </p>
+
+                    <div class="mt-10 flex flex-wrap gap-4 reveal-node delay-300 active">
+                        <a href="#alliances" class="px-8 sm:px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-eventotes-gold transition-all clip-button hover:scale-105 duration-300 text-sm sm:text-base">
+                            <span data-i18n="hero_cta">Get a free diagnosis</span>
                         </a>
-                        <a href="#alliances" class="px-8 sm:px-10 py-4 bg-black/50 backdrop-blur border border-white/30 text-white font-brand italic uppercase hover:bg-white/10 transition-all clip-button hover:border-white hover:text-eventotes-gold text-sm sm:text-base" data-i18n="nav_contact">
-                            Partners
+                        <a href="#cases" class="px-8 sm:px-10 py-4 border border-white/20 text-white font-brand italic uppercase hover:bg-white/5 hover:border-white/50 transition-all clip-button text-sm sm:text-base" data-i18n="hero_cta2">
+                            See our work
                         </a>
                     </div>
                 </div>
@@ -360,9 +422,453 @@
             </div>
         </header>
 
+        <!-- SERVICES (WHAT WE DO) -->
+        <section id="services" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="mb-16 reveal-node">
+                    <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="svc_title">WHAT WE DO</h2>
+                    <p class="text-gray-400 font-body mt-4 max-w-2xl text-base sm:text-lg leading-relaxed" data-i18n="svc_sub">You need technology. You don't need to manage a tech team. We take SMBs where a single developer can't reach. If you have a team, we integrate. If you don't, we're your team.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Scenario 1 -->
+                    <div class="card-tech rounded-lg p-8 reveal-node delay-100">
+                        <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase">Scenario 01</span>
+                        <h3 class="font-brand italic text-xl text-white mt-3 mb-2" data-i18n="scen1_q">"I have a product idea and need to execute it."</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="scen1_a">We're your team from day one. Diagnosis, proposal and kickoff in under a week.</p>
+                    </div>
+                    <!-- Scenario 2 -->
+                    <div class="card-tech rounded-lg p-8 reveal-node delay-200">
+                        <span class="text-neon-cyan font-mono text-[10px] tracking-[0.2em] uppercase">Scenario 02</span>
+                        <h3 class="font-brand italic text-xl text-white mt-3 mb-2" data-i18n="scen2_q">"I have a platform but no one reliable to maintain it."</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="scen2_a">Monthly subscription. One contact, 6+ specialists behind it, a report of everything done each month.</p>
+                    </div>
+                    <!-- Scenario 3 -->
+                    <div class="card-tech rounded-lg p-8 reveal-node delay-100">
+                        <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase">Scenario 03</span>
+                        <h3 class="font-brand italic text-xl text-white mt-3 mb-2" data-i18n="scen3_q">"My tech team exists but can't keep up."</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="scen3_a">We plug in as an extension of your team. Your architecture, your repos, your process — capacity without friction.</p>
+                    </div>
+                    <!-- Scenario 4 -->
+                    <div class="card-tech rounded-lg p-8 reveal-node delay-200">
+                        <span class="text-neon-cyan font-mono text-[10px] tracking-[0.2em] uppercase">Scenario 04</span>
+                        <h3 class="font-brand italic text-xl text-white mt-3 mb-2" data-i18n="scen4_q">"I want to use AI in my processes but don't know where to start."</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="scen4_a">Free diagnosis. We identify what to automate with AI and propose a solution with real costs and concrete scope.</p>
+                    </div>
+                </div>
+
+                <!-- Value strip -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12 border-t border-white/10 pt-10 reveal-node">
+                    <div><h4 class="font-brand italic text-3xl text-white">6+</h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="val_specialists">Specialists per project, at the cost of one in-house dev</p></div>
+                    <div><h4 class="font-brand italic text-3xl text-white">1</h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="val_contact">Point of contact. We align the team, you coordinate with one person</p></div>
+                    <div><h4 class="font-brand italic text-3xl text-white">0</h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="val_surprises">Billing surprises. Fixed monthly price, cancel anytime</p></div>
+                </div>
+
+                <div class="mt-12 reveal-node">
+                    <a href="#alliances" class="inline-flex items-center gap-3 px-10 py-4 bg-white text-black font-brand italic uppercase hover:bg-eventotes-gold transition-all clip-button hover:scale-105 duration-300 text-sm sm:text-base">
+                        <span data-i18n="svc_cta">Get a free diagnosis</span> <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROVEN TRACK RECORD (REAL CASES) -->
+        <section id="cases" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="mb-16 reveal-node">
+                    <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="cases_title">PROVEN TRACK RECORD</h2>
+                    <p class="text-gray-400 font-body mt-4 max-w-2xl text-base sm:text-lg" data-i18n="cases_sub">We don't promise. We deliver. A few systems we've built, rescued and scaled.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Case 1: SAT / invoices -->
+                    <div class="card-tech rounded-lg p-8 flex flex-col reveal-node delay-100">
+                        <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase border border-eventotes-gold/30 px-2 py-1 rounded w-max">Fiscal · Scale</span>
+                        <h3 class="font-brand italic text-2xl text-white mt-5 mb-3" data-i18n="case1_title">Millions of invoices, zero downtime</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed flex-grow" data-i18n="case1_desc">Migrated a Laravel monolith to a multi-tenant, multi-service architecture handling millions of SAT XML invoices. Fully auditable for fiscal compliance, with Redis Streams and real-time WebSockets.</p>
+                    </div>
+                    <!-- Case 2: Insurance rescue -->
+                    <div class="card-tech rounded-lg p-8 flex flex-col reveal-node delay-200">
+                        <span class="text-neon-cyan font-mono text-[10px] tracking-[0.2em] uppercase border border-neon-cyan/30 px-2 py-1 rounded w-max">Rescue · AWS</span>
+                        <h3 class="font-brand italic text-2xl text-white mt-5 mb-3" data-i18n="case2_title">An insurer rescued without its source code</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed flex-grow" data-i18n="case2_desc">Migrated a legacy VB.NET system to AWS with no access to the original codebase — rebuilt by behavior. Payment microservices moved with 100% uptime and zero disruption to production.</p>
+                    </div>
+                    <!-- Case 3: Gas stations -->
+                    <div class="card-tech rounded-lg p-8 flex flex-col reveal-node delay-300">
+                        <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase border border-eventotes-gold/30 px-2 py-1 rounded w-max">Enterprise · Resilience</span>
+                        <h3 class="font-brand italic text-2xl text-white mt-5 mb-3" data-i18n="case3_title">Resilient architecture for 16 fuel stations</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed flex-grow" data-i18n="case3_desc">Led a Java Spring Boot + Angular platform across 16 gas stations: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.</p>
+                    </div>
+                </div>
+
+                <!-- Stat strip -->
+                <div class="grid grid-cols-3 gap-6 mt-16 border-t border-white/10 pt-10 reveal-node text-center md:text-left">
+                    <div><h4 class="font-brand italic text-4xl text-white">+50</h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="stat_projects">Projects delivered</p></div>
+                    <div><h4 class="font-brand italic text-4xl text-white">10 <span class="text-lg" data-i18n="stat_years_u">yrs</span></h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="stat_years">Combined experience</p></div>
+                    <div><h4 class="font-brand italic text-4xl text-white">98%</h4><p class="text-xs uppercase tracking-wide text-gray-500 mt-1" data-i18n="stat_sat">Client satisfaction</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- COMPARISON — light section, breaks up the dark run -->
+        <section id="compare" class="relative z-20 py-28 sm:py-32 bg-gradient-to-b from-white via-[#f7f5ff] to-[#eeeaf9] text-black clip-tech overflow-hidden">
+            <div class="absolute inset-0 opacity-[0.04] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] pointer-events-none"></div>
+            <!-- Soft violet bloom so the light section has depth instead of flat white -->
+            <div class="absolute -top-40 -right-32 w-[42rem] h-[42rem] rounded-full bg-rankit-purple/10 blur-[90px] pointer-events-none"></div>
+            <div class="absolute -bottom-48 -left-40 w-[38rem] h-[38rem] rounded-full bg-rankit-purple/[0.08] blur-[90px] pointer-events-none"></div>
+
+            <div class="max-w-6xl mx-auto px-6 relative z-10">
+                <div class="mb-14 reveal-node">
+                    <!-- flex w-max (not inline-flex): euro-style titles are inline-block,
+                         so an inline badge would sit on the same line and overlap. -->
+                    <div class="flex w-max items-center gap-2 border border-black/70 px-3 py-1 mb-6 rounded-full">
+                        <div class="w-2 h-2 bg-black rounded-full"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest" data-i18n="cmp_badge">The real math</span>
+                    </div>
+                    <div class="euro-wrapper block mb-5">
+                        <h2 class="euro-style text-4xl sm:text-5xl md:text-6xl leading-[0.95]" data-i18n="cmp_title">ONE DEV ON PAYROLL<br>VS. A WHOLE TEAM</h2>
+                    </div>
+                    <p class="text-base sm:text-lg text-gray-700 max-w-2xl leading-relaxed" data-i18n="cmp_sub">You don't need to hire, manage and retain a technical team. That's the part that's expensive, slow, and distracts you from your business.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Hiring in-house -->
+                    <div class="border border-black/10 rounded-2xl p-7 bg-white reveal-node delay-100 shadow-[0_2px_10px_rgba(0,0,0,0.04)]">
+                        <div class="flex items-center gap-2 mb-5">
+                            <span class="text-xl text-gray-400">✗</span>
+                            <span class="font-mono text-[10px] uppercase tracking-widest text-gray-500" data-i18n="cmp_a_tag">Hiring 1 senior dev</span>
+                        </div>
+                        <div class="mb-1"><span class="font-brand italic text-3xl sm:text-4xl text-gray-400">$35–55k</span></div>
+                        <p class="font-mono text-xs text-gray-500 mb-6">MXN / mes</p>
+                        <p class="text-xs text-gray-500 mb-6" data-i18n="cmp_a_note">plus benefits, recruiting and turnover risk</p>
+                        <ul class="space-y-2.5 text-sm text-gray-500">
+                            <li class="flex gap-2.5"><span class="text-gray-300">—</span><span data-i18n="cmp_a_1">One person. One profile. One point of failure.</span></li>
+                            <li class="flex gap-2.5"><span class="text-gray-300">—</span><span data-i18n="cmp_a_2">No QA, no DevOps, no architecture.</span></li>
+                            <li class="flex gap-2.5"><span class="text-gray-300">—</span><span data-i18n="cmp_a_3">Months to hire. You carry the payroll risk.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- BÁSICO -->
+                    <div class="border border-black/15 rounded-2xl p-7 bg-white reveal-node delay-200 shadow-[0_10px_40px_-12px_rgba(0,0,0,0.18)]">
+                        <div class="flex items-center gap-2 mb-5">
+                            <span class="text-xl text-black">✓</span>
+                            <span class="font-mono text-[10px] uppercase tracking-widest text-black" data-i18n="cmp_b_tag">CometaX · Básico</span>
+                        </div>
+                        <div class="mb-1"><span class="font-brand italic text-3xl sm:text-4xl text-black">$26,000</span></div>
+                        <p class="font-mono text-xs text-gray-600 mb-6">MXN / mes · 40h equipo</p>
+                        <p class="text-xs text-gray-600 mb-6" data-i18n="cmp_b_note">keep it running: support, monitoring, fixes</p>
+                        <ul class="space-y-2.5 text-sm text-gray-800">
+                            <li class="flex gap-2.5"><span class="text-black font-bold">+</span><span data-i18n="cmp_b_1"><strong>6+ specialists:</strong> dev, QA, architect, DevOps.</span></li>
+                            <li class="flex gap-2.5"><span class="text-black font-bold">+</span><span data-i18n="cmp_b_2">One point of contact. No payroll.</span></li>
+                            <li class="flex gap-2.5"><span class="text-black font-bold">+</span><span data-i18n="cmp_b_3">Cancel anytime, no penalty.</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- PRO (recommended) -->
+                    <div class="border-2 border-rankit-purple rounded-2xl p-7 bg-gradient-to-b from-rankit-purple/[0.07] to-white relative reveal-node delay-300 shadow-[0_24px_70px_-20px_rgba(124,58,237,0.45)]">
+                        <div class="absolute top-0 right-5 -translate-y-1/2 bg-rankit-purple text-white text-[9px] font-mono uppercase tracking-widest px-3 py-1 rounded font-bold" data-i18n="cmp_c_badge">Recommended</div>
+                        <div class="flex items-center gap-2 mb-5">
+                            <span class="text-xl text-rankit-purple">✓</span>
+                            <span class="font-mono text-[10px] uppercase tracking-widest text-rankit-purple" data-i18n="cmp_c_tag">CometaX · Pro</span>
+                        </div>
+                        <div class="mb-1"><span class="font-brand italic text-3xl sm:text-4xl text-black">$50,000</span></div>
+                        <p class="font-mono text-xs text-gray-600 mb-6">MXN / mes · 80h equipo</p>
+                        <p class="text-xs text-gray-700 mb-6" data-i18n="cmp_c_note">make it grow: consulting, architecture, new modules</p>
+                        <ul class="space-y-2.5 text-sm text-gray-800">
+                            <li class="flex gap-2.5"><span class="text-rankit-purple font-bold">+</span><span data-i18n="cmp_c_1"><strong>Everything in Básico</strong>, at double the capacity.</span></li>
+                            <li class="flex gap-2.5"><span class="text-rankit-purple font-bold">+</span><span data-i18n="cmp_c_2">Technical consulting and architecture design.</span></li>
+                            <li class="flex gap-2.5"><span class="text-rankit-purple font-bold">+</span><span data-i18n="cmp_c_3">Scoped development and documentation.</span></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Custom quote strip -->
+                <div class="mt-8 rounded-2xl border border-black/10 bg-black text-white p-7 sm:p-8 flex flex-col md:flex-row md:items-center gap-6 justify-between reveal-node delay-300">
+                    <div>
+                        <h3 class="font-brand italic text-xl sm:text-2xl mb-2" data-i18n="cmp_quote_t">Bigger project? We quote it separately.</h3>
+                        <p class="text-sm text-gray-400 max-w-2xl" data-i18n="cmp_quote_d">Full products, legacy modernization or complex integrations. Fixed scope and price: 30% to start, 40% on milestones, 30% on delivery.</p>
+                    </div>
+                    <a href="#alliances" class="shrink-0 bg-white text-black px-7 py-4 clip-button hover:bg-rankit-purple hover:text-white transition-all duration-300 font-brand italic uppercase text-xs whitespace-nowrap" data-i18n="cmp_quote_cta">Request a quote</a>
+                </div>
+
+                <div class="mt-10 flex flex-col sm:flex-row items-start sm:items-center gap-6 justify-between border-t border-black/10 pt-8 reveal-node delay-400">
+                    <p class="text-sm text-gray-700 max-w-xl"><strong data-i18n="cmp_fast_t">Fast start:</strong> <span data-i18n="cmp_fast_d">week one is diagnosis, access and team assignment. Operational in days, not months.</span></p>
+                    <a href="#alliances" class="shrink-0 bg-black text-white px-8 py-4 clip-button hover:bg-rankit-purple transition-all duration-300 font-brand italic uppercase text-sm whitespace-nowrap" data-i18n="cmp_cta">Get a free diagnosis</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- PLANS / PRICING -->
+        <section id="plans" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="mb-16 reveal-node">
+                    <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="plans_title">PLANS</h2>
+                    <p class="text-gray-400 font-body mt-4 max-w-2xl text-base sm:text-lg" data-i18n="plans_sub">Monthly subscription for support and evolution, or a fixed quote for custom builds. One contact, 6+ specialists, cancel anytime.</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                    <!-- BÁSICO -->
+                    <div class="card-tech rounded-2xl p-8 flex flex-col reveal-node delay-100">
+                        <span class="text-gray-400 font-mono text-[10px] tracking-[0.2em] uppercase" data-i18n="plan_basic_tag">Maintenance</span>
+                        <h3 class="font-brand italic text-3xl text-white mt-2 mb-4">Básico</h3>
+                        <div class="mb-1"><span class="font-brand italic text-4xl text-white">$28,000</span> <span class="text-gray-500 text-sm font-mono">MXN / mes</span></div>
+                        <p class="text-xs text-gray-500 font-mono mb-6">≈ $1,647 USD + IVA · 40h equipo/mes</p>
+                        <ul class="space-y-3 text-sm text-gray-300 flex-grow border-t border-white/10 pt-6">
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_basic_1">Support and request tracking</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_basic_2">Monitoring and stability review</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_basic_3">Bug fixes and minor adjustments</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_basic_4">Monthly meeting + progress report</span></li>
+                        </ul>
+                        <a href="#alliances" class="mt-8 block text-center border border-white/30 text-white px-6 py-3 clip-button hover:bg-white hover:text-black transition uppercase font-bold text-xs tracking-widest" data-i18n="plan_choose">Choose plan</a>
+                    </div>
+
+                    <!-- PRO (RECOMMENDED) -->
+                    <div class="card-tech rounded-2xl p-8 flex flex-col reveal-node delay-200 border-eventotes-gold/60 relative shadow-[0_0_50px_rgba(251,191,36,0.12)]">
+                        <div class="absolute top-0 right-6 -translate-y-1/2 bg-eventotes-gold text-black text-[10px] font-mono uppercase tracking-widest px-3 py-1 rounded font-bold" data-i18n="plan_recommended">Recommended</div>
+                        <span class="text-eventotes-gold font-mono text-[10px] tracking-[0.2em] uppercase" data-i18n="plan_pro_tag">Evolution</span>
+                        <h3 class="font-brand italic text-3xl text-white mt-2 mb-4">Pro</h3>
+                        <div class="mb-1"><span class="font-brand italic text-4xl text-white">$52,000</span> <span class="text-gray-500 text-sm font-mono">MXN / mes</span></div>
+                        <p class="text-xs text-gray-500 font-mono mb-6">≈ $3,059 USD + IVA · 80h equipo/mes</p>
+                        <ul class="space-y-3 text-sm text-gray-300 flex-grow border-t border-white/10 pt-6">
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_pro_1">Everything in Básico, plus:</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_pro_2">Technical and product consulting</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_pro_3">Scoped development and new modules</span></li>
+                            <li class="flex gap-3"><i class="fas fa-check text-eventotes-gold mt-1 text-xs"></i><span data-i18n="plan_pro_4">Architecture review and documentation</span></li>
+                        </ul>
+                        <a href="#alliances" class="mt-8 block text-center bg-white text-black px-6 py-3 clip-button hover:bg-eventotes-gold transition uppercase font-bold text-xs tracking-widest" data-i18n="plan_choose">Choose plan</a>
+                    </div>
+
+                    <!-- SOFTWARE A MEDIDA -->
+                    <div class="card-tech rounded-2xl p-8 flex flex-col reveal-node delay-300">
+                        <span class="text-neon-cyan font-mono text-[10px] tracking-[0.2em] uppercase" data-i18n="plan_custom_tag">Custom software</span>
+                        <h3 class="font-brand italic text-3xl text-white mt-2 mb-4" data-i18n="plan_custom_name">By project</h3>
+                        <div class="mb-1"><span class="font-brand italic text-3xl text-white" data-i18n="plan_custom_price">Quoted</span></div>
+                        <p class="text-xs text-gray-500 font-mono mb-6" data-i18n="plan_custom_pay">30% start · 40% milestones · 30% delivery</p>
+                        <ul class="space-y-3 text-sm text-gray-300 flex-grow border-t border-white/10 pt-6">
+                            <li class="flex gap-3"><i class="fas fa-cube text-neon-cyan mt-1 text-xs"></i><span data-i18n="plan_custom_1">Full products and platforms (web, mobile, B2B)</span></li>
+                            <li class="flex gap-3"><i class="fas fa-cube text-neon-cyan mt-1 text-xs"></i><span data-i18n="plan_custom_2">Modernization: migrations, re-architecture</span></li>
+                            <li class="flex gap-3"><i class="fas fa-cube text-neon-cyan mt-1 text-xs"></i><span data-i18n="plan_custom_3">Complex integrations, payments, APIs</span></li>
+                        </ul>
+                        <a href="#alliances" class="mt-8 block text-center border border-neon-cyan/50 text-neon-cyan px-6 py-3 clip-button hover:bg-neon-cyan hover:text-black transition uppercase font-bold text-xs tracking-widest" data-i18n="plan_quote">Request a quote</a>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-gray-500 font-mono mt-10 reveal-node" data-i18n="plans_note">Card auto-charge: -$2,000/mo · Quarterly: best rate · Cancel anytime, no penalty · Your code is yours · First-month satisfaction guarantee.</p>
+            </div>
+        </section>
+
+        <!-- CLIENT PANEL -->
+        <section id="panel" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <!-- Copy -->
+                    <div class="reveal-node">
+                        <div class="flex w-max items-center gap-3 mb-6">
+                            <span class="w-2 h-2 rounded-full bg-rankit-purple animate-pulse"></span>
+                            <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-rankit-purple" data-i18n="panel_badge">Total transparency</span>
+                        </div>
+                        <div class="euro-wrapper block mb-5">
+                            <h2 class="euro-style text-4xl sm:text-5xl md:text-6xl text-white leading-[0.95]" data-i18n="panel_title">A PANEL TO WATCH<br>YOUR TEAM WORK</h2>
+                        </div>
+                        <p class="text-base sm:text-lg text-gray-400 font-body font-light leading-relaxed mb-8" data-i18n="panel_sub">You don't have to chase anyone for an update. Your account at cometax.click shows what we're doing, how many hours went in and what's coming — any day of the month, not just at the end.</p>
+
+                        <ul class="space-y-4">
+                            <li class="flex gap-4 reveal-node delay-100">
+                                <i class="fas fa-chart-line text-rankit-purple mt-1"></i>
+                                <span class="text-sm text-gray-300" data-i18n="panel_1"><strong class="text-white">Hours in real time.</strong> How much of your monthly pool is used and on what.</span>
+                            </li>
+                            <li class="flex gap-4 reveal-node delay-200">
+                                <i class="fas fa-list-check text-rankit-purple mt-1"></i>
+                                <span class="text-sm text-gray-300" data-i18n="panel_2"><strong class="text-white">Tasks and progress.</strong> What's done, what's running, what's next — with priorities and risks.</span>
+                            </li>
+                            <li class="flex gap-4 reveal-node delay-300">
+                                <i class="fas fa-file-signature text-rankit-purple mt-1"></i>
+                                <span class="text-sm text-gray-300" data-i18n="panel_3"><strong class="text-white">Contracts and reports.</strong> Your monthly report and paperwork, always available.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Mock panel -->
+                    <div class="reveal-node delay-200">
+                        <div class="card-tech rounded-2xl overflow-hidden shadow-[0_30px_80px_-30px_rgba(124,58,237,0.5)]">
+                            <!-- window bar -->
+                            <div class="flex items-center gap-2 px-5 py-3.5 border-b border-white/10 bg-white/[0.03]">
+                                <span class="w-2.5 h-2.5 rounded-full bg-red-500/70"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70"></span>
+                                <span class="w-2.5 h-2.5 rounded-full bg-green-500/70"></span>
+                                <span class="ml-3 font-mono text-[11px] text-gray-500">cometax.click / mi cuenta</span>
+                            </div>
+
+                            <div class="p-6 space-y-6">
+                                <!-- hours -->
+                                <div>
+                                    <div class="flex justify-between items-end mb-2">
+                                        <span class="font-mono text-[10px] uppercase tracking-widest text-gray-500" data-i18n="panel_hours">Team hours this month</span>
+                                        <span class="font-brand italic text-2xl text-white">32<span class="text-gray-500 text-base">/40</span></span>
+                                    </div>
+                                    <div class="h-2 rounded-full bg-white/10 overflow-hidden">
+                                        <div class="h-full rounded-full bg-gradient-to-r from-rankit-purple to-neon-cyan" style="width:80%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- tasks -->
+                                <div class="space-y-3">
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <i class="fas fa-circle-check text-green-400 text-xs"></i>
+                                        <span class="text-gray-300 flex-grow" data-i18n="panel_t1">Payment microservice migration</span>
+                                        <span class="font-mono text-[10px] text-gray-500">6h</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <i class="fas fa-circle-notch text-rankit-purple text-xs animate-spin-slow"></i>
+                                        <span class="text-gray-300 flex-grow" data-i18n="panel_t2">Slow query optimization</span>
+                                        <span class="font-mono text-[10px] text-gray-500">4h</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm">
+                                        <i class="far fa-circle text-gray-600 text-xs"></i>
+                                        <span class="text-gray-500 flex-grow" data-i18n="panel_t3">Architecture review</span>
+                                        <span class="font-mono text-[10px] text-gray-600">—</span>
+                                    </div>
+                                </div>
+
+                                <!-- report -->
+                                <div class="flex items-center justify-between border-t border-white/10 pt-5">
+                                    <div class="flex items-center gap-3">
+                                        <i class="fas fa-file-lines text-gray-400"></i>
+                                        <span class="text-sm text-gray-300" data-i18n="panel_report">Monthly report</span>
+                                    </div>
+                                    <span class="font-mono text-[10px] uppercase tracking-widest text-green-400" data-i18n="panel_ready">Ready</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- METHOD / HOW WE WORK -->
+        <section id="method" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
+                <div class="mb-16 reveal-node">
+                    <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="method_title">HOW WE WORK</h2>
+                    <p class="text-gray-400 font-body mt-4 max-w-2xl text-base sm:text-lg" data-i18n="method_sub">You always have visibility. Your systems, repos and deliverables stay under your control.</p>
+                </div>
+
+                <!-- 5 steps -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 mb-20">
+                    <div class="reveal-node delay-100 border-t border-white/15 pt-5">
+                        <span class="font-mono text-eventotes-gold text-xs">01</span>
+                        <h3 class="font-brand italic text-lg text-white mt-2 mb-2" data-i18n="step1_t">Diagnosis</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="step1_d">We understand goals, operation, challenges and tech context.</p>
+                    </div>
+                    <div class="reveal-node delay-150 border-t border-white/15 pt-5">
+                        <span class="font-mono text-eventotes-gold text-xs">02</span>
+                        <h3 class="font-brand italic text-lg text-white mt-2 mb-2" data-i18n="step2_t">Proposal</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="step2_d">We define scope, investment, architecture, timeline and owners.</p>
+                    </div>
+                    <div class="reveal-node delay-200 border-t border-white/15 pt-5">
+                        <span class="font-mono text-eventotes-gold text-xs">03</span>
+                        <h3 class="font-brand italic text-lg text-white mt-2 mb-2" data-i18n="step3_t">Execution</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="step3_d">We work by priorities, iterations and verifiable deliveries.</p>
+                    </div>
+                    <div class="reveal-node delay-300 border-t border-white/15 pt-5">
+                        <span class="font-mono text-eventotes-gold text-xs">04</span>
+                        <h3 class="font-brand italic text-lg text-white mt-2 mb-2" data-i18n="step4_t">Validation</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="step4_d">We review results with your team and document decisions.</p>
+                    </div>
+                    <div class="reveal-node delay-400 border-t border-white/15 pt-5">
+                        <span class="font-mono text-eventotes-gold text-xs">05</span>
+                        <h3 class="font-brand italic text-lg text-white mt-2 mb-2" data-i18n="step5_t">Handover</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed" data-i18n="step5_d">We deploy, transfer knowledge and agree on continuity.</p>
+                    </div>
+                </div>
+
+                <!-- Technical criteria -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-white/10 pt-14">
+                    <div class="reveal-node delay-100">
+                        <h4 class="font-brand italic text-lg text-white mb-2" data-i18n="crit1_t">Code others can maintain</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="crit1_d">If another team has to touch it tomorrow, they should understand it. We write for continuity, not to create dependency on us.</p>
+                    </div>
+                    <div class="reveal-node delay-200">
+                        <h4 class="font-brand italic text-lg text-white mb-2" data-i18n="crit2_t">Production first</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="crit2_d">Every decision is judged by "what happens if this fails at 2am?" Monitoring, error handling and rollback are part of the design.</p>
+                    </div>
+                    <div class="reveal-node delay-300">
+                        <h4 class="font-brand italic text-lg text-white mb-2" data-i18n="crit3_t">The right stack, not the trendy one</h4>
+                        <p class="text-sm text-gray-400 leading-relaxed" data-i18n="crit3_d">We pick what actually solves the problem and fits whoever will maintain it — not what's trending this year.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ + GUARANTEE -->
+        <section id="faq" class="relative z-10 py-32">
+            <div class="max-w-5xl mx-auto px-6 relative z-10">
+                <div class="mb-14 reveal-node">
+                    <h2 class="euro-style text-4xl sm:text-5xl md:text-7xl text-white break-words" data-i18n="faq_title">FAQ</h2>
+                    <p class="text-gray-400 font-body mt-4 text-base sm:text-lg" data-i18n="faq_sub">Doubts resolved before the first call.</p>
+                </div>
+
+                <div class="space-y-3 reveal-node delay-100">
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q1">Can I cancel anytime?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a1">Yes. No penalty, no forced term. If there are hours already worked and unpaid, only that balance is settled. Nothing else.</p>
+                    </details>
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q2">Who owns the code?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a2">You do. Code and deliverables are transferred to the client. We don't create dependency — if another team takes over tomorrow, they can.</p>
+                    </details>
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q3">What if a bug is introduced — who pays?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a3">If it's 100% on us (unauthorized changes, something we broke), we fix it at no cost. If the change was approved by you and the bug is reported after 15 days, it's handled as normal hours from your plan.</p>
+                    </details>
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q4">What if I don't use all my monthly hours?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a4">Hours don't roll over. But in the monthly review meeting we help you prioritize so every hour goes into what moves the needle.</p>
+                    </details>
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q5">Can you work with my existing tech team?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a5">Absolutely. We join your repos, processes and tools. We work as an extension of your team, not as a separate island.</p>
+                    </details>
+                    <details class="card-tech rounded-lg px-6 py-5 group">
+                        <summary class="cursor-pointer list-none flex justify-between items-center gap-4 font-brand italic text-base sm:text-lg text-white">
+                            <span data-i18n="faq_q6">How do I know what was done each month?</span>
+                            <i class="fas fa-plus text-eventotes-gold text-sm group-open:rotate-45 transition-transform duration-300"></i>
+                        </summary>
+                        <p class="text-sm text-gray-400 leading-relaxed mt-4" data-i18n="faq_a6">You get a monthly report with hours used, tasks executed and progress. You can also check it anytime in your cometax.click account.</p>
+                    </details>
+                </div>
+
+                <!-- GUARANTEE -->
+                <div class="mt-14 border border-eventotes-gold/40 rounded-2xl p-8 sm:p-10 bg-eventotes-gold/[0.04] reveal-node delay-200">
+                    <div class="flex items-start gap-5">
+                        <i class="fas fa-shield-halved text-eventotes-gold text-3xl mt-1"></i>
+                        <div>
+                            <h3 class="font-brand italic text-2xl text-white mb-3" data-i18n="guarantee_t">Satisfaction guarantee</h3>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed" data-i18n="guarantee_d">If the first month of work doesn't meet your expectations, you don't continue and we don't penalize you. The plan is cancellable anytime — this guarantee just makes it explicit: if you don't see value, you don't pay a second month.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- LEADERSHIP (REDESIGNED: CIRCULAR ORBITAL STYLE) -->
-        <section class="relative z-10 py-32 bg-[#050505]">
-            <div class="max-w-7xl mx-auto px-6">
+        <section class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
                 <div class="mb-24 reveal-node text-center">
                     <div class="euro-wrapper">
                         <!-- Responsive title text -->
@@ -390,7 +896,7 @@
                             <div class="absolute inset-[-4px] rounded-full border border-eventotes-gold/20 scale-110"></div>
                             
                             <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#111] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-500">
-                                <img src="https://media.licdn.com/dms/image/v2/D4E03AQE8S7kVKvRzwQ/profile-displayphoto-crop_800_800/B4EZg0PDAsGYAI-/0/1753223017811?e=1767225600&v=beta&t=G6uMIJ17XcIImLOc7O2Aii4STKO-npJDhNvwXHxxnOM" 
+                                <img src="https://github.com/JFabrizzio5.png" alt="Joseph Fabrizzio"
                                      class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 transition duration-500">
                             </div>
                             
@@ -406,7 +912,7 @@
                             <p class="text-xs font-mono text-gray-500 mb-6 tracking-widest uppercase">CEO & FOUNDER | Ex-Sr. Tech Lead</p>
                             
                             <p class="text-sm text-gray-300 font-light leading-relaxed max-w-md mx-auto opacity-70 group-hover:opacity-100 transition duration-300" data-i18n="bio_joseph">
-                                Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.
+                                Software architect. Led a fiscal system handling millions of invoices, rescued an insurer's platform on AWS without its source code, and designed resilient architecture for 16 fuel stations. Self-taught since 2016.
                             </p>
                             
                             <!-- Social Icon (Optional) -->
@@ -432,8 +938,9 @@
                              <div class="absolute inset-[-4px] rounded-full border border-neon-cyan/20 scale-110"></div>
 
                             <div class="w-full h-full rounded-full overflow-hidden border-4 border-[#111] shadow-2xl relative z-10 group-hover:scale-105 transition-transform duration-500">
-                                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1887&auto=format&fit=crop" 
-                                     class="w-full h-full object-cover filter saturate-0 contrast-125 group-hover:saturate-100 transition duration-500">
+                                <div class="w-full h-full bg-[#0d0d0d] flex items-center justify-center">
+                                    <span class="euro-style text-6xl md:text-7xl text-neon-cyan/70">JA</span>
+                                </div>
                             </div>
 
                              <!-- Status Indicator -->
@@ -463,7 +970,7 @@
         </section>
 
         <!-- PROJECTS -->
-        <section id="projects" class="relative z-10 py-32 border-t border-white/10 bg-[#020202]">
+        <section id="projects" class="relative z-10 py-32">
             <!-- Decorative Elements -->
             <div class="absolute top-0 right-0 w-1/3 h-full bg-gradient-to-l from-[#111] to-transparent pointer-events-none"></div>
 
@@ -580,11 +1087,11 @@
         </section>
 
         <!-- STRATEGIC ALLIANCES & FORM -->
-        <section id="alliances" class="relative z-10 py-32 bg-[#080808] border-t border-white/10">
-            <div class="max-w-7xl mx-auto px-6">
+        <section id="alliances" class="relative z-10 py-32">
+            <div class="max-w-7xl mx-auto px-6 relative z-10">
                 <div class="text-center mb-16 reveal-node">
-                    <h2 class="euro-style text-4xl text-white" data-i18n="alliances_title">STRATEGIC ALLIANCES</h2>
-                    <p class="text-xs text-gray-500 font-mono mt-3 uppercase tracking-[0.3em]" data-i18n="alliances_sub">Expansion & Impact</p>
+                    <h2 class="euro-style text-4xl text-white" data-i18n="alliances_title">LET'S TALK</h2>
+                    <p class="text-xs text-gray-500 font-mono mt-3 uppercase tracking-[0.3em]" data-i18n="alliances_sub">Clients · Partners · Impact</p>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch max-w-6xl mx-auto">
@@ -635,20 +1142,21 @@
                             <span data-i18n="form_header">Start the conversation</span>
                         </h3>
                         
-                        <form onsubmit="event.preventDefault();" class="space-y-5">
+                        <form onsubmit="sendLead(event)" class="space-y-5">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_name">Full Name</label>
-                                    <input type="text" class="form-input" placeholder="John Doe">
+                                    <input id="f-name" type="text" required class="form-input" placeholder="John Doe">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_email">Email</label>
-                                    <input type="email" class="form-input" placeholder="john@example.com">
+                                    <input id="f-email" type="email" class="form-input" placeholder="john@example.com">
                                 </div>
                             </div>
                             <div>
                                 <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_type">Alliance Type</label>
-                                <select class="form-input form-select">
+                                <select id="f-type" class="form-input form-select">
+                                    <option value="client" data-i18n="form_opt_client" selected>Client — I need software / free diagnosis</option>
                                     <option value="investor" data-i18n="form_opt_investor">Investor / VC</option>
                                     <option value="grant" data-i18n="form_opt_grant">Grant / NGO Support</option>
                                     <option value="other" data-i18n="form_opt_other">Other Inquiry</option>
@@ -656,22 +1164,59 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_msg">Message</label>
-                                <textarea class="form-input resize-none h-24 font-mono text-xs" placeholder="..."></textarea>
+                                <textarea id="f-msg" required class="form-input resize-none h-24 font-mono text-xs" placeholder="..."></textarea>
                             </div>
                             
-                            <button class="w-full bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-gray-200 transition tracking-widest text-sm shadow-[0_0_15px_rgba(255,255,255,0.3)]" data-i18n="form_btn_send">
-                                Send Request
+                            <button class="w-full bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-[#25D366] transition tracking-widest text-sm flex items-center justify-center gap-3">
+                                <i class="fab fa-whatsapp text-lg"></i>
+                                <span data-i18n="form_btn_send">Send via WhatsApp</span>
                             </button>
                         </form>
 
                         <div class="mt-6 text-center pt-6 border-t border-white/10">
                             <p class="text-xs text-gray-500 font-mono" data-i18n="form_fallback">
-                                Prefer email? Write to us at <span class="text-white hover:underline cursor-pointer">direccionejemplo@gmail.com</span>
+                                Prefer email? Write to us at <a href="mailto:cometax@cometax.click" class="text-white hover:underline cursor-pointer">cometax@cometax.click</a>
                             </p>
                         </div>
                     </div>
 
                 </div>
+            </div>
+        </section>
+        <!-- FINAL CTA — the close -->
+        <section id="final-cta" class="relative z-10 py-28 sm:py-36 overflow-hidden border-t border-white/10">
+            <!-- Purple energy field -->
+            <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(124,58,237,0.30)_0%,transparent_68%)] pointer-events-none"></div>
+            <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[38rem] h-[38rem] bg-rankit-purple/20 blur-[130px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+                <div class="flex w-max mx-auto items-center gap-3 mb-8 reveal-node">
+                    <span class="w-2 h-2 rounded-full bg-rankit-purple animate-pulse"></span>
+                    <span class="font-mono text-[11px] tracking-[0.25em] uppercase text-gray-400" data-i18n="cta_eyebrow">The next step</span>
+                </div>
+
+                <h2 class="euro-style text-4xl sm:text-6xl md:text-7xl text-white leading-[0.95] mb-8 reveal-node delay-100" data-i18n="cta_title">WILL YOUR SYSTEM SURVIVE WHAT'S NEXT?</h2>
+
+                <p class="text-base sm:text-lg text-gray-300 font-body font-light leading-relaxed max-w-2xl mx-auto mb-4 reveal-node delay-200" data-i18n="cta_desc">
+                    In 30–45 minutes we tell you exactly what you have, what breaks first, and what we would do about it. No cost, no commitment — and you keep the plan even if you never hire us.
+                </p>
+                <p class="text-sm text-gray-500 font-mono mb-12 reveal-node delay-200" data-i18n="cta_trust">Free diagnosis · Same-day reply · First-month satisfaction guarantee</p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center reveal-node delay-300">
+                    <a href="https://wa.me/525532351392?text=Hola%20CometaX%2C%20quiero%20agendar%20mi%20diagn%C3%B3stico%20gratuito."
+                       target="_blank" rel="noopener"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-white text-black font-brand italic uppercase text-sm sm:text-base px-10 py-5 clip-button hover:bg-rankit-purple hover:text-white transition-all duration-300 hover:scale-105">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                        <span data-i18n="cta_wa">Book my free diagnosis</span>
+                    </a>
+                    <a href="mailto:cometax@cometax.click"
+                       class="w-full sm:w-auto inline-flex items-center justify-center gap-3 border border-white/25 text-white font-brand italic uppercase text-sm sm:text-base px-10 py-5 clip-button hover:bg-white/5 hover:border-white/60 transition-all duration-300">
+                        <i class="fas fa-envelope"></i>
+                        <span data-i18n="cta_mail">Write to us</span>
+                    </a>
+                </div>
+
+                <p class="mt-10 text-xs text-gray-600 font-mono reveal-node delay-400" data-i18n="cta_foot">cometax@cometax.click · +52 55 3235 1392 · Mexico City</p>
             </div>
         </section>
     </main>
@@ -691,12 +1236,12 @@
             <!-- Social Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-32">
                 <!-- Instagram -->
-                <a href="#" class="group block card-tech p-8 rounded-xl hover:border-pink-500 transition duration-500 reveal-node delay-100">
+                <a href="https://www.instagram.com/cometaxcompany/" target="_blank" rel="noopener" class="group block card-tech p-8 rounded-xl hover:border-pink-500 transition duration-500 reveal-node delay-100">
                     <div class="flex items-center justify-between mb-6 text-pink-500">
                         <i class="fab fa-instagram text-3xl group-hover:scale-110 transition"></i>
                         <i class="fas fa-external-link-alt opacity-0 group-hover:opacity-100 transition"></i>
                     </div>
-                    <span class="font-bold text-white text-lg block mb-2">@CometaX_Official</span>
+                    <span class="font-bold text-white text-lg block mb-2">@cometaxcompany</span>
                     <p class="text-xs text-gray-400">Behind the scenes, product launches, and company culture.</p>
                 </a>
                 
@@ -805,10 +1350,11 @@
                 <div>
                     <h4 class="font-brand italic text-white mb-6 uppercase text-sm tracking-wider" data-i18n="footer_connect">Connect</h4>
                     <ul class="space-y-4 text-xs text-gray-400">
+                        <li><a href="mailto:cometax@cometax.click" class="hover:text-white transition flex items-center gap-2"><i class="fas fa-envelope w-4"></i>cometax@cometax.click</a></li>
+                        <li><a href="https://wa.me/525532351392" target="_blank" rel="noopener" class="hover:text-[#25D366] transition flex items-center gap-2"><i class="fab fa-whatsapp w-4"></i>+52 55 3235 1392</a></li>
+                        <li><a href="https://www.instagram.com/cometaxcompany/" target="_blank" rel="noopener" class="hover:text-pink-500 transition flex items-center gap-2"><i class="fab fa-instagram w-4"></i>@cometaxcompany</a></li>
+                        <li><a href="https://github.com/JFabrizzio5" target="_blank" rel="noopener" class="hover:text-white transition flex items-center gap-2"><i class="fab fa-github w-4"></i>GitHub</a></li>
                         <li><a href="#" onclick="showPage('hub')" class="hover:text-white transition flex items-center gap-2" data-i18n="nav_hub">Social Hub</a></li>
-                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">Instagram</a></li>
-                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">LinkedIn</a></li>
-                        <li><a href="#" class="hover:text-white transition flex items-center gap-2">GitHub</a></li>
                     </ul>
                 </div>
 
@@ -832,7 +1378,7 @@
 
             <!-- Copyright -->
             <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-[10px] font-mono text-gray-600 uppercase tracking-wider">
-                <p>© 2024 COMETAX INC. EST. MEXICO CITY.</p>
+                <p>© 2026 COMETAX. EST. MEXICO CITY. · <a href="mailto:cometax@cometax.click" class="hover:text-white transition">cometax@cometax.click</a></p>
                 <div class="flex gap-8 mt-4 md:mt-0">
                     <a href="#" class="hover:text-white transition" data-i18n="privacy">Privacy Policy</a>
                     <a href="#" class="hover:text-white transition" data-i18n="terms">Terms of Service</a>
@@ -840,6 +1386,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- FLOATING WHATSAPP -->
+    <a href="https://wa.me/525532351392?text=Hola%20CometaX%2C%20me%20interesa%20un%20diagn%C3%B3stico%20gratuito."
+       target="_blank" rel="noopener"
+       class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#25D366] text-black font-brand italic uppercase text-sm px-5 py-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:scale-105 hover:shadow-[0_8px_40px_rgba(37,211,102,0.6)] transition-all duration-300 group">
+        <i class="fab fa-whatsapp text-2xl"></i>
+        <span class="hidden sm:inline pr-1" data-i18n="wa_btn">Free diagnosis</span>
+    </a>
 
     <!-- SCRIPTS -->
     <script>
@@ -862,117 +1416,154 @@
 
 
         // 2. HERO ANIMATION: DIGITAL NEURAL SPHERE (THREE.JS)
+        // HERO BACKGROUND: single fullscreen shader — flowing plasma (domain-warped
+        // FBM) in the CometaX palette. One striking element instead of many small
+        // ones: high impact, zero clutter. Energy sits right-of-centre so it never
+        // competes with the copy on the left.
         function initHeroAnimation() {
             const container = document.getElementById('hero-canvas-container');
             if (!container) return;
 
-            // Scene setup
             const scene = new THREE.Scene();
-            // Optional: Fog for depth
-            scene.fog = new THREE.FogExp2(0x000000, 0.001);
+            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = 30; // Move back to see the sphere
-
-            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            const renderer = new THREE.WebGLRenderer({ antialias: false });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+            // Cap DPR: the shader is fill-rate heavy, this keeps it smooth
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             container.appendChild(renderer.domElement);
 
-            // --- CREATE THE NEURAL SPHERE ---
-            // 1. Particles (The "Nodes")
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particlesCount = 2000;
-            const posArray = new Float32Array(particlesCount * 3);
+            const uniforms = {
+                u_time:  { value: 0 },
+                u_res:   { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+                u_mouse: { value: new THREE.Vector2(0.5, 0.5) }
+            };
 
-            for(let i = 0; i < particlesCount * 3; i++) {
-                // Spread particles in a sphere shape mostly, with some randomness
-                // Using spherical coordinates to cartesian for better globe distribution
-                const r = 15 + Math.random() * 2; // Radius around 15
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos((Math.random() * 2) - 1);
-                
-                posArray[i] = r * Math.sin(phi) * Math.cos(theta); // x
-                posArray[i+1] = r * Math.sin(phi) * Math.sin(theta); // y
-                posArray[i+2] = r * Math.cos(phi); // z
-            }
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-            
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.08,
-                color: 0xffffff, // White
-                transparent: true,
-                opacity: 0.8,
-            });
-            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-            scene.add(particlesMesh);
+            const vertexShader = `
+                varying vec2 vUv;
+                void main() {
+                    vUv = uv;
+                    gl_Position = vec4(position, 1.0);
+                }
+            `;
 
-            // 2. Wireframe Icosahedron (The "Structure")
-            const geometry = new THREE.IcosahedronGeometry(15, 1);
-            const material = new THREE.MeshBasicMaterial({ 
-                color: 0x333333, 
-                wireframe: true,
-                transparent: true,
-                opacity: 0.15
-            });
-            const wireframeSphere = new THREE.Mesh(geometry, material);
-            scene.add(wireframeSphere);
-            
-            // 3. Floating "Data" Cubes (Optional clutter for "World" feel)
-            const cubesGroup = new THREE.Group();
-            for (let i = 0; i < 20; i++) {
-                const geo = new THREE.BoxGeometry(0.5, 0.5, 0.5);
-                const mat = new THREE.MeshBasicMaterial({ color: 0xfbbf24, wireframe: true }); // Gold
-                const cube = new THREE.Mesh(geo, mat);
-                
-                // Random position further out
-                const r = 20 + Math.random() * 10;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.random() * Math.PI;
-                cube.position.set(
-                    r * Math.sin(phi) * Math.cos(theta),
-                    r * Math.sin(phi) * Math.sin(theta),
-                    r * Math.cos(phi)
+            const fragmentShader = `
+                precision highp float;
+                uniform float u_time;
+                uniform vec2 u_res;
+                uniform vec2 u_mouse;
+                varying vec2 vUv;
+
+                float hash(vec2 p) {
+                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+                }
+                float noise(vec2 p) {
+                    vec2 i = floor(p);
+                    vec2 f = fract(p);
+                    vec2 u = f * f * (3.0 - 2.0 * f);
+                    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+                               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
+                }
+                float fbm(vec2 p) {
+                    float v = 0.0;
+                    float a = 0.5;
+                    for (int i = 0; i < 4; i++) {
+                        v += a * noise(p);
+                        p *= 2.02;
+                        a *= 0.5;
+                    }
+                    return v;
+                }
+
+                // One comet: bright head, halo, long tapering tail.
+                // sizeMul scales the whole thing so we can run a big one and a small one.
+                vec3 cometAt(vec2 p, float ct, float cycle, vec2 start, vec2 dir, float sizeMul, vec3 lav) {
+                    float life = ct / cycle;
+                    vec2 head = start + dir * ct * 1.20;
+                    vec2 v = p - head;
+                    float td = dot(v, -dir);
+                    float pd = length(v + dir * td);
+                    float taper = 1.0 + td * 4.0;
+                    float tail = exp(-pd * 14.0 / (taper * sizeMul)) * exp(-max(td, 0.0) * 1.1) * step(0.0, td);
+                    float headGlow = exp(-length(v) * 18.0 / sizeMul);
+                    float halo = exp(-length(v) * 5.0 / sizeMul) * 0.55;
+                    float fade = smoothstep(0.0, 0.06, life) * smoothstep(1.0, 0.88, life);
+                    vec3 c = mix(lav, vec3(1.0), clamp(headGlow * 1.6, 0.0, 1.0));
+                    return c * (tail * 1.40 + halo + headGlow * 3.50) * fade;
+                }
+
+                void main() {
+                    float aspect = u_res.x / max(u_res.y, 1.0);
+                    vec2 uv = vUv;
+                    vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
+                    vec2 mo = (u_mouse - 0.5) * 0.06;
+
+                    // Deep space
+                    vec3 col = vec3(0.004, 0.004, 0.009);
+
+                    vec3 purple = vec3(0.42, 0.19, 0.88);
+                    vec3 lav    = vec3(0.74, 0.58, 1.00);
+
+                    // --- Nebula (slow violet clouds) ---
+                    vec2 np = p * 1.7 + mo * 2.0;
+                    float n = fbm(np + vec2(u_time * 0.013, u_time * 0.009));
+                    float neb = smoothstep(0.40, 0.95, n);
+                    col += purple * neb * 0.60;
+                    col += lav * pow(neb, 3.0) * 0.30;
+
+                    // --- Starfield ---
+                    vec2 sp = uv * vec2(aspect, 1.0) * 240.0;
+                    vec2 si = floor(sp);
+                    float sh = hash(si);
+                    if (sh > 0.984) {
+                        vec2 sf = fract(sp) - 0.5;
+                        float tw = 0.55 + 0.45 * sin(u_time * 2.2 + sh * 120.0);
+                        col += vec3(1.0) * smoothstep(0.45, 0.0, length(sf)) * tw * 0.95;
+                    }
+
+                    // --- Comets. Two lanes, half a cycle apart, so there is almost
+                    // always one crossing the screen. ~9s per pass.
+                    float cycle = 2.4;
+                    float T = u_time * 0.27;
+
+                    vec2 dirA = normalize(vec2(1.0, -0.40));
+                    col += cometAt(p, mod(T, cycle), cycle, vec2(-1.30, 0.72) + mo, dirA, 1.0, lav);
+
+                    vec2 dirB = normalize(vec2(1.0, -0.20));
+                    col += cometAt(p, mod(T + cycle * 0.5, cycle), cycle, vec2(-1.30, -0.05) + mo, dirB, 0.60, lav) * 0.70;
+
+                    // Vignette
+                    float d = length(p * vec2(1.0, 1.15));
+                    col *= smoothstep(1.20, 0.12, d);
+
+                    gl_FragColor = vec4(col, 1.0);
+                }
+            `;
+
+            const quad = new THREE.Mesh(
+                new THREE.PlaneGeometry(2, 2),
+                new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader })
+            );
+            scene.add(quad);
+
+            window.addEventListener('mousemove', (event) => {
+                uniforms.u_mouse.value.set(
+                    event.clientX / window.innerWidth,
+                    1.0 - event.clientY / window.innerHeight
                 );
-                
-                cubesGroup.add(cube);
-            }
-            scene.add(cubesGroup);
-
-
-            // --- ANIMATION LOOP ---
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            // Mouse Interaction
-            document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
             });
 
+            const start = performance.now();
             function animate() {
                 requestAnimationFrame(animate);
-
-                // Rotations
-                particlesMesh.rotation.y += 0.001;
-                wireframeSphere.rotation.y -= 0.0015;
-                wireframeSphere.rotation.x += 0.0005;
-                cubesGroup.rotation.y += 0.002;
-                cubesGroup.rotation.z += 0.001;
-
-                // Mouse influence on camera/scene
-                particlesMesh.rotation.x += mouseY * 0.001;
-                particlesMesh.rotation.y += mouseX * 0.001;
-
+                uniforms.u_time.value = (performance.now() - start) / 1000;
                 renderer.render(scene, camera);
             }
             animate();
 
-            // Resize Handler
             window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
                 renderer.setSize(window.innerWidth, window.innerHeight);
+                uniforms.u_res.value.set(window.innerWidth, window.innerHeight);
             });
         }
         
@@ -989,10 +1580,12 @@
                 nav_contact: "PARTNERS",
                 hero_title_1: "FUTURE",
                 hero_title_2: "ENGINEERED.",
-                hero_desc: "Redefining the boundaries of software architecture and commercial strategy. We build ecosystems, not just applications.",
-                hero_cta: "Explore Ventures",
+                hero_desc: "Technology that gets delivered, not just promised. We take SMBs where a single developer can't — architecture, development and maintenance from a team of 6+ specialists, at the cost of one in-house hire.",
+                hero_cta: "Get a free diagnosis",
+                hero_cta2: "See our work",
+                hero_badge: "Available for new projects",
                 lead_title: "CORE LEADERSHIP",
-                bio_joseph: "Scalable Systems Architect. The technical vision designing the infrastructure of tomorrow.",
+                bio_joseph: "Software architect. Led a fiscal system handling millions of invoices, rescued an insurer's platform on AWS without its source code, and designed resilient architecture for 16 fuel stations. Self-taught since 2016.",
                 bio_jose: "Global Growth Strategist. Bridging complex technology with real-world market demands.",
                 proj_title: "VENTURES",
                 proj_sub: "/ INNOVATION PORTFOLIO",
@@ -1002,8 +1595,8 @@
                 pledge_text: "We view technology as the ultimate vehicle for social mobility. That is why 10% of gross revenue from every commercial project directly funds scholarships at the CometaX Academy.",
                 impact_students: "Students Impacted",
                 impact_cost: "Cost to Students",
-                alliances_title: "STRATEGIC ALLIANCES",
-                alliances_sub: "Expansion & Impact",
+                alliances_title: "LET'S TALK",
+                alliances_sub: "Clients · Partners · Impact",
                 investor_title: "Become an Investor",
                 investor_desc: "Join our aggressive expansion. We are seeking strategic partners to scale our SaaS ecosystem across Latin America and the US.",
                 charity_title: "Apply for Aid",
@@ -1016,7 +1609,7 @@
                 form_opt_investor: "Investor / VC",
                 form_opt_grant: "Grant / NGO Support",
                 form_opt_other: "Other Inquiry",
-                form_btn_send: "Send Request",
+                form_btn_send: "Send via WhatsApp",
                 form_fallback: "Prefer email? Write to us at ",
                 hub_title: "SOCIAL HUB",
                 hub_subtitle: "/ COMMUNITY & CAREERS",
@@ -1037,7 +1630,140 @@
                 careers_link: "Careers",
                 apply_grant: "Apply for Grant",
                 privacy: "Privacy Policy",
-                terms: "Terms of Service"
+                terms: "Terms of Service",
+                form_opt_client: "Client — I need software / free diagnosis",
+                svc_title: "WHAT WE DO",
+                svc_sub: "You need technology. You don't need to manage a tech team. We take SMBs where a single developer can't reach. If you have a team, we integrate. If you don't, we're your team.",
+                scen1_q: "\"I have a product idea and need to execute it.\"",
+                scen1_a: "We're your team from day one. Diagnosis, proposal and kickoff in under a week.",
+                scen2_q: "\"I have a platform but no one reliable to maintain it.\"",
+                scen2_a: "Monthly subscription. One contact, 6+ specialists behind it, a report of everything done each month.",
+                scen3_q: "\"My tech team exists but can't keep up.\"",
+                scen3_a: "We plug in as an extension of your team. Your architecture, your repos, your process — capacity without friction.",
+                scen4_q: "\"I want to use AI in my processes but don't know where to start.\"",
+                scen4_a: "Free diagnosis. We identify what to automate with AI and propose a solution with real costs and concrete scope.",
+                val_specialists: "Specialists per project, at the cost of one in-house dev",
+                val_contact: "Point of contact. We align the team, you coordinate with one person",
+                val_surprises: "Billing surprises. Fixed monthly price, cancel anytime",
+                svc_cta: "Get a free diagnosis",
+                cases_title: "PROVEN TRACK RECORD",
+                cases_sub: "We don't promise. We deliver. A few systems we've built, rescued and scaled.",
+                case1_title: "Millions of invoices, zero downtime",
+                case1_desc: "Migrated a Laravel monolith to a multi-tenant, multi-service architecture handling millions of SAT XML invoices. Fully auditable for fiscal compliance, with Redis Streams and real-time WebSockets.",
+                case2_title: "An insurer rescued without its source code",
+                case2_desc: "Migrated a legacy VB.NET system to AWS with no access to the original codebase — rebuilt by behavior. Payment microservices moved with 100% uptime and zero disruption to production.",
+                case3_title: "Resilient architecture for 16 fuel stations",
+                case3_desc: "Led a Java Spring Boot + Angular platform across 16 gas stations: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.",
+                stat_projects: "Projects delivered",
+                stat_years: "Combined experience",
+                stat_years_u: "yrs",
+                stat_sat: "Client satisfaction",
+                plans_title: "PLANS",
+                plans_sub: "Monthly subscription for support and evolution, or a fixed quote for custom builds. One contact, 6+ specialists, cancel anytime.",
+                plan_basic_tag: "Maintenance",
+                plan_basic_1: "Support and request tracking",
+                plan_basic_2: "Monitoring and stability review",
+                plan_basic_3: "Bug fixes and minor adjustments",
+                plan_basic_4: "Monthly meeting + progress report",
+                plan_choose: "Choose plan",
+                plan_recommended: "Recommended",
+                plan_pro_tag: "Evolution",
+                plan_pro_1: "Everything in Básico, plus:",
+                plan_pro_2: "Technical and product consulting",
+                plan_pro_3: "Scoped development and new modules",
+                plan_pro_4: "Architecture review and documentation",
+                plan_custom_tag: "Custom software",
+                plan_custom_name: "By project",
+                plan_custom_price: "Quoted",
+                plan_custom_pay: "30% start · 40% milestones · 30% delivery",
+                plan_custom_1: "Full products and platforms (web, mobile, B2B)",
+                plan_custom_2: "Modernization: migrations, re-architecture",
+                plan_custom_3: "Complex integrations, payments, APIs",
+                plan_quote: "Request a quote",
+                plans_note: "Card auto-charge: -$2,000/mo · Quarterly: best rate · Cancel anytime, no penalty · Your code is yours · First-month satisfaction guarantee.",
+                wa_btn: "Free diagnosis",
+                nav_services: "Services",
+                nav_cases: "Work",
+                nav_plans: "Plans",
+                nav_cta: "FREE DIAGNOSIS",
+                method_title: "HOW WE WORK",
+                method_sub: "You always have visibility. Your systems, repos and deliverables stay under your control.",
+                step1_t: "Diagnosis",
+                step1_d: "We understand goals, operation, challenges and tech context.",
+                step2_t: "Proposal",
+                step2_d: "We define scope, investment, architecture, timeline and owners.",
+                step3_t: "Execution",
+                step3_d: "We work by priorities, iterations and verifiable deliveries.",
+                step4_t: "Validation",
+                step4_d: "We review results with your team and document decisions.",
+                step5_t: "Handover",
+                step5_d: "We deploy, transfer knowledge and agree on continuity.",
+                crit1_t: "Code others can maintain",
+                crit1_d: "If another team has to touch it tomorrow, they should understand it. We write for continuity, not to create dependency on us.",
+                crit2_t: "Production first",
+                crit2_d: "Every decision is judged by \"what happens if this fails at 2am?\" Monitoring, error handling and rollback are part of the design.",
+                crit3_t: "The right stack, not the trendy one",
+                crit3_d: "We pick what actually solves the problem and fits whoever will maintain it — not what's trending this year.",
+                faq_title: "FAQ",
+                faq_sub: "Doubts resolved before the first call.",
+                faq_q1: "Can I cancel anytime?",
+                faq_a1: "Yes. No penalty, no forced term. If there are hours already worked and unpaid, only that balance is settled. Nothing else.",
+                faq_q2: "Who owns the code?",
+                faq_a2: "You do. Code and deliverables are transferred to the client. We don't create dependency — if another team takes over tomorrow, they can.",
+                faq_q3: "What if a bug is introduced — who pays?",
+                faq_a3: "If it's 100% on us (unauthorized changes, something we broke), we fix it at no cost. If the change was approved by you and the bug is reported after 15 days, it's handled as normal hours from your plan.",
+                faq_q4: "What if I don't use all my monthly hours?",
+                faq_a4: "Hours don't roll over. But in the monthly review meeting we help you prioritize so every hour goes into what moves the needle.",
+                faq_q5: "Can you work with my existing tech team?",
+                faq_a5: "Absolutely. We join your repos, processes and tools. We work as an extension of your team, not as a separate island.",
+                faq_q6: "How do I know what was done each month?",
+                faq_a6: "You get a monthly report with hours used, tasks executed and progress. You can also check it anytime in your cometax.click account.",
+                guarantee_t: "Satisfaction guarantee",
+                guarantee_d: "If the first month of work doesn't meet your expectations, you don't continue and we don't penalize you. The plan is cancellable anytime — this guarantee just makes it explicit: if you don't see value, you don't pay a second month.",
+                cta_eyebrow: "The next step",
+                cta_title: "WILL YOUR SYSTEM SURVIVE WHAT'S NEXT?",
+                cta_desc: "In 30–45 minutes we tell you exactly what you have, what breaks first, and what we would do about it. No cost, no commitment — and you keep the plan even if you never hire us.",
+                cta_trust: "Free diagnosis · Same-day reply · First-month satisfaction guarantee",
+                cta_wa: "Book my free diagnosis",
+                cta_mail: "Write to us",
+                cta_foot: "cometax@cometax.click · +52 55 3235 1392 · Mexico City",
+                cmp_badge: "The real math",
+                cmp_title: "ONE DEV ON PAYROLL<br>VS. A WHOLE TEAM",
+                cmp_sub: "You don't need to hire, manage and retain a technical team. That's the part that's expensive, slow, and distracts you from your business.",
+                cmp_a_tag: "Hiring 1 senior dev",
+                cmp_a_note: "plus benefits, recruiting and turnover risk",
+                cmp_a_1: "One person. One profile. One point of failure.",
+                cmp_a_2: "No QA, no DevOps, no architecture.",
+                cmp_a_3: "Months to hire. You carry the payroll risk.",
+                cmp_b_tag: "CometaX · Básico plan",
+                cmp_b_1: "<strong>6+ coordinated specialists:</strong> dev, QA, architect, DevOps, frontend, backend.",
+                cmp_b_2: "One point of contact. We align the team.",
+                cmp_b_3: "Running in days, not months.",
+                cmp_fast_t: "Fast start:",
+                cmp_fast_d: "week one is diagnosis, access and team assignment. Operational in days, not months.",
+                cmp_cta: "Get a free diagnosis",
+                cmp_b_note: "keep it running: support, monitoring, fixes",
+                cmp_c_badge: "Recommended",
+                cmp_c_tag: "CometaX · Pro",
+                cmp_c_note: "make it grow: consulting, architecture, new modules",
+                cmp_c_1: "<strong>Everything in Básico</strong>, at double the capacity.",
+                cmp_c_2: "Technical consulting and architecture design.",
+                cmp_c_3: "Scoped development and documentation.",
+                cmp_quote_t: "Bigger project? We quote it separately.",
+                cmp_quote_d: "Full products, legacy modernization or complex integrations. Fixed scope and price: 30% to start, 40% on milestones, 30% on delivery.",
+                cmp_quote_cta: "Request a quote",
+                panel_badge: "Total transparency",
+                panel_title: "A PANEL TO WATCH<br>YOUR TEAM WORK",
+                panel_sub: "You don't have to chase anyone for an update. Your account at cometax.click shows what we're doing, how many hours went in and what's coming — any day of the month, not just at the end.",
+                panel_1: "<strong class='text-white'>Hours in real time.</strong> How much of your monthly pool is used and on what.",
+                panel_2: "<strong class='text-white'>Tasks and progress.</strong> What's done, what's running, what's next — with priorities and risks.",
+                panel_3: "<strong class='text-white'>Contracts and reports.</strong> Your monthly report and paperwork, always available.",
+                panel_hours: "Team hours this month",
+                panel_t1: "Payment microservice migration",
+                panel_t2: "Slow query optimization",
+                panel_t3: "Architecture review",
+                panel_report: "Monthly report",
+                panel_ready: "Ready"
             },
             es: {
                 nav_home: "Inicio",
@@ -1046,10 +1772,12 @@
                 nav_contact: "ALIADOS",
                 hero_title_1: "FUTURO",
                 hero_title_2: "DISEÑADO.",
-                hero_desc: "Redefiniendo los límites de la arquitectura de software y la estrategia comercial. Construimos ecosistemas, no solo aplicaciones.",
-                hero_cta: "Explorar Proyectos",
+                hero_desc: "Tecnología que se entrega, no que se promete. Llevamos a las pymes donde un solo desarrollador no puede — arquitectura, desarrollo y mantenimiento con un equipo de 6+ especialistas, al costo de una sola contratación.",
+                hero_cta: "Diagnóstico gratuito",
+                hero_cta2: "Ver nuestro trabajo",
+                hero_badge: "Disponible para nuevos proyectos",
                 lead_title: "LIDERAZGO",
-                bio_joseph: "Arquitecto de Sistemas Escalables. La visión técnica diseñando la infraestructura del mañana.",
+                bio_joseph: "Arquitecto de software. Lideró un sistema fiscal que maneja millones de facturas, rescató la plataforma de una aseguradora en AWS sin su código fuente, y diseñó arquitectura resiliente para 16 gasolineras. Autodidacta desde 2016.",
                 bio_jose: "Estratega de Crecimiento Global. Conectando tecnología compleja con las demandas reales del mercado.",
                 proj_title: "PROYECTOS",
                 proj_sub: "/ PORTAFOLIO DE INNOVACIÓN",
@@ -1059,8 +1787,8 @@
                 pledge_text: "Vemos la tecnología como el vehículo definitivo para la movilidad social. Por eso, el 10% de los ingresos de cada proyecto comercial financia becas en la Academia CometaX.",
                 impact_students: "Estudiantes Impactados",
                 impact_cost: "Costo para Estudiantes",
-                alliances_title: "ALIANZAS ESTRATÉGICAS",
-                alliances_sub: "Expansión e Impacto",
+                alliances_title: "HABLEMOS",
+                alliances_sub: "Clientes · Aliados · Impacto",
                 investor_title: "Inversionistas",
                 investor_desc: "Únete a nuestra expansión agresiva. Buscamos socios estratégicos para escalar nuestro ecosistema SaaS en LatAm y EE. UU.",
                 charity_title: "Solicitar Apoyo",
@@ -1073,7 +1801,7 @@
                 form_opt_investor: "Inversionista / VC",
                 form_opt_grant: "Beca / Apoyo ONG",
                 form_opt_other: "Otra Consulta",
-                form_btn_send: "Enviar Solicitud",
+                form_btn_send: "Enviar por WhatsApp",
                 form_fallback: "¿Prefieres email? Escríbenos a ",
                 hub_title: "COMUNIDAD",
                 hub_subtitle: "/ COMUNIDAD Y CARRERA",
@@ -1094,7 +1822,140 @@
                 careers_link: "Bolsa de Trabajo",
                 apply_grant: "Solicitar Beca",
                 privacy: "Política de Privacidad",
-                terms: "Términos de Servicio"
+                terms: "Términos de Servicio",
+                form_opt_client: "Cliente — Necesito software / diagnóstico gratis",
+                svc_title: "LO QUE HACEMOS",
+                svc_sub: "Necesitas tecnología. No necesitas gestionar un equipo técnico. Llevamos a las pymes donde un solo desarrollador no llega. Si tienes equipo, nos integramos. Si no, somos tu equipo.",
+                scen1_q: "«Tengo una idea de producto y necesito ejecutarla.»",
+                scen1_a: "Somos tu equipo desde el día uno. Diagnóstico, propuesta y arranque en menos de una semana.",
+                scen2_q: "«Tengo una plataforma pero nadie confiable que la mantenga.»",
+                scen2_a: "Suscripción mensual. Un contacto, 6+ especialistas detrás, reporte de todo lo hecho cada mes.",
+                scen3_q: "«Mi equipo técnico existe pero no da abasto.»",
+                scen3_a: "Nos integramos como extensión de tu equipo. Tu arquitectura, tus repos, tu proceso — capacidad sin fricción.",
+                scen4_q: "«Quiero usar IA en mis procesos pero no sé por dónde empezar.»",
+                scen4_a: "Diagnóstico gratis. Identificamos qué automatizar con IA y proponemos una solución con costos reales y alcance concreto.",
+                val_specialists: "Especialistas por proyecto, al costo de un solo dev en nómina",
+                val_contact: "Punto de contacto. Nosotros alineamos al equipo, tú coordinas con una persona",
+                val_surprises: "Sorpresas en facturación. Precio fijo mensual, cancelable cuando quieras",
+                svc_cta: "Diagnóstico gratuito",
+                cases_title: "CASOS REALES",
+                cases_sub: "No prometemos. Entregamos. Algunos sistemas que construimos, rescatamos y escalamos.",
+                case1_title: "Millones de facturas, cero caídas",
+                case1_desc: "Migramos un monolito Laravel a una arquitectura multi-tenant y multi-servicio que maneja millones de facturas XML del SAT. Totalmente auditable para cumplimiento fiscal, con Redis Streams y WebSockets en tiempo real.",
+                case2_title: "Una aseguradora rescatada sin su código fuente",
+                case2_desc: "Migramos un sistema VB.NET heredado a AWS sin acceso al código original — reconstruido por comportamiento. Microservicios de pago migrados con 100% de uptime y cero interrupción en producción.",
+                case3_title: "Arquitectura resiliente para 16 gasolineras",
+                case3_desc: "Lideramos una plataforma Java Spring Boot + Angular en 16 gasolineras: diseño de arquitectura resiliente, negociación con el cliente y presupuestos multimillonarios, entregado de punta a punta.",
+                stat_projects: "Proyectos entregados",
+                stat_years: "Experiencia combinada",
+                stat_years_u: "años",
+                stat_sat: "Satisfacción de clientes",
+                plans_title: "PLANES",
+                plans_sub: "Suscripción mensual para soporte y evolución, o cotización fija para desarrollo a medida. Un contacto, 6+ especialistas, cancelable cuando quieras.",
+                plan_basic_tag: "Mantenimiento",
+                plan_basic_1: "Soporte y seguimiento de solicitudes",
+                plan_basic_2: "Monitoreo y revisión de estabilidad",
+                plan_basic_3: "Corrección de errores y ajustes menores",
+                plan_basic_4: "Junta mensual + reporte de avance",
+                plan_choose: "Elegir plan",
+                plan_recommended: "Recomendado",
+                plan_pro_tag: "Evolución",
+                plan_pro_1: "Todo lo de Básico, más:",
+                plan_pro_2: "Consultoría técnica y de producto",
+                plan_pro_3: "Desarrollos acotados y módulos nuevos",
+                plan_pro_4: "Revisión de arquitectura y documentación",
+                plan_custom_tag: "Software a medida",
+                plan_custom_name: "Por proyecto",
+                plan_custom_price: "Cotización",
+                plan_custom_pay: "30% inicio · 40% hitos · 30% entrega",
+                plan_custom_1: "Productos y plataformas completas (web, móvil, B2B)",
+                plan_custom_2: "Modernización: migraciones, rediseño de arquitectura",
+                plan_custom_3: "Integraciones complejas, pagos, APIs",
+                plan_quote: "Solicitar cotización",
+                plans_note: "Cargo domiciliado: -$2,000/mes · Trimestral: mejor tarifa · Cancelable sin penalización · El código es tuyo · Garantía de satisfacción el primer mes.",
+                wa_btn: "Diagnóstico gratis",
+                nav_services: "Servicios",
+                nav_cases: "Casos",
+                nav_plans: "Planes",
+                nav_cta: "DIAGNÓSTICO GRATIS",
+                method_title: "CÓMO TRABAJAMOS",
+                method_sub: "Siempre tienes visibilidad. Tus sistemas, repos y entregables quedan bajo tu control.",
+                step1_t: "Diagnóstico",
+                step1_d: "Entendemos objetivos, operación, retos y contexto tecnológico.",
+                step2_t: "Propuesta",
+                step2_d: "Definimos alcance, inversión, arquitectura, tiempos y responsables.",
+                step3_t: "Ejecución",
+                step3_d: "Trabajamos por prioridades, iteraciones y entregas verificables.",
+                step4_t: "Validación",
+                step4_d: "Revisamos resultados con tu equipo y documentamos decisiones.",
+                step5_t: "Entrega",
+                step5_d: "Desplegamos, transferimos conocimiento y acordamos continuidad.",
+                crit1_t: "Código que otros pueden mantener",
+                crit1_d: "Si mañana otro equipo tiene que tocarlo, debe poder entenderlo. Escribimos para la continuidad, no para crear dependencia de CometaX.",
+                crit2_t: "Producción primero",
+                crit2_d: "Toda decisión se evalúa con «¿qué pasa si esto falla a las 2am?» Monitoreo, manejo de errores y rollback son parte del diseño.",
+                crit3_t: "El stack adecuado, no el de moda",
+                crit3_d: "Elegimos lo que realmente resuelve el problema y le queda a quien lo va a mantener — no lo que está de trending este año.",
+                faq_title: "PREGUNTAS",
+                faq_sub: "Dudas resueltas antes de la primera llamada.",
+                faq_q1: "¿Puedo cancelar en cualquier momento?",
+                faq_a1: "Sí. Sin penalización, sin permanencia forzada. Si al cancelar hay horas ya trabajadas sin pagar, se liquida únicamente ese saldo. Nada más.",
+                faq_q2: "¿De quién es el código?",
+                faq_a2: "Tuyo. El código y los entregables se transfieren al cliente. No creamos dependencia — si mañana otro equipo lo toma, puede hacerlo.",
+                faq_q3: "¿Si meten un bug quién lo paga?",
+                faq_a3: "Si es 100% culpa nuestra (cambios no autorizados, código que nosotros rompimos), lo corregimos sin costo. Si el cambio fue aprobado por ti y el bug se reporta después de 15 días, se atiende con cargo normal a las horas de tu plan.",
+                faq_q4: "¿Y si no uso todas las horas del mes?",
+                faq_a4: "Las horas no se acumulan. Pero en la junta mensual de revisión te ayudamos a priorizar para que cada hora se use en lo que más impacta.",
+                faq_q5: "¿Puedo integrar a mi equipo técnico?",
+                faq_a5: "Totalmente. Nos sumamos a tus repos, procesos y herramientas. Trabajamos como extensión de tu equipo, no como una isla aparte.",
+                faq_q6: "¿Cómo sé qué hicieron en el mes?",
+                faq_a6: "Recibes un reporte mensual con horas consumidas, tareas ejecutadas y avance. También puedes verlo en tu cuenta en cometax.click cuando quieras.",
+                guarantee_t: "Garantía de satisfacción",
+                guarantee_d: "Si el primer mes de trabajo no cumple tus expectativas, no continúas y no te penalizamos. El plan es cancelable en cualquier momento — esta garantía simplemente lo hace explícito: si no ves valor, no pagas un segundo mes.",
+                cta_eyebrow: "El siguiente paso",
+                cta_title: "¿TU SISTEMA AGUANTA LO QUE VIENE?",
+                cta_desc: "En 30–45 minutos te decimos exactamente qué tienes, qué se va a romper primero y qué haríamos nosotros. Sin costo, sin compromiso — y te quedas con el plan aunque nunca nos contrates.",
+                cta_trust: "Diagnóstico gratuito · Respondemos el mismo día · Garantía de satisfacción el primer mes",
+                cta_wa: "Agendar mi diagnóstico gratis",
+                cta_mail: "Escríbenos",
+                cta_foot: "cometax@cometax.click · +52 55 3235 1392 · Ciudad de México",
+                cmp_badge: "Las cuentas reales",
+                cmp_title: "UN DEV EN NÓMINA<br>VS. UN EQUIPO COMPLETO",
+                cmp_sub: "No necesitas contratar, gestionar y retener un equipo técnico. Esa parte es la cara, la lenta, y la que te distrae de tu negocio.",
+                cmp_a_tag: "Contratar 1 dev senior",
+                cmp_a_note: "más prestaciones, reclutamiento y riesgo de renuncia",
+                cmp_a_1: "Una sola persona. Un solo perfil. Un solo punto de falla.",
+                cmp_a_2: "Sin QA, sin DevOps, sin arquitectura.",
+                cmp_a_3: "Meses para contratar. Tú cargas con el riesgo de nómina.",
+                cmp_b_tag: "CometaX · Plan Básico",
+                cmp_b_1: "<strong>6+ especialistas coordinados:</strong> dev, QA, arquitecto, DevOps, frontend, backend.",
+                cmp_b_2: "Un solo punto de contacto. Nosotros alineamos al equipo.",
+                cmp_b_3: "Operando en días, no en meses.",
+                cmp_fast_t: "Arranque rápido:",
+                cmp_fast_d: "la semana 1 es diagnóstico, accesos y asignación del equipo. Operativo en días, no en meses.",
+                cmp_cta: "Diagnóstico gratuito",
+                cmp_b_note: "mantenerlo vivo: soporte, monitoreo, correcciones",
+                cmp_c_badge: "Recomendado",
+                cmp_c_tag: "CometaX · Pro",
+                cmp_c_note: "hacerlo crecer: consultoría, arquitectura, módulos nuevos",
+                cmp_c_1: "<strong>Todo lo de Básico</strong>, al doble de capacidad.",
+                cmp_c_2: "Consultoría técnica y diseño de arquitectura.",
+                cmp_c_3: "Desarrollos acotados y documentación.",
+                cmp_quote_t: "¿Proyecto más grande? Se cotiza aparte.",
+                cmp_quote_d: "Productos completos, modernización de sistemas heredados o integraciones complejas. Alcance y precio fijos: 30% al inicio, 40% en hitos, 30% contra entrega.",
+                cmp_quote_cta: "Solicitar cotización",
+                panel_badge: "Transparencia total",
+                panel_title: "UN PANEL PARA VER<br>TRABAJAR A TU EQUIPO",
+                panel_sub: "No tienes que perseguir a nadie para saber cómo va. Tu cuenta en cometax.click te muestra qué estamos haciendo, cuántas horas se fueron y qué sigue — cualquier día del mes, no solo al final.",
+                panel_1: "<strong class='text-white'>Horas en tiempo real.</strong> Cuánto de tu bolsa mensual se usó y en qué.",
+                panel_2: "<strong class='text-white'>Tareas y avance.</strong> Qué está listo, qué corre y qué sigue — con prioridades y riesgos.",
+                panel_3: "<strong class='text-white'>Contratos y reportes.</strong> Tu reporte mensual y papeleo, siempre disponibles.",
+                panel_hours: "Horas equipo este mes",
+                panel_t1: "Migración de microservicio de pagos",
+                panel_t2: "Optimización de queries lentas",
+                panel_t3: "Revisión de arquitectura",
+                panel_report: "Reporte mensual",
+                panel_ready: "Listo"
             }
         };
 
@@ -1144,6 +2005,35 @@
                 homeView.classList.add('hidden');
                 hubView.classList.remove('hidden');
             }
+        }
+
+        // The site is fully static (GitHub Pages, no backend), so this form can't
+        // POST anywhere. Instead it composes the enquiry and hands it to WhatsApp,
+        // so the lead lands somewhere that actually gets read — no server needed.
+        const WA_NUMBER = '525532351392';
+
+        function sendLead(event) {
+            event.preventDefault();
+            const val = (id) => (document.getElementById(id)?.value || '').trim();
+            const name = val('f-name');
+            const email = val('f-email');
+            const msg = val('f-msg');
+            const sel = document.getElementById('f-type');
+            const type = sel ? sel.options[sel.selectedIndex].text : '';
+            const es = (typeof currentLang !== 'undefined') && currentLang === 'es';
+
+            const body = [
+                es ? 'Hola CometaX, les escribo desde la web.' : 'Hi CometaX, writing from your website.',
+                '',
+                (es ? 'Nombre: ' : 'Name: ') + name,
+                email ? 'Email: ' + email : '',
+                (es ? 'Interés: ' : 'Interest: ') + type,
+                '',
+                (es ? 'Mensaje: ' : 'Message: ') + msg
+            ].filter(Boolean).join('\n');
+
+            window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(body),
+                '_blank', 'noopener');
         }
 
         function toggleMobileMenu() {

@@ -1,0 +1,28 @@
+# Bloquea el acceso web directo a archivos sensibles si el hosting compartido
+# apunta el dominio a la raíz del proyecto en vez de a /public (caso típico
+# de algunos planes de Hostinger). El document root correcto sigue siendo
+# /public — esto es una segunda capa de protección, no la solución principal.
+
+<IfModule mod_authz_core.c>
+    <FilesMatch "^\.">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "\.(env|env\..*|lock|log|sqlite|key)$">
+        Require all denied
+    </FilesMatch>
+</IfModule>
+
+<IfModule !mod_authz_core.c>
+    <IfModule mod_authz_host.c>
+        <FilesMatch "^\.">
+            Order allow,deny
+            Deny from all
+        </FilesMatch>
+        <FilesMatch "\.(env|env\..*|lock|log|sqlite|key)$">
+            Order allow,deny
+            Deny from all
+        </FilesMatch>
+    </IfModule>
+</IfModule>
+
+Options -Indexes

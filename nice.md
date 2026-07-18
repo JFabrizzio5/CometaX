@@ -1,0 +1,4 @@
+2girls, sakurasawa sumi, kanojo okarishimasu, pink hair, shy, school uniform, pleated skirt, on all fours, doggystyle pose, looking back, embarrassed, blush, looking away, bedroom, bed, pillows, indoor, dakimakura, body pillow design, lying on back, nude, completely naked, bare breasts, nipples, pussy, pulling down panties, panty pull, half down, ahegao, rolled eyes, tongue out, drooling, flushed, looking under skirt, upskirt, low angle, nagatoro shouko, hayase nagatoro, long black hair, purple eyes, dark skin,  score_9, score_8_up, score_7_up, source_anime, masterpiece, best quality, amazing quality, very aesthetic, absurdres, 8k resolution, intricate details, yuri
+
+
+worst quality, bad quality, lowres, bad anatomy, bad hands, extra limbs,futanari,penis, 1men
