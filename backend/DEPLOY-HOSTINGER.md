@@ -10,8 +10,13 @@ Restricciones que mandan sobre el diseño: **no hay root**, **no hay daemons**
 
 ## Estructura final en el servidor
 
+El invariante es **`laravel/` hermana de `public_html/`**, no la ruta absoluta.
+Según el plan, la raíz puede ser `~/` o `~/domains/cometax.click/`; el
+`../../laravel` del front controller resuelve bien en ambos casos siempre que
+se respete esa relación.
+
 ```
-~/domains/cometax.click/
+<raíz>/
 ├── public_html/              <- document root, lo único expuesto a internet
 │   ├── index.html            <- landing estática
 │   ├── assets/
