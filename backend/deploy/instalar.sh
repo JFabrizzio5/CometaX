@@ -135,12 +135,19 @@ poner DB_PORT 3306
 echo "  APP_URL = $APP_URL"
 
 if grep -qE "^DB_PASSWORD='?<" .env || ! grep -q "^DB_PASSWORD=" .env; then
+    # Ejecutado como `curl ... | bash`, stdin es la tubería y no el teclado:
+    # un `read` normal consumiría el propio script y devolvería vacío. Por eso
+    # se lee de la terminal directamente.
+    [ -r /dev/tty ] || die "No hay terminal para pedir las credenciales. Bajá el script y corrélo:
+    curl -sO https://raw.githubusercontent.com/JFabrizzio5/CometaX/main/backend/deploy/instalar.sh
+    bash instalar.sh"
+
     echo
     echo "  Credenciales MySQL (hPanel > Bases de datos)."
     echo "  La contraseña no se muestra ni queda en el historial."
-    read -r -p "  DB_DATABASE : " DBN
-    read -r -p "  DB_USERNAME : " DBU
-    read -r -s -p "  DB_PASSWORD : " DBP; echo
+    read -r -p "  DB_DATABASE : " DBN < /dev/tty
+    read -r -p "  DB_USERNAME : " DBU < /dev/tty
+    read -r -s -p "  DB_PASSWORD : " DBP < /dev/tty; echo
     [ -n "$DBN" ] && [ -n "$DBU" ] || die "Base y usuario no pueden ir vacíos."
     poner DB_DATABASE "$DBN"
     poner DB_USERNAME "$DBU"
