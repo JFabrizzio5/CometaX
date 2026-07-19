@@ -43,6 +43,13 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Panel interno. Sesión separada de 'web' para que un cliente y un
+        // consultor puedan estar logueados en el mismo navegador sin pisarse.
+        'consultant' => [
+            'driver' => 'session',
+            'provider' => 'consultants',
+        ],
     ],
 
     /*

@@ -2,12 +2,27 @@
 # apunta el dominio a la raíz del proyecto en vez de a /public (caso típico
 # de algunos planes de Hostinger). El document root correcto sigue siendo
 # /public — esto es una segunda capa de protección, no la solución principal.
+#
+# Con el document root bien puesto este archivo NUNCA se ejecuta: Apache solo
+# lee los .htaccess que están dentro del árbol servido.
 
+# --- Directorios completos ---
+# FilesMatch solo matchea archivos, así que no cubre .git/config ni
+# vendor/**. Se bloquean por ruta antes que nada más.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(\.git|\.github|app|bootstrap|config|database|node_modules|resources|routes|storage|tests|vendor)(/|$) - [F,L]
+</IfModule>
+
+# --- Archivos sueltos ---
 <IfModule mod_authz_core.c>
     <FilesMatch "^\.">
         Require all denied
     </FilesMatch>
-    <FilesMatch "\.(env|env\..*|lock|log|sqlite|key)$">
+    <FilesMatch "\.(env|env\..*|lock|log|sqlite|key|pem|ini|sh|bak|sql|yml|yaml|md)$">
+        Require all denied
+    </FilesMatch>
+    <FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml|vite\.config\.js)$">
         Require all denied
     </FilesMatch>
 </IfModule>
@@ -18,7 +33,11 @@
             Order allow,deny
             Deny from all
         </FilesMatch>
-        <FilesMatch "\.(env|env\..*|lock|log|sqlite|key)$">
+        <FilesMatch "\.(env|env\..*|lock|log|sqlite|key|pem|ini|sh|bak|sql|yml|yaml|md)$">
+            Order allow,deny
+            Deny from all
+        </FilesMatch>
+        <FilesMatch "^(composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml|vite\.config\.js)$">
             Order allow,deny
             Deny from all
         </FilesMatch>

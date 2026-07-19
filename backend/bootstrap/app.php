@@ -15,6 +15,12 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'payments.available' => \App\Http\Middleware\EnsurePaymentsAvailable::class,
+            'staff' => \App\Http\Middleware\EnsureConsultantIsStaff::class,
+        ]);
+
+        // Stripe firma sus webhooks con STRIPE_WEBHOOK_SECRET; no manda token CSRF.
+        $middleware->validateCsrfTokens(except: [
+            'stripe/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
