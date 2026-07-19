@@ -22,7 +22,8 @@ class SubscriptionOverviewController extends Controller
 
     public function __invoke(Request $request): View
     {
-        $filter = $request->string('estado')->toString();
+        // ?estado[]=x llega como array y reventaría al castear a string.
+        $filter = is_string($request->query('estado')) ? $request->query('estado') : '';
 
         $clients = Client::query()
             ->with(['plan', 'subscriptions', 'users'])

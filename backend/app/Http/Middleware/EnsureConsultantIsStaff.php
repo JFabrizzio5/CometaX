@@ -14,6 +14,13 @@ class EnsureConsultantIsStaff
         $consultant = Auth::guard('consultant')->user();
 
         if ($consultant === null) {
+            // Un cliente ya autenticado no necesita iniciar sesión: le falta
+            // permiso, no sesión. Mandarlo a login guardaría esta URL como
+            // "intended" y el callback lo devolvería acá en bucle.
+            if (Auth::guard('web')->check()) {
+                abort(403, 'Esta sección es solo para el equipo interno.');
+            }
+
             return redirect()->guest(route('login'));
         }
 

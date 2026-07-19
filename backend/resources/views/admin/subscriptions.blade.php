@@ -12,8 +12,11 @@
             'unpaid' => ['Sin pago', 'border-red-500/30 bg-red-500/10 text-red-300'],
             'incomplete' => ['Incompleta', 'border-amber-500/30 bg-amber-500/10 text-amber-300'],
             'canceled' => ['Cancelada', 'border-zinc-600/40 bg-zinc-600/10 text-zinc-400'],
+            'paused' => ['Pausada', 'border-zinc-600/40 bg-zinc-600/10 text-zinc-400'],
             null => ['Sin suscripción', 'border-zinc-700/50 bg-zinc-800/30 text-zinc-500'],
-            default => [$status, 'border-zinc-600/40 bg-zinc-600/10 text-zinc-400'],
+            // Estado nuevo de Stripe que todavía no clasificamos: se marca para
+            // que se note, en vez de mostrar el identificador en inglés.
+            default => ['Revisar: '.$status, 'border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300'],
         };
     };
 @endphp
