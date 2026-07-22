@@ -28,9 +28,7 @@
   {{-- Sidebar --}}
   <aside class="hidden lg:flex w-64 shrink-0 flex-col border-r border-white/10 bg-black/40 px-5 py-8">
     <div class="flex items-center gap-3 px-1">
-      <div class="h-9 w-9 rounded-control bg-white flex items-center justify-center">
-        <span class="font-mono text-[10px] font-bold text-black">CX</span>
-      </div>
+      <span class="text-white">@include('partials.logo', ['class' => 'h-9 w-auto'])</span>
       <div>
         <p class="text-sm font-semibold tracking-tight leading-none">{{ config('app.name') }}</p>
         <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-500 mt-1">Panel interno</p>
@@ -62,7 +60,10 @@
   {{-- Nav superior (móvil) --}}
   <div class="lg:hidden fixed inset-x-0 top-0 z-20 border-b border-white/10 bg-black/70 backdrop-blur">
     <div class="flex items-center justify-between px-4 py-3">
-      <span class="font-mono text-[11px] uppercase tracking-widest text-zinc-300">{{ config('app.name') }} · Interno</span>
+      <span class="flex items-center gap-2 text-white">
+        @include('partials.logo', ['class' => 'h-6 w-auto'])
+        <span class="font-mono text-[11px] uppercase tracking-widest text-zinc-300">Interno</span>
+      </span>
       <form method="POST" action="{{ route('logout') }}">@csrf
         <button class="font-mono text-[11px] uppercase tracking-widest text-zinc-400 hover:text-white">Salir</button>
       </form>

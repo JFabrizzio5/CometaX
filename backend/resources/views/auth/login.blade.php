@@ -6,9 +6,7 @@
 <div class="min-h-screen flex flex-col items-center justify-center px-6 py-16">
 
   <div class="flex items-center gap-3 mb-10">
-    <div class="h-10 w-10 rounded-control bg-white flex items-center justify-center">
-      <span class="font-mono text-xs font-bold text-black">CX</span>
-    </div>
+    <span class="text-white">@include('partials.logo', ['class' => 'h-10 w-auto'])</span>
     <div>
       <p class="text-sm font-semibold tracking-tight">{{ config('app.name') }}</p>
       <p class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Portal de clientes</p>

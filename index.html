@@ -382,14 +382,16 @@
         <div class="space-orb" style="width:44rem;height:44rem;top:76%;left:-16rem"></div>
         
         <!-- HERO SECTION (INTERACTIVE CANVAS) -->
-        <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-black">
-            
+        <header class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-[#020202]">
+
             <!-- THE INTERACTIVE 3D CANVAS -->
             <div id="hero-canvas-container"></div>
-            
+
             <!-- Legibility scrim: darkens the left where the text sits, fades right -->
             <div class="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/70 to-transparent pointer-events-none z-10"></div>
-            <div class="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-[#020202] to-transparent pointer-events-none z-10"></div>
+            <!-- Bottom fade: dissolves the comet into the SAME violet as the continuous
+                 space-field below (no hard seam, no clipped light at the hero edge). -->
+            <div class="absolute inset-x-0 bottom-0 h-72 bg-gradient-to-t from-[#050410] via-[#050410]/60 to-transparent pointer-events-none z-10"></div>
 
             <div class="max-w-7xl mx-auto px-6 relative z-20 w-full pointer-events-none">
                 <div class="max-w-3xl pointer-events-auto">
