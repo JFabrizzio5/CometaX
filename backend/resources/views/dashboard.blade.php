@@ -29,6 +29,11 @@
     <p class="mt-2 text-sm text-zinc-400">
       Aquí van las pantallas de proyectos, incidencias y facturación.
     </p>
+
+    <a href="{{ route('billing.planes') }}"
+       class="mt-6 inline-flex h-11 items-center rounded-control bg-white px-5 font-mono text-xs uppercase tracking-widest text-black transition hover:bg-zinc-200">
+      {{ auth()->user()->client->plan ? 'Cambiar plan' : 'Elegir plan y pagar' }}
+    </a>
   </div>
 
 </div>
