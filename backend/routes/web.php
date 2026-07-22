@@ -53,6 +53,9 @@ Route::middleware('auth:web')->group(function () {
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
+    // Activar plan gratuito no depende de Stripe.
+    Route::post('/planes/{plan}/gratis', [BillingController::class, 'activarGratis'])->name('billing.gratis');
+
     // Facturación: se apaga sola con PAYMENTS_MAINTENANCE (payments.available).
     Route::middleware('payments.available')->group(function () {
         Route::get('/planes', [BillingController::class, 'index'])->name('billing.planes');

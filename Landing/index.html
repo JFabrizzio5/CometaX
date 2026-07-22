@@ -3,8 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CometaX | Future Engineered</title>
-    
+    <title>CometaX — Software a la medida y equipo de tecnología para PYMES</title>
+
+    <!-- SEO -->
+    <meta name="description" content="CometaX: arquitectura, desarrollo y mantenimiento de software para PYMES. Un equipo de 6+ especialistas al costo de una sola contratación. Diagnóstico gratis.">
+    <meta name="keywords" content="desarrollo de software, PYMES, equipo de tecnología, consultoría, arquitectura de software, SaaS, México">
+    <meta name="author" content="CometaX">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#050510">
+    <link rel="canonical" href="https://cometax.click/">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CometaX">
+    <meta property="og:title" content="CometaX — Software a la medida para PYMES">
+    <meta property="og:description" content="Tecnología que se entrega, no solo se promete. Un equipo de 6+ especialistas al costo de una contratación interna. Diagnóstico gratis.">
+    <meta property="og:url" content="https://cometax.click/">
+    <meta property="og:image" content="https://cometax.click/FinalLogoCometax.png">
+    <meta property="og:locale" content="es_MX">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CometaX — Software a la medida para PYMES">
+    <meta name="twitter:description" content="Arquitectura, desarrollo y mantenimiento con un equipo de 6+ especialistas. Diagnóstico gratis.">
+    <meta name="twitter:image" content="https://cometax.click/FinalLogoCometax.png">
+
     <!-- External Resources -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -307,8 +330,8 @@
                     <span class="euro-style text-2xl text-white tracking-wide">COMETAX</span>
                 </a>
 
-                <!-- Desktop Menu -->
-                <div class="hidden xl:flex items-center space-x-6 2xl:space-x-10 font-body text-xs font-bold tracking-[0.2em] uppercase">
+                <!-- Desktop Menu (2xl para que quepan las etiquetas largas en español) -->
+                <div class="hidden 2xl:flex items-center space-x-5 font-body text-xs font-bold tracking-[0.15em] uppercase">
                     
                     <div class="lang-switch-container" onclick="toggleLanguage()">
                         <span id="lang-en" class="lang-option active">EN</span>
@@ -347,7 +370,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="xl:hidden relative z-50 text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
+                <button class="2xl:hidden relative z-50 text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
@@ -1155,7 +1178,7 @@
                             <span data-i18n="form_header">Start the conversation</span>
                         </h3>
                         
-                        <form onsubmit="sendLead(event)" class="space-y-5">
+                        <form onsubmit="event.preventDefault();" class="space-y-5">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_name">Full Name</label>
@@ -1180,10 +1203,18 @@
                                 <textarea id="f-msg" required class="form-input resize-none h-24 font-mono text-xs" placeholder="..."></textarea>
                             </div>
                             
-                            <button class="w-full bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-[#25D366] transition tracking-widest text-sm flex items-center justify-center gap-3">
-                                <i class="fab fa-whatsapp text-lg"></i>
-                                <span data-i18n="form_btn_send">Send via WhatsApp</span>
-                            </button>
+                            <div id="lead-status" class="hidden rounded-lg px-4 py-3 text-sm"></div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <button type="button" onclick="sendLeadEmail(event)" class="bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-rankit-purple hover:text-white transition tracking-widest text-sm flex items-center justify-center gap-2">
+                                    <i class="fas fa-envelope"></i>
+                                    <span data-i18n="form_btn_email">Send by email</span>
+                                </button>
+                                <button type="button" onclick="sendLead(event)" class="border border-white/25 text-white font-brand italic uppercase py-4 clip-button hover:bg-[#25D366] hover:text-black hover:border-transparent transition tracking-widest text-sm flex items-center justify-center gap-2">
+                                    <i class="fab fa-whatsapp text-lg"></i>
+                                    <span data-i18n="form_btn_send">WhatsApp</span>
+                                </button>
+                            </div>
                         </form>
 
                         <div class="mt-6 text-center pt-6 border-t border-white/10">
@@ -1497,7 +1528,9 @@
                     float td = dot(v, -dir);
                     float pd = length(v + dir * td);
                     float taper = 1.0 + td * 4.0;
-                    float tail = exp(-pd * 14.0 / (taper * sizeMul)) * exp(-max(td, 0.0) * 1.1) * step(0.0, td);
+                    // smoothstep en vez de step: sin el step la cola arrancaba con un
+                    // borde recto diagonal en la cabeza — eso era la "luz cortada".
+                    float tail = exp(-pd * 14.0 / (taper * sizeMul)) * exp(-max(td, 0.0) * 1.1) * smoothstep(-0.06, 0.06, td);
                     float headGlow = exp(-length(v) * 18.0 / sizeMul);
                     float halo = exp(-length(v) * 5.0 / sizeMul) * 0.55;
                     float fade = smoothstep(0.0, 0.06, life) * smoothstep(1.0, 0.88, life);
@@ -1623,7 +1656,8 @@
                 form_opt_investor: "Investor / VC",
                 form_opt_grant: "Grant / NGO Support",
                 form_opt_other: "Other Inquiry",
-                form_btn_send: "Send via WhatsApp",
+                form_btn_send: "WhatsApp",
+                form_btn_email: "Send by email",
                 form_fallback: "Prefer email? Write to us at ",
                 hub_title: "SOCIAL HUB",
                 hub_subtitle: "/ COMMUNITY & CAREERS",
@@ -1817,7 +1851,8 @@
                 form_opt_investor: "Inversionista / VC",
                 form_opt_grant: "Beca / Apoyo ONG",
                 form_opt_other: "Otra Consulta",
-                form_btn_send: "Enviar por WhatsApp",
+                form_btn_send: "WhatsApp",
+                form_btn_email: "Enviar por correo",
                 form_fallback: "¿Prefieres email? Escríbenos a ",
                 hub_title: "COMUNIDAD",
                 hub_subtitle: "/ COMUNIDAD Y CARRERA",
@@ -2053,6 +2088,56 @@
                 '_blank', 'noopener');
         }
 
+        // Endpoint del backend (Laravel bajo /panel). Limita a 2 envíos por IP/hora.
+        const CONTACT_ENDPOINT = 'https://cometax.click/panel/api/v1/contacto';
+
+        function leadStatus(msg, ok) {
+            const el = document.getElementById('lead-status');
+            if (!el) return;
+            el.textContent = msg;
+            el.className = 'rounded-lg px-4 py-3 text-sm ' + (ok
+                ? 'bg-green-500/10 border border-green-500/30 text-green-300'
+                : 'bg-red-500/10 border border-red-500/30 text-red-300');
+        }
+
+        async function sendLeadEmail(event) {
+            event.preventDefault();
+            const val = (id) => (document.getElementById(id)?.value || '').trim();
+            const name = val('f-name'), email = val('f-email'), msg = val('f-msg');
+            const type = document.getElementById('f-type')?.value || '';
+            const es = (typeof currentLang !== 'undefined') && currentLang === 'es';
+
+            if (!name || !email || !msg) {
+                leadStatus(es ? 'Completa nombre, correo y mensaje.' : 'Fill in name, email and message.', false);
+                return;
+            }
+
+            const btn = event.currentTarget;
+            btn.disabled = true;
+            leadStatus(es ? 'Enviando…' : 'Sending…', true);
+
+            try {
+                const r = await fetch(CONTACT_ENDPOINT, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({ name, email, type, message: msg })
+                });
+                const d = await r.json().catch(() => ({}));
+                if (r.ok) {
+                    leadStatus(d.message || (es ? '¡Mensaje enviado! Te contactamos pronto.' : 'Message sent! We\'ll reach out soon.'), true);
+                    document.querySelector('#alliances form')?.reset();
+                } else if (r.status === 429) {
+                    leadStatus(es ? 'Demasiados envíos. Intenta en una hora o usa WhatsApp.' : 'Too many sends. Try again in an hour or use WhatsApp.', false);
+                } else {
+                    leadStatus(d.message || (es ? 'No se pudo enviar. Usa WhatsApp o el correo directo.' : 'Could not send. Use WhatsApp or direct email.'), false);
+                }
+            } catch (err) {
+                leadStatus(es ? 'Error de red. Usa WhatsApp o el correo directo.' : 'Network error. Use WhatsApp or direct email.', false);
+            } finally {
+                btn.disabled = false;
+            }
+        }
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
             if (menu.classList.contains('translate-x-full')) {
@@ -2060,6 +2145,108 @@
             } else {
                 menu.classList.add('translate-x-full');
             }
+        }
+    </script>
+
+    <!-- ============================ -->
+    <!-- CHATBOT (FAQ por reglas)     -->
+    <!-- ============================ -->
+    <div id="cx-chat" class="fixed bottom-5 right-5 z-[60] flex flex-col items-end">
+        <!-- Panel -->
+        <div id="cx-chat-panel" class="hidden mb-3 w-[22rem] max-w-[calc(100vw-2.5rem)] overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b12]/95 backdrop-blur-xl shadow-2xl">
+            <div class="flex items-center justify-between border-b border-white/10 px-4 py-3">
+                <div class="flex items-center gap-2">
+                    <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60"></span><span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-400"></span></span>
+                    <span class="font-brand italic text-sm text-white">CometaX · Asistente</span>
+                </div>
+                <button onclick="cxChatToggle()" class="text-gray-400 hover:text-white text-lg leading-none">&times;</button>
+            </div>
+            <div id="cx-chat-log" class="h-72 space-y-3 overflow-y-auto px-4 py-4 text-sm"></div>
+            <div class="border-t border-white/10 p-3">
+                <form onsubmit="cxChatSend(event)" class="flex gap-2">
+                    <input id="cx-chat-input" type="text" autocomplete="off" placeholder="Escribe tu duda…"
+                           class="flex-1 rounded-full bg-white/5 border border-white/15 px-4 py-2 text-sm text-white placeholder:text-gray-600 outline-none focus:border-white/40">
+                    <button class="shrink-0 rounded-full bg-white px-4 text-black text-sm font-bold hover:bg-rankit-purple hover:text-white transition">→</button>
+                </form>
+            </div>
+        </div>
+        <!-- Launcher -->
+        <button onclick="cxChatToggle()" aria-label="Abrir chat"
+                class="h-14 w-14 rounded-full bg-white text-black shadow-lg flex items-center justify-center hover:bg-rankit-purple hover:text-white transition-transform hover:scale-105">
+            <i id="cx-chat-icon" class="fas fa-comment-dots text-xl"></i>
+        </button>
+    </div>
+
+    <script>
+        // Chatbot 100% cliente: matching por palabras clave, sin backend ni IA.
+        const CX_FAQ = [
+            { k: ['plan','planes','precio','precios','costo','cuanto','cuánto','tarifa','price','plans','cost'],
+              es: 'Tenemos <b>Consultoría gratis</b> (agendas una reunión sin costo), <b>Básico $28,000</b> (domiciliado $26,000) y <b>Pro $52,000</b> (domiciliado $50,000) MXN/mes. Mira la sección Planes.',
+              en: 'We offer <b>Free consulting</b> (book a call at no cost), <b>Basic $28,000</b> (auto-pay $26,000) and <b>Pro $52,000</b> (auto-pay $50,000) MXN/mo. See the Plans section.' },
+            { k: ['servicio','servicios','hacen','ofrecen','desarrollo','software','service','services','do you do'],
+              es: 'Hacemos arquitectura, desarrollo y mantenimiento de software para PYMES: web, apps, integraciones y automatización, con un equipo de 6+ especialistas.',
+              en: 'We do software architecture, development and maintenance for SMBs: web, apps, integrations and automation, with a team of 6+ specialists.' },
+            { k: ['contacto','contactar','correo','email','telefono','teléfono','whatsapp','hablar','contact','phone'],
+              es: 'Escríbenos a <b>cometax@cometax.click</b> o por WhatsApp al <b>+52 55 3235 1392</b>. También puedes usar el formulario de arriba (Diagnóstico gratis).',
+              en: 'Reach us at <b>cometax@cometax.click</b> or WhatsApp <b>+52 55 3235 1392</b>. You can also use the form above (Free diagnosis).' },
+            { k: ['tiempo','plazo','cuando','cuánto tarda','entrega','duracion','duración','how long','timeline'],
+              es: 'Depende del alcance. En el diagnóstico gratis te damos un estimado real de tiempo y costo, sin compromiso.',
+              en: 'It depends on scope. In the free diagnosis we give you a real time and cost estimate, no strings attached.' },
+            { k: ['login','acceso','entrar','panel','cuenta','iniciar','sign in','portal'],
+              es: 'Tu portal de cliente está en <a class="underline" href="https://cometax.click/panel/login">cometax.click/panel/login</a>. Puedes entrar con correo y contraseña o con Google.',
+              en: 'Your client portal is at <a class="underline" href="https://cometax.click/panel/login">cometax.click/panel/login</a>. Log in with email/password or Google.' },
+            { k: ['diagnostico','diagnóstico','gratis','free','diagnosis','demo'],
+              es: 'El diagnóstico es <b>gratis</b>: llena el formulario de arriba o agenda una reunión y revisamos tu caso sin costo.',
+              en: 'The diagnosis is <b>free</b>: fill the form above or book a call and we review your case at no cost.' },
+        ];
+
+        function cxIsEs() { return (typeof currentLang !== 'undefined') && currentLang === 'es'; }
+
+        function cxAppend(who, html) {
+            const log = document.getElementById('cx-chat-log');
+            const wrap = document.createElement('div');
+            wrap.className = who === 'me' ? 'flex justify-end' : 'flex justify-start';
+            wrap.innerHTML = '<div class="' + (who === 'me'
+                ? 'bg-white text-black rounded-2xl rounded-br-sm'
+                : 'bg-white/8 text-gray-100 border border-white/10 rounded-2xl rounded-bl-sm')
+                + ' px-3 py-2 max-w-[85%]">' + html + '</div>';
+            log.appendChild(wrap);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function cxReply(text) {
+            const t = text.toLowerCase();
+            const hit = CX_FAQ.find(f => f.k.some(kw => t.includes(kw)));
+            if (hit) return cxIsEs() ? hit.es : hit.en;
+            const wa = 'https://wa.me/' + WA_NUMBER;
+            return cxIsEs()
+                ? 'No estoy seguro de eso 🤔. Escríbeme "planes", "servicios" o "contacto", o háblanos directo por <a class="underline" href="' + wa + '" target="_blank" rel="noopener">WhatsApp</a>.'
+                : 'Not sure about that 🤔. Try "plans", "services" or "contact", or reach us on <a class="underline" href="' + wa + '" target="_blank" rel="noopener">WhatsApp</a>.';
+        }
+
+        let cxGreeted = false;
+        function cxChatToggle() {
+            const panel = document.getElementById('cx-chat-panel');
+            const icon = document.getElementById('cx-chat-icon');
+            const open = panel.classList.toggle('hidden') === false;
+            icon.className = open ? 'fas fa-times text-xl' : 'fas fa-comment-dots text-xl';
+            if (open && !cxGreeted) {
+                cxGreeted = true;
+                cxAppend('bot', cxIsEs()
+                    ? '¡Hola! 👋 Soy el asistente de CometaX. Pregúntame por <b>planes</b>, <b>servicios</b>, <b>contacto</b> o <b>acceso</b>.'
+                    : 'Hi! 👋 I\'m the CometaX assistant. Ask me about <b>plans</b>, <b>services</b>, <b>contact</b> or <b>login</b>.');
+            }
+            if (open) setTimeout(() => document.getElementById('cx-chat-input')?.focus(), 50);
+        }
+
+        function cxChatSend(event) {
+            event.preventDefault();
+            const input = document.getElementById('cx-chat-input');
+            const text = (input.value || '').trim();
+            if (!text) return;
+            cxAppend('me', text.replace(/</g, '&lt;'));
+            input.value = '';
+            setTimeout(() => cxAppend('bot', cxReply(text)), 250);
         }
     </script>
 </body>

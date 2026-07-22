@@ -21,6 +21,17 @@ class PlanSeeder extends Seeder
     {
         $plans = [
             [
+                'slug' => 'gratis',
+                'name' => 'Consultoría gratis',
+                'description' => 'Agenda una reunión de diagnóstico sin costo. Sin tarjeta.',
+                'price_cents' => 0,
+                'price_domiciliado_cents' => null, // sin Stripe: no se cobra
+                'included_hours' => 0,
+                'hourly_overage_rate_cents' => 0,
+                'max_clients' => null,
+                'sort_order' => 0,
+            ],
+            [
                 'slug' => 'basico',
                 'name' => 'Plan Básico',
                 'description' => '40 horas de equipo al mes.',

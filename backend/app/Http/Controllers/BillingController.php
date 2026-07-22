@@ -53,6 +53,17 @@ class BillingController extends Controller
         ]);
     }
 
+    /** Activa un plan gratuito (sin Stripe): solo asigna el plan al cliente. */
+    public function activarGratis(Plan $plan): RedirectResponse
+    {
+        abort_unless($plan->is_public && $plan->price_cents === 0, 404);
+
+        auth()->user()->client->forceFill(['plan_id' => $plan->id])->save();
+
+        return redirect()->route('dashboard')
+            ->with('status', "Plan «{$plan->name}» activado.");
+    }
+
     public function exito(): View
     {
         return view('billing.exito');

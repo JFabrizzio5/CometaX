@@ -30,18 +30,36 @@
       <div class="rounded-card border border-white/10 bg-white/[0.03] p-8 flex flex-col">
         <p class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">{{ $plan->name }}</p>
 
-        <div class="mt-4 flex items-baseline gap-2">
-          <span class="text-3xl font-semibold tracking-tight">{{ $plan->priceDomiciliadoLabel() ?? $plan->priceOnetimeLabel() }}</span>
-          <span class="text-sm text-zinc-400">/mes domiciliado</span>
-        </div>
-        <p class="mt-1 text-sm text-zinc-500">o {{ $plan->priceOnetimeLabel() }} en pago único mensual</p>
+        @if ($plan->price_cents === 0)
+          <div class="mt-4 flex items-baseline gap-2">
+            <span class="text-3xl font-semibold tracking-tight">Gratis</span>
+            <span class="text-sm text-zinc-400">sin tarjeta</span>
+          </div>
+        @else
+          <div class="mt-4 flex items-baseline gap-2">
+            <span class="text-3xl font-semibold tracking-tight">{{ $plan->priceDomiciliadoLabel() ?? $plan->priceOnetimeLabel() }}</span>
+            <span class="text-sm text-zinc-400">/mes domiciliado</span>
+          </div>
+          <p class="mt-1 text-sm text-zinc-500">o {{ $plan->priceOnetimeLabel() }} en pago único mensual</p>
+        @endif
 
         @if ($plan->description)
           <p class="mt-4 text-sm text-zinc-400">{{ $plan->description }}</p>
         @endif
 
         <div class="mt-auto pt-8 space-y-3">
-          @if ($plan->isBillable())
+          @if ($plan->price_cents === 0)
+            @if ($client->plan_id === $plan->id)
+              <p class="rounded-control border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-center text-sm text-emerald-200">Plan actual</p>
+            @else
+              <form method="POST" action="{{ route('billing.gratis', $plan) }}">
+                @csrf
+                <button class="h-12 w-full rounded-control bg-white px-5 text-sm font-semibold text-black transition hover:bg-zinc-200">
+                  Activar gratis
+                </button>
+              </form>
+            @endif
+          @elseif ($plan->isBillable())
             <form method="POST" action="{{ route('billing.domiciliar', $plan) }}">
               @csrf
               <button class="h-12 w-full rounded-control bg-white px-5 text-sm font-semibold text-black transition hover:bg-zinc-200">
