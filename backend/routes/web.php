@@ -3,20 +3,16 @@
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\HomeRedirectController;
 use App\Http\Controllers\StripeWebhookController;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Laravel\Cashier\Http\Middleware\VerifyWebhookSignature;
 
-Route::get('/', function () {
-    if (Auth::guard('consultant')->check()) {
-        return redirect()->route('admin.subscriptions');
-    }
+// Controller invokable, no Closure: route:cache no serializa Closures y dejaba
+// la raíz respondiendo solo HEAD (405 en GET). Ver HomeRedirectController.
+Route::get('/', HomeRedirectController::class);
 
-    return redirect()->route(Auth::guard('web')->check() ? 'dashboard' : 'login');
-});
-
-Route::get('/login', fn () => view('auth.login'))->name('login');
+Route::view('/login', 'auth.login')->name('login');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
@@ -27,7 +23,7 @@ Route::post('/logout', [GoogleController::class, 'logout'])->name('logout');
 
 // Portal de cliente
 Route::middleware('auth:web')->group(function () {
-    Route::get('/dashboard', fn () => view('dashboard'))->name('dashboard');
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
 
     // Facturación: se apaga sola con PAYMENTS_MAINTENANCE (payments.available).
     Route::middleware('payments.available')->group(function () {
