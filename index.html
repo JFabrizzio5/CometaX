@@ -32,9 +32,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
-    <!-- Three.js for 3D Animations -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    
     <!-- Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -370,7 +367,7 @@
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <button class="2xl:hidden relative z-50 text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
+                <button aria-label="Abrir menú" class="2xl:hidden relative z-50 text-white p-2 focus:outline-none" onclick="toggleMobileMenu()">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
             </div>
@@ -953,7 +950,7 @@
                             
                             <!-- Social Icon (Optional) -->
                             <div class="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                                <a href="#" class="text-white hover:text-eventotes-gold"><i class="fab fa-linkedin text-xl"></i></a>
+                                <a href="#" aria-label="LinkedIn de Joseph" class="text-white hover:text-eventotes-gold"><i class="fab fa-linkedin text-xl"></i></a>
                             </div>
                         </div>
                     </div>
@@ -996,7 +993,7 @@
                             
                              <!-- Social Icon (Optional) -->
                              <div class="mt-6 opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500 delay-100">
-                                <a href="#" class="text-white hover:text-neon-cyan"><i class="fab fa-linkedin text-xl"></i></a>
+                                <a href="#" aria-label="LinkedIn de José Ángel" class="text-white hover:text-neon-cyan"><i class="fab fa-linkedin text-xl"></i></a>
                             </div>
                         </div>
                     </div>
@@ -1190,8 +1187,8 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_type">Alliance Type</label>
-                                <select id="f-type" class="form-input form-select">
+                                <label for="f-type" class="block text-[10px] font-mono text-gray-500 mb-1 uppercase" data-i18n="form_label_type">Alliance Type</label>
+                                <select id="f-type" aria-label="Tipo de alianza" class="form-input form-select">
                                     <option value="client" data-i18n="form_opt_client" selected>Client — I need software / free diagnosis</option>
                                     <option value="investor" data-i18n="form_opt_investor">Investor / VC</option>
                                     <option value="grant" data-i18n="form_opt_grant">Grant / NGO Support</option>
@@ -1205,12 +1202,12 @@
                             
                             <div id="lead-status" class="hidden rounded-lg px-4 py-3 text-sm"></div>
 
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                <button type="button" onclick="sendLeadEmail(event)" class="bg-white text-black font-brand italic uppercase py-4 clip-button hover:bg-rankit-purple hover:text-white transition tracking-widest text-sm flex items-center justify-center gap-2">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <button type="button" onclick="sendLeadEmail(event)" class="bg-white text-black font-brand italic uppercase py-4 rounded-lg hover:bg-rankit-purple hover:text-white transition tracking-widest text-sm flex items-center justify-center gap-2">
                                     <i class="fas fa-envelope"></i>
                                     <span data-i18n="form_btn_email">Send by email</span>
                                 </button>
-                                <button type="button" onclick="sendLead(event)" class="border border-white/25 text-white font-brand italic uppercase py-4 clip-button hover:bg-[#25D366] hover:text-black hover:border-transparent transition tracking-widest text-sm flex items-center justify-center gap-2">
+                                <button type="button" onclick="sendLead(event)" class="border border-white/25 text-white font-brand italic uppercase py-4 rounded-lg hover:bg-[#25D366] hover:text-black hover:border-transparent transition tracking-widest text-sm flex items-center justify-center gap-2">
                                     <i class="fab fa-whatsapp text-lg"></i>
                                     <span data-i18n="form_btn_send">WhatsApp</span>
                                 </button>
@@ -1433,8 +1430,8 @@
 
     <!-- FLOATING WHATSAPP -->
     <a href="https://wa.me/525532351392?text=Hola%20CometaX%2C%20me%20interesa%20un%20diagn%C3%B3stico%20gratuito."
-       target="_blank" rel="noopener"
-       class="fixed bottom-6 right-6 z-50 flex items-center gap-3 bg-[#25D366] text-black font-brand italic uppercase text-sm px-5 py-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:scale-105 hover:shadow-[0_8px_40px_rgba(37,211,102,0.6)] transition-all duration-300 group">
+       target="_blank" rel="noopener" aria-label="Diagnóstico gratis por WhatsApp"
+       class="fixed bottom-6 left-6 z-50 flex items-center gap-3 bg-[#25D366] text-black font-brand italic uppercase text-sm px-5 py-4 rounded-full shadow-[0_8px_30px_rgba(37,211,102,0.4)] hover:scale-105 hover:shadow-[0_8px_40px_rgba(37,211,102,0.6)] transition-all duration-300 group">
         <i class="fab fa-whatsapp text-2xl"></i>
         <span class="hidden sm:inline pr-1" data-i18n="wa_btn">Free diagnosis</span>
     </a>
@@ -1459,7 +1456,7 @@
         document.querySelectorAll('.reveal-node').forEach(el => observer.observe(el));
 
 
-        // 2. HERO ANIMATION: DIGITAL NEURAL SPHERE (THREE.JS)
+        // 2. HERO ANIMATION: campo espacial + cometas en canvas 2D (sin Three.js)
         // HERO BACKGROUND: single fullscreen shader — flowing plasma (domain-warped
         // FBM) in the CometaX palette. One striking element instead of many small
         // ones: high impact, zero clutter. Energy sits right-of-centre so it never
@@ -1468,152 +1465,107 @@
             const container = document.getElementById('hero-canvas-container');
             if (!container) return;
 
-            const scene = new THREE.Scene();
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+            // Fondo del hero en canvas 2D (sin Three.js): campo de estrellas,
+            // nebulosa violeta y dos cometas con cabeza y cola. Mucho más ligero
+            // que el shader WebGL — mejor performance y sin la "luz cortada".
+            const canvas = document.createElement('canvas');
+            canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block';
+            container.appendChild(canvas);
+            const ctx = canvas.getContext('2d');
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            const renderer = new THREE.WebGLRenderer({ antialias: false });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            // Cap DPR: the shader is fill-rate heavy, this keeps it smooth
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-            container.appendChild(renderer.domElement);
-
-            const uniforms = {
-                u_time:  { value: 0 },
-                u_res:   { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-                u_mouse: { value: new THREE.Vector2(0.5, 0.5) }
-            };
-
-            const vertexShader = `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = vec4(position, 1.0);
-                }
-            `;
-
-            const fragmentShader = `
-                precision highp float;
-                uniform float u_time;
-                uniform vec2 u_res;
-                uniform vec2 u_mouse;
-                varying vec2 vUv;
-
-                float hash(vec2 p) {
-                    return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
-                }
-                float noise(vec2 p) {
-                    vec2 i = floor(p);
-                    vec2 f = fract(p);
-                    vec2 u = f * f * (3.0 - 2.0 * f);
-                    return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
-                               mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
-                }
-                float fbm(vec2 p) {
-                    float v = 0.0;
-                    float a = 0.5;
-                    for (int i = 0; i < 4; i++) {
-                        v += a * noise(p);
-                        p *= 2.02;
-                        a *= 0.5;
-                    }
-                    return v;
-                }
-
-                // One comet: bright head, halo, long tapering tail.
-                // sizeMul scales the whole thing so we can run a big one and a small one.
-                vec3 cometAt(vec2 p, float ct, float cycle, vec2 start, vec2 dir, float sizeMul, vec3 lav) {
-                    float life = ct / cycle;
-                    vec2 head = start + dir * ct * 1.20;
-                    vec2 v = p - head;
-                    float td = dot(v, -dir);
-                    float pd = length(v + dir * td);
-                    float taper = 1.0 + td * 4.0;
-                    // smoothstep en vez de step: sin el step la cola arrancaba con un
-                    // borde recto diagonal en la cabeza — eso era la "luz cortada".
-                    float tail = exp(-pd * 14.0 / (taper * sizeMul)) * exp(-max(td, 0.0) * 1.1) * smoothstep(-0.06, 0.06, td);
-                    float headGlow = exp(-length(v) * 18.0 / sizeMul);
-                    float halo = exp(-length(v) * 5.0 / sizeMul) * 0.55;
-                    float fade = smoothstep(0.0, 0.06, life) * smoothstep(1.0, 0.88, life);
-                    vec3 c = mix(lav, vec3(1.0), clamp(headGlow * 1.6, 0.0, 1.0));
-                    return c * (tail * 1.40 + halo + headGlow * 3.50) * fade;
-                }
-
-                void main() {
-                    float aspect = u_res.x / max(u_res.y, 1.0);
-                    vec2 uv = vUv;
-                    vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
-                    vec2 mo = (u_mouse - 0.5) * 0.06;
-
-                    // Deep space
-                    vec3 col = vec3(0.004, 0.004, 0.009);
-
-                    vec3 purple = vec3(0.42, 0.19, 0.88);
-                    vec3 lav    = vec3(0.74, 0.58, 1.00);
-
-                    // --- Nebula (slow violet clouds) ---
-                    vec2 np = p * 1.7 + mo * 2.0;
-                    float n = fbm(np + vec2(u_time * 0.013, u_time * 0.009));
-                    float neb = smoothstep(0.40, 0.95, n);
-                    col += purple * neb * 0.60;
-                    col += lav * pow(neb, 3.0) * 0.30;
-
-                    // --- Starfield ---
-                    vec2 sp = uv * vec2(aspect, 1.0) * 240.0;
-                    vec2 si = floor(sp);
-                    float sh = hash(si);
-                    if (sh > 0.984) {
-                        vec2 sf = fract(sp) - 0.5;
-                        float tw = 0.55 + 0.45 * sin(u_time * 2.2 + sh * 120.0);
-                        col += vec3(1.0) * smoothstep(0.45, 0.0, length(sf)) * tw * 0.95;
-                    }
-
-                    // --- Comets. Two lanes, half a cycle apart, so there is almost
-                    // always one crossing the screen. ~9s per pass.
-                    float cycle = 2.4;
-                    float T = u_time * 0.27;
-
-                    vec2 dirA = normalize(vec2(1.0, -0.40));
-                    col += cometAt(p, mod(T, cycle), cycle, vec2(-1.30, 0.72) + mo, dirA, 1.0, lav);
-
-                    vec2 dirB = normalize(vec2(1.0, -0.20));
-                    col += cometAt(p, mod(T + cycle * 0.5, cycle), cycle, vec2(-1.30, -0.05) + mo, dirB, 0.60, lav) * 0.70;
-
-                    // Vignette
-                    float d = length(p * vec2(1.0, 1.15));
-                    col *= smoothstep(1.20, 0.12, d);
-
-                    gl_FragColor = vec4(col, 1.0);
-                }
-            `;
-
-            const quad = new THREE.Mesh(
-                new THREE.PlaneGeometry(2, 2),
-                new THREE.ShaderMaterial({ uniforms, vertexShader, fragmentShader })
-            );
-            scene.add(quad);
-
-            window.addEventListener('mousemove', (event) => {
-                uniforms.u_mouse.value.set(
-                    event.clientX / window.innerWidth,
-                    1.0 - event.clientY / window.innerHeight
-                );
-            });
-
-            const start = performance.now();
-            function animate() {
-                requestAnimationFrame(animate);
-                uniforms.u_time.value = (performance.now() - start) / 1000;
-                renderer.render(scene, camera);
+            let W = 0, H = 0, stars = [];
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+                W = container.clientWidth;
+                H = container.clientHeight || window.innerHeight;
+                canvas.width = W * dpr;
+                canvas.height = H * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+                const n = Math.min(260, Math.round(W * H / 9000));
+                stars = Array.from({ length: n }, () => ({
+                    x: Math.random() * W, y: Math.random() * H,
+                    r: Math.random() * 1.2 + 0.2, tw: Math.random() * 6.28,
+                    sp: Math.random() * 1.8 + 0.6, violet: Math.random() > 0.7
+                }));
             }
-            animate();
+            resize();
+            window.addEventListener('resize', resize);
 
-            window.addEventListener('resize', () => {
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                uniforms.u_res.value.set(window.innerWidth, window.innerHeight);
+            const nebula = [{ x: 0.62, y: 0.34, r: 0.55 }, { x: 0.30, y: 0.62, r: 0.42 }];
+            const comets = [
+                { sx: -0.25, sy: 0.72, dx: 1, dy: -0.40, size: 1.0, phase: 0.0 },
+                { sx: -0.25, sy: 0.28, dx: 1, dy: -0.20, size: 0.6, phase: 0.5 }
+            ];
+            comets.forEach(c => { const l = Math.hypot(c.dx, c.dy); c.dx /= l; c.dy /= l; });
+
+            function comet(c, life) {
+                const fade = Math.min(life / 0.08, 1) * Math.min((1 - life) / 0.12, 1);
+                if (fade <= 0) return;
+                const hx = (c.sx + c.dx * life * 1.5) * W;
+                const hy = (c.sy + c.dy * life * 1.5) * H;
+                const R = 22 * c.size;
+                const seg = 22;
+                for (let i = seg; i > 0; i--) {
+                    const f = i / seg;
+                    const tx = hx - c.dx * f * 240 * c.size;
+                    const ty = hy - c.dy * f * 240 * c.size;
+                    const rr = R * (1 - f * 0.8) * 1.7;
+                    const a = (1 - f) * (1 - f) * 0.45 * fade;
+                    const g = ctx.createRadialGradient(tx, ty, 0, tx, ty, rr);
+                    g.addColorStop(0, 'rgba(190,160,255,' + a + ')');
+                    g.addColorStop(1, 'rgba(190,160,255,0)');
+                    ctx.fillStyle = g;
+                    ctx.beginPath(); ctx.arc(tx, ty, rr, 0, 6.283); ctx.fill();
+                }
+                const gh = ctx.createRadialGradient(hx, hy, 0, hx, hy, R * 3);
+                gh.addColorStop(0, 'rgba(255,255,255,' + (0.95 * fade) + ')');
+                gh.addColorStop(0.28, 'rgba(200,170,255,' + (0.55 * fade) + ')');
+                gh.addColorStop(1, 'rgba(124,58,237,0)');
+                ctx.fillStyle = gh;
+                ctx.beginPath(); ctx.arc(hx, hy, R * 3, 0, 6.283); ctx.fill();
+            }
+
+            function render(elapsed) {
+                ctx.fillStyle = '#050410';
+                ctx.fillRect(0, 0, W, H);
+
+                nebula.forEach((nb, i) => {
+                    const nx = (nb.x + Math.sin(elapsed * 0.05 + i) * 0.02) * W;
+                    const ny = (nb.y + Math.cos(elapsed * 0.04 + i) * 0.02) * H;
+                    const Rr = nb.r * Math.min(W, H) * 1.3;
+                    const g = ctx.createRadialGradient(nx, ny, 0, nx, ny, Rr);
+                    g.addColorStop(0, 'rgba(124,58,237,0.18)');
+                    g.addColorStop(1, 'rgba(124,58,237,0)');
+                    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+                });
+
+                for (const s of stars) {
+                    const tw = reduce ? 0.8 : 0.5 + 0.5 * Math.sin(elapsed * s.sp + s.tw);
+                    ctx.globalAlpha = tw * 0.9;
+                    ctx.fillStyle = s.violet ? '#c4b5fd' : '#ffffff';
+                    ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.283); ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+
+                ctx.globalCompositeOperation = 'lighter';
+                comets.forEach(c => comet(c, (elapsed * 0.11 + c.phase) % 1));
+                ctx.globalCompositeOperation = 'source-over';
+            }
+
+            if (reduce) { render(2.0); return; } // estático si el usuario pidió menos movimiento
+
+            const t0 = performance.now();
+            let raf = 0;
+            function loop() { render((performance.now() - t0) / 1000); raf = requestAnimationFrame(loop); }
+            loop();
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) { cancelAnimationFrame(raf); }
+                else { raf = requestAnimationFrame(loop); }
             });
         }
-        
-        // Start Three.js when window loads
+
+        // Arranca la animación 2D del hero al cargar
         window.addEventListener('load', initHeroAnimation);
 
 
