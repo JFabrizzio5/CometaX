@@ -15,18 +15,54 @@
 
   <div class="w-full max-w-md rounded-card border border-white/10 bg-white/[0.03] p-8">
     <h1 class="text-2xl font-semibold tracking-tight">Entra a tu panel</h1>
-    <p class="mt-2 text-sm text-zinc-400">
-      Usa tu cuenta de Google. Si es tu primera vez, se crea tu espacio automáticamente.
-    </p>
+    <p class="mt-2 text-sm text-zinc-400">Con tu correo y contraseña, o con Google.</p>
 
-    @error('google')
-      <div class="mt-6 rounded-control border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-        {{ $message }}
+    @if (session('status'))
+      <div class="mt-6 rounded-control border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">
+        {{ session('status') }}
       </div>
+    @endif
+    @error('email')
+      <div class="mt-6 rounded-control border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{{ $message }}</div>
+    @enderror
+    @error('google')
+      <div class="mt-6 rounded-control border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">{{ $message }}</div>
     @enderror
 
+    <form method="POST" action="{{ route('login.attempt') }}" class="mt-8 space-y-4">
+      @csrf
+      <div>
+        <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Correo</label>
+        <input type="email" name="email" value="{{ old('email') }}" required autofocus
+          class="mt-2 w-full rounded-control bg-white/5 border border-white/15 px-4 py-3 text-sm outline-none focus:border-white/40 transition" />
+      </div>
+      <div>
+        <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Contraseña</label>
+        <input type="password" name="password" required
+          class="mt-2 w-full rounded-control bg-white/5 border border-white/15 px-4 py-3 text-sm outline-none focus:border-white/40 transition" />
+      </div>
+      <label class="flex items-center gap-2 text-xs text-zinc-500">
+        <input type="checkbox" name="remember" class="h-3.5 w-3.5 rounded-[4px] bg-white/5 border border-white/20 accent-white" />
+        Mantener sesión iniciada
+      </label>
+      <button class="h-12 w-full rounded-control bg-white px-5 text-sm font-semibold text-black transition hover:bg-zinc-200">
+        Entrar
+      </button>
+    </form>
+
+    <p class="mt-4 text-center text-sm text-zinc-400">
+      ¿No tienes cuenta?
+      <a href="{{ route('register') }}" class="text-white underline underline-offset-4 hover:text-zinc-200">Crear una</a>
+    </p>
+
+    <div class="mt-6 flex items-center gap-3">
+      <div class="h-px flex-1 bg-white/10"></div>
+      <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-600">o</span>
+      <div class="h-px flex-1 bg-white/10"></div>
+    </div>
+
     <a href="{{ route('auth.google.redirect') }}"
-       class="mt-8 flex h-12 w-full items-center justify-center gap-3 rounded-control bg-white px-5 text-sm font-semibold text-black transition hover:bg-zinc-200">
+       class="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-control border border-white/15 px-5 text-sm font-semibold text-zinc-100 transition hover:border-white/30">
       <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
         <path fill="#4285F4" d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.63h6.46a5.52 5.52 0 0 1-2.4 3.62v3h3.88c2.27-2.09 3.58-5.17 3.58-8.8z"/>
         <path fill="#34A853" d="M12 24c3.24 0 5.96-1.08 7.94-2.91l-3.88-3.01c-1.08.72-2.45 1.15-4.06 1.15-3.12 0-5.77-2.11-6.71-4.95H1.28v3.1A12 12 0 0 0 12 24z"/>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\IncidentAdminController;
 use App\Http\Controllers\Admin\ProjectAdminController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
+use App\Http\Controllers\Auth\ClientAuthController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
 use App\Http\Controllers\DemoController;
@@ -23,6 +24,11 @@ use Laravel\Cashier\Http\Middleware\VerifyWebhookSignature;
 Route::get('/', HomeRedirectController::class);
 
 Route::view('/login', 'auth.login')->name('login');
+Route::post('/login', [ClientAuthController::class, 'login'])->middleware('throttle:6,1')->name('login.attempt');
+
+// Auto-registro de clientes (correo + contraseña).
+Route::get('/registro', [ClientAuthController::class, 'showRegister'])->name('register');
+Route::post('/registro', [ClientAuthController::class, 'register'])->middleware('throttle:6,1')->name('register.store');
 
 // Acceso demo (gateado por features.demo_login dentro del controller).
 Route::get('/demo', [DemoController::class, 'entrar'])->name('demo.entrar');
@@ -34,8 +40,17 @@ Route::middleware('throttle:10,1')->group(function () {
 
 Route::post('/logout', [GoogleController::class, 'logout'])->name('logout');
 
-// Portal de cliente
+// Verificación de correo (usuario autenticado, aún sin verificar).
 Route::middleware('auth:web')->group(function () {
+    Route::get('/email/verificar', [ClientAuthController::class, 'notice'])->name('verification.notice');
+    Route::get('/email/verificar/{id}/{hash}', [ClientAuthController::class, 'verify'])
+        ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::post('/email/reenviar', [ClientAuthController::class, 'resend'])
+        ->middleware('throttle:6,1')->name('verification.send');
+});
+
+// Portal de cliente — requiere correo verificado.
+Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');
 
     // Facturación: se apaga sola con PAYMENTS_MAINTENANCE (payments.available).

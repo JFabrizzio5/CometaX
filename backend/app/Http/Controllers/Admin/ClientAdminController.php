@@ -92,7 +92,8 @@ class ClientAdminController extends Controller
             'role' => ['required', 'in:admin,member'],
         ]);
 
-        $client->users()->create($data);
+        // Usuario dado de alta por el equipo: correo de confianza, ya verificado.
+        $client->users()->create([...$data, 'email_verified_at' => now()]);
 
         return redirect()->route('admin.clients.show', $client)
             ->with('status', "Usuario {$data['email']} agregado.");
