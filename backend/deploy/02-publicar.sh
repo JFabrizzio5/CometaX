@@ -82,7 +82,10 @@ say "Permisos y caché"
 chmod -R 775 "$LARAVEL/storage" "$LARAVEL/bootstrap/cache"
 "$PHP_BIN" artisan optimize:clear
 "$PHP_BIN" artisan config:cache
-"$PHP_BIN" artisan route:cache
+# OJO: NO cachear rutas. En este deploy en subdirectorio (/panel), route:cache
+# rompe la ruta raíz '/' — queda respondiendo solo HEAD y da 405 en GET. El
+# resto de rutas van bien sin caché; el ahorro de route:cache aquí es marginal.
+"$PHP_BIN" artisan route:clear
 "$PHP_BIN" artisan view:cache
 
 # --------------------------------------------------------- 5. verificar

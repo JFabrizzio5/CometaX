@@ -125,9 +125,14 @@ chmod -R 775 storage bootstrap/cache
 
 ```bash
 php artisan config:cache
-php artisan route:cache
+php artisan route:clear    # NO route:cache — ver aviso abajo
 php artisan view:cache
 ```
+
+**No cachear rutas.** En este deploy en subdirectorio (`/panel`), `route:cache`
+rompe la ruta raíz `/`: queda respondiendo solo `HEAD` y da **405 Method Not
+Allowed** en `GET`. Las demás rutas funcionan bien sin caché y el ahorro de
+`route:cache` en una app de ~15 rutas es marginal. Dejar siempre `route:clear`.
 
 **Ojo:** después de `config:cache`, las llamadas a `env()` fuera de los archivos
 de `config/` devuelven `null`. Todo el código actual lee de `config(...)`, así que
@@ -138,7 +143,7 @@ Cada deploy posterior:
 ```bash
 cd ~/domains/cometax.click/repo && git pull
 cd ../laravel && php artisan optimize:clear && php artisan migrate --force
-php artisan config:cache && php artisan route:cache && php artisan view:cache
+php artisan config:cache && php artisan route:clear && php artisan view:cache
 ```
 
 Si el `git pull` tocó `deploy/panel/`, repetir el paso 5.

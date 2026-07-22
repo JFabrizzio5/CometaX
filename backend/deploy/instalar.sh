@@ -198,7 +198,8 @@ chmod -R 775 storage bootstrap/cache 2>/dev/null
 say "Cacheando configuración"
 "$PHP_BIN" artisan optimize:clear >/dev/null 2>&1
 "$PHP_BIN" artisan config:cache >/dev/null 2>&1
-"$PHP_BIN" artisan route:cache  >/dev/null 2>&1
+# NO route:cache: en subdirectorio (/panel) rompe la ruta raíz '/' (405 en GET).
+"$PHP_BIN" artisan route:clear  >/dev/null 2>&1
 "$PHP_BIN" artisan view:cache   >/dev/null 2>&1
 echo "  listo"
 
