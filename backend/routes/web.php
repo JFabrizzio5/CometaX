@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
@@ -44,7 +45,18 @@ Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']
     ->middleware(VerifyWebhookSignature::class)
     ->name('cashier.webhook');
 
-// Panel interno
+// Auth de staff (sin sesión): login email+password y definir/reset de contraseña.
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('/login', [AdminAuthController::class, 'showLogin'])->name('login');
+    Route::post('/login', [AdminAuthController::class, 'login'])->middleware('throttle:6,1')->name('login.attempt');
+
+    Route::get('/password/olvide', [AdminAuthController::class, 'showForgot'])->name('password.request');
+    Route::post('/password/email', [AdminAuthController::class, 'sendResetLink'])->middleware('throttle:6,1')->name('password.email');
+    Route::get('/password/reset/{token}', [AdminAuthController::class, 'showReset'])->name('password.reset');
+    Route::post('/password/reset', [AdminAuthController::class, 'reset'])->middleware('throttle:6,1')->name('password.update');
+});
+
+// Panel interno (requiere staff).
 Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/suscripciones', SubscriptionOverviewController::class)->name('subscriptions');
 });

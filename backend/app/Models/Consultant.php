@@ -8,13 +8,23 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use App\Notifications\ConsultantSetPassword;
 use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name', 'title', 'avatar_path', 'email', 'password', 'role', 'google_id'])]
 #[Hidden(['password', 'remember_token'])]
 class Consultant extends Authenticatable
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
+
+    /**
+     * El correo de reset apunta a la ruta de staff, no a la de clientes.
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ConsultantSetPassword($token));
+    }
 
     protected function casts(): array
     {
