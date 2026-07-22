@@ -1,6 +1,9 @@
 # CometaX
 
-CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y mantenimiento de software con un equipo de 6+ especialistas, al costo de una sola contratación interna. Sitio: https://cometax.click/
+CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y mantenimiento de software con un equipo de 6+ especialistas, al costo de una sola contratación interna.
+
+- [Sitio web](https://cometax.click/)
+- [Portal de clientes](https://cometax.click/panel/login)
 
 ## Servicios
 
@@ -10,19 +13,18 @@ CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y man
 
 ## Planes
 
-- Consultoría gratis: reunión de diagnóstico sin costo, sin tarjeta.
-- Básico: $28,000 MXN/mes ($26,000 con domiciliación) — 40 horas de equipo al mes.
-- Pro: $52,000 MXN/mes ($50,000 con domiciliación) — 80 horas de equipo al mes.
-- A medida: se cotiza según alcance.
+- **Consultoría gratis**: reunión de diagnóstico sin costo, sin tarjeta.
+- **Básico**: $28,000 MXN/mes ($26,000 con domiciliación) — 40 horas de equipo al mes.
+- **Pro**: $52,000 MXN/mes ($50,000 con domiciliación) — 80 horas de equipo al mes.
+- **A medida**: se cotiza según alcance.
 
 ## Contacto
 
-- Correo: cometax@cometax.click
-- WhatsApp: +52 55 3235 1392
-- Instagram: @cometaxcompany
-- Portal de clientes: https://cometax.click/panel/login
+- Correo: [cometax@cometax.click](mailto:cometax@cometax.click)
+- WhatsApp: [+52 55 3235 1392](https://wa.me/525532351392)
+- Instagram: [@cometaxcompany](https://www.instagram.com/cometaxcompany/)
 
 ## Notas
 
 - Empresa con sede en Ciudad de México.
-- 10% de los ingresos de cada proyecto comercial financia becas en la Academia CometaX.
+- El 10% de los ingresos de cada proyecto comercial financia becas en la Academia CometaX.
