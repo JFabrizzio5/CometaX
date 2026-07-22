@@ -38,6 +38,18 @@
       Continuar con Google
     </a>
 
+    @if (config('features.demo_login'))
+      <div class="mt-6 flex items-center gap-3">
+        <div class="h-px flex-1 bg-white/10"></div>
+        <span class="font-mono text-[10px] uppercase tracking-widest text-zinc-600">demo</span>
+        <div class="h-px flex-1 bg-white/10"></div>
+      </div>
+      <a href="{{ route('demo.entrar') }}"
+         class="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-control border border-white/15 px-5 text-sm font-semibold text-zinc-200 transition hover:border-white/30 hover:text-white">
+        Entrar como demo (sin Google)
+      </a>
+    @endif
+
     <p class="mt-6 text-center font-mono text-[11px] uppercase tracking-widest text-zinc-600">
       Acceso cifrado · OAuth 2.0
     </p>

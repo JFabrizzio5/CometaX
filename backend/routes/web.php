@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\DemoController;
 use App\Http\Controllers\HomeRedirectController;
 use App\Http\Controllers\StripeWebhookController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,9 @@ use Laravel\Cashier\Http\Middleware\VerifyWebhookSignature;
 Route::get('/', HomeRedirectController::class);
 
 Route::view('/login', 'auth.login')->name('login');
+
+// Acceso demo (gateado por features.demo_login dentro del controller).
+Route::get('/demo', [DemoController::class, 'entrar'])->name('demo.entrar');
 
 Route::middleware('throttle:10,1')->group(function () {
     Route::get('/auth/google/redirect', [GoogleController::class, 'redirect'])->name('auth.google.redirect');
