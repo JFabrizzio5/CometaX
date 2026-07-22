@@ -17,6 +17,7 @@ class DemoController extends Controller
     {
         abort_unless(config('features.demo_login'), 404);
 
-        return redirect('/panel/app/');
+        // APP_URL ya incluye el /panel; un path con slash inicial lo duplicaría.
+        return redirect(rtrim(config('app.url'), '/').'/app/');
     }
 }
