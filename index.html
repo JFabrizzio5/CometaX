@@ -1965,36 +1965,48 @@
 
         let currentLang = 'en';
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'es' : 'en';
-            
-            document.getElementById('lang-en').classList.toggle('active');
-            document.getElementById('lang-es').classList.toggle('active');
-            document.getElementById('lang-en-mobile').classList.toggle('active');
-            document.getElementById('lang-es-mobile').classList.toggle('active');
-            
-            const elements = document.querySelectorAll('[data-i18n]');
-            elements.forEach(el => {
+        // Aplica un idioma a todo [data-i18n]. animate=true hace el fade del toggle.
+        function applyLang(lang, animate) {
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            try { localStorage.setItem('cx_lang', lang); } catch (e) {}
+
+            const setActive = (id, on) => { const el = document.getElementById(id); if (el) el.classList.toggle('active', on); };
+            setActive('lang-en', lang === 'en');
+            setActive('lang-es', lang === 'es');
+            setActive('lang-en-mobile', lang === 'en');
+            setActive('lang-es-mobile', lang === 'es');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
-                if (translations[currentLang][key]) {
-                    el.style.opacity = '0';
-                    setTimeout(() => {
-                        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-                            el.placeholder = translations[currentLang][key];
-                        } else if (el.tagName === 'OPTION') {
-                            el.text = translations[currentLang][key];
-                        } else {
-                             if (key === 'pledge_title') {
-                                el.innerHTML = translations[currentLang][key].replace('\n', '<br>');
-                            } else {
-                                el.innerHTML = translations[currentLang][key];
-                            }
-                        }
-                        el.style.opacity = '1';
-                    }, 200);
-                }
+                const val = translations[lang] && translations[lang][key];
+                if (val == null) return;
+                const set = () => {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') el.placeholder = val;
+                    else if (el.tagName === 'OPTION') el.text = val;
+                    else el.innerHTML = key === 'pledge_title' ? val.replace('\n', '<br>') : val;
+                };
+                if (animate) { el.style.opacity = '0'; setTimeout(() => { set(); el.style.opacity = '1'; }, 200); }
+                else set();
             });
         }
+
+        function toggleLanguage() {
+            applyLang(currentLang === 'en' ? 'es' : 'en', true);
+        }
+
+        // Idioma inicial: preferencia guardada o el del navegador (es* → español).
+        // El literal del HTML ya es inglés, así que solo re-traducimos si toca español.
+        (function initLang() {
+            let lang = null;
+            try { lang = localStorage.getItem('cx_lang'); } catch (e) {}
+            if (lang !== 'en' && lang !== 'es') {
+                const nav = (navigator.languages && navigator.languages[0]) || navigator.language || 'en';
+                lang = /^es/i.test(nav) ? 'es' : 'en';
+            }
+            if (lang === 'es') applyLang('es', false);
+            else { currentLang = 'en'; document.documentElement.lang = 'en'; }
+        })();
 
         function showPage(pageId) {
             const homeView = document.getElementById('view-home');
