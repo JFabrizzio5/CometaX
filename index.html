@@ -1477,7 +1477,7 @@
             let W = 0, H = 0, stars = [];
             function resize() {
                 const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-                W = container.clientWidth;
+                W = container.clientWidth || window.innerWidth;
                 H = container.clientHeight || window.innerHeight;
                 canvas.width = W * dpr;
                 canvas.height = H * dpr;
