@@ -46,7 +46,7 @@
       </div>
       <a href="{{ route('demo.entrar') }}"
          class="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-control border border-white/15 px-5 text-sm font-semibold text-zinc-200 transition hover:border-white/30 hover:text-white">
-        Entrar como demo (sin Google)
+        Ver panel demo
       </a>
     @endif
 

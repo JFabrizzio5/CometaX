@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Auth;
 
 /**
- * Acceso demo al portal de cliente, SIN Google. Entra como la cuenta demo
- * sembrada por DemoSeeder (demo@cometax.click), scoped a su propio tenant.
+ * Entrada al demo del portal. Manda al front estático (public_html/panel/app),
+ * un mockup navegable servido directo por Apache — no usa sesión ni backend.
  *
- * Gateado por features.demo_login (env DEMO_LOGIN). OFF por defecto: es un
- * bypass de login. Con el flag apagado, 404.
+ * Gateado por features.demo_login (env DEMO_LOGIN, OFF por defecto): con el
+ * flag apagado, 404 y el botón no aparece en el login.
  */
 class DemoController extends Controller
 {
@@ -19,15 +17,6 @@ class DemoController extends Controller
     {
         abort_unless(config('features.demo_login'), 404);
 
-        $demo = User::where('email', 'demo@cometax.click')->first();
-
-        abort_if($demo === null, 404, 'Falta sembrar la cuenta demo (DemoSeeder).');
-
-        // Cierra cualquier sesión de staff para no mezclar guards.
-        Auth::guard('consultant')->logout();
-        Auth::guard('web')->login($demo);
-        request()->session()->regenerate();
-
-        return redirect()->route('dashboard');
+        return redirect('/panel/app/');
     }
 }
