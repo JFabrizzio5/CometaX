@@ -192,4 +192,95 @@
 
   </div>
 
+  <div class="mt-6 grid gap-6 lg:grid-cols-2">
+
+    {{-- Consultores asignados --}}
+    <section class="rounded-card border border-white/10 bg-white/[0.03] p-6">
+      <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Consultores del proyecto</h2>
+
+      <ul class="mt-4 divide-y divide-white/5">
+        @forelse ($project->consultants as $member)
+          <li class="py-3 flex items-center justify-between gap-4">
+            <div>
+              <p class="text-sm font-medium">{{ $member->name }}</p>
+              <p class="font-mono text-xs text-zinc-500">{{ $member->pivot->role_label ?? $member->title ?? 'Consultor' }}</p>
+            </div>
+            <form method="POST" action="{{ route('admin.projects.consultants.detach', [$project, $member]) }}"
+                  onsubmit="return confirm('¿Quitar a {{ $member->name }} del proyecto?')">
+              @csrf
+              @method('DELETE')
+              <button class="font-mono text-[10px] uppercase tracking-widest text-zinc-500 transition hover:text-red-300">Quitar</button>
+            </form>
+          </li>
+        @empty
+          <li class="py-6 text-center text-sm text-zinc-500">Nadie asignado todavía.</li>
+        @endforelse
+      </ul>
+
+      <form method="POST" action="{{ route('admin.projects.consultants.attach', $project) }}" class="mt-5 border-t border-white/10 pt-5 space-y-3">
+        @csrf
+        <select name="consultant_id" required
+          class="h-11 w-full rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
+          <option value="">Elegir consultor…</option>
+          @foreach ($consultants as $consultant)
+            <option value="{{ $consultant->id }}">{{ $consultant->name }}</option>
+          @endforeach
+        </select>
+        <div class="flex gap-2">
+          <input type="text" name="role_label" placeholder="Rol (ej. Backend, Líder QA…)"
+            class="h-11 w-full rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition" />
+          <button class="h-11 shrink-0 rounded-control border border-white/15 px-4 font-mono text-xs uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+            + Asignar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    {{-- Enlaces del proyecto (GitHub, staging, etc.) --}}
+    <section class="rounded-card border border-white/10 bg-white/[0.03] p-6">
+      <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Enlaces (GitHub, staging, docs…)</h2>
+
+      <ul class="mt-4 divide-y divide-white/5">
+        @forelse ($project->links as $link)
+          <li class="py-3 flex items-center justify-between gap-4">
+            <div class="min-w-0">
+              <a href="{{ $link->url }}" target="_blank" rel="noopener noreferrer"
+                 class="text-sm font-medium hover:underline underline-offset-4 break-all">{{ $link->label }}</a>
+              <p class="font-mono text-xs text-zinc-500 break-all">{{ $link->kind }} · {{ $link->url }}</p>
+            </div>
+            <form method="POST" action="{{ route('admin.projects.links.destroy', $link) }}">
+              @csrf
+              @method('DELETE')
+              <button class="font-mono text-[10px] uppercase tracking-widest text-zinc-500 transition hover:text-red-300">Borrar</button>
+            </form>
+          </li>
+        @empty
+          <li class="py-6 text-center text-sm text-zinc-500">Sin enlaces todavía.</li>
+        @endforelse
+      </ul>
+
+      <form method="POST" action="{{ route('admin.projects.links.store', $project) }}" class="mt-5 border-t border-white/10 pt-5 space-y-3">
+        @csrf
+        <div class="flex gap-2">
+          <select name="kind"
+            class="h-11 shrink-0 rounded-control bg-white/5 border border-white/15 px-3 text-sm outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
+            @foreach (['github' => 'GitHub', 'repo' => 'Repo', 'staging' => 'Staging', 'produccion' => 'Producción', 'doc' => 'Doc', 'otro' => 'Otro'] as $value => $label)
+              <option value="{{ $value }}">{{ $label }}</option>
+            @endforeach
+          </select>
+          <input type="text" name="label" placeholder="Etiqueta (ej. Repo backend)" required
+            class="h-11 w-full rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition" />
+        </div>
+        <div class="flex gap-2">
+          <input type="url" name="url" placeholder="https://github.com/…" required
+            class="h-11 w-full rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition" />
+          <button class="h-11 shrink-0 rounded-control border border-white/15 px-4 font-mono text-xs uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+            + Enlace
+          </button>
+        </div>
+      </form>
+    </section>
+
+  </div>
+
 @endsection

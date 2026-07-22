@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AnnouncementAdminController;
 use App\Http\Controllers\Admin\AppointmentAdminController;
 use App\Http\Controllers\Admin\ClientAdminController;
+use App\Http\Controllers\Admin\ConsultantAdminController;
+use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\IncidentAdminController;
 use App\Http\Controllers\Admin\ProjectAdminController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
@@ -46,6 +48,9 @@ Route::middleware('auth:web')->group(function () {
     });
 });
 
+// Salir de la vista "ver como cliente" y volver a la sesión de staff.
+Route::post('/salir-vista-cliente', [ImpersonationController::class, 'stop'])->name('impersonation.stop');
+
 // Webhook de Stripe: sin auth ni CSRF (ya exento en bootstrap), firmado.
 Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
     ->middleware(VerifyWebhookSignature::class)
@@ -75,6 +80,16 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/clientes/{client}/editar', [ClientAdminController::class, 'edit'])->name('clients.edit');
     Route::put('/clientes/{client}', [ClientAdminController::class, 'update'])->name('clients.update');
     Route::post('/clientes/{client}/usuarios', [ClientAdminController::class, 'storeUser'])->name('clients.users.store');
+    Route::post('/clientes/{client}/ver-como', [ImpersonationController::class, 'start'])->name('clients.impersonate');
+
+    // Consultores (equipo interno). Solo super_admin — se valida en el controller.
+    Route::get('/consultores', [ConsultantAdminController::class, 'index'])->name('consultants.index');
+    Route::get('/consultores/nuevo', [ConsultantAdminController::class, 'create'])->name('consultants.create');
+    Route::post('/consultores', [ConsultantAdminController::class, 'store'])->name('consultants.store');
+    Route::get('/consultores/{consultant}', [ConsultantAdminController::class, 'show'])->name('consultants.show');
+    Route::get('/consultores/{consultant}/editar', [ConsultantAdminController::class, 'edit'])->name('consultants.edit');
+    Route::put('/consultores/{consultant}', [ConsultantAdminController::class, 'update'])->name('consultants.update');
+    Route::post('/consultores/{consultant}/invitar', [ConsultantAdminController::class, 'invite'])->name('consultants.invite');
 
     // Proyectos
     Route::get('/proyectos', [ProjectAdminController::class, 'index'])->name('projects.index');
@@ -85,6 +100,11 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/proyectos/{project}/avances', [ProjectAdminController::class, 'storeActivity'])->name('projects.activities.store');
     Route::post('/proyectos/{project}/hitos', [ProjectAdminController::class, 'storeMilestone'])->name('projects.milestones.store');
     Route::put('/hitos/{milestone}', [ProjectAdminController::class, 'updateMilestone'])->name('milestones.update');
+    // Asignar consultores y enlaces (GitHub, staging, etc.) a un proyecto.
+    Route::post('/proyectos/{project}/consultores', [ProjectAdminController::class, 'attachConsultant'])->name('projects.consultants.attach');
+    Route::delete('/proyectos/{project}/consultores/{consultant}', [ProjectAdminController::class, 'detachConsultant'])->name('projects.consultants.detach');
+    Route::post('/proyectos/{project}/enlaces', [ProjectAdminController::class, 'storeLink'])->name('projects.links.store');
+    Route::delete('/enlaces/{link}', [ProjectAdminController::class, 'destroyLink'])->name('projects.links.destroy');
 
     // Incidencias
     Route::get('/incidencias', [IncidentAdminController::class, 'index'])->name('incidents.index');

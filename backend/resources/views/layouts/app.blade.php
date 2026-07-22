@@ -37,6 +37,18 @@
   <div class="fixed inset-0 bg-grid opacity-40 [mask-image:radial-gradient(ellipse_80%_60%_at_50%_0%,black,transparent)] pointer-events-none"></div>
   <div class="glow fixed -top-40 -left-40 h-96 w-96 rounded-full bg-white/10 pointer-events-none"></div>
 
+  @if (session('impersonator_consultant_id'))
+    <div class="relative z-30 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 bg-amber-500 px-4 py-2 text-center text-sm font-medium text-black">
+      <span>Estás viendo el portal como cliente{{ auth('web')->user()?->client ? ' — '.auth('web')->user()->client->name : '' }}.</span>
+      <form method="POST" action="{{ route('impersonation.stop') }}">
+        @csrf
+        <button class="rounded-full bg-black/85 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-white transition hover:bg-black">
+          Salir de la vista · Volver al panel
+        </button>
+      </form>
+    </div>
+  @endif
+
   <div class="relative">
     @yield('content')
   </div>

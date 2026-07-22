@@ -7,6 +7,7 @@ use App\Models\Client;
 use App\Models\Consultant;
 use App\Models\Milestone;
 use App\Models\Project;
+use App\Models\ProjectLink;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -71,12 +72,56 @@ class ProjectAdminController extends Controller
 
     public function show(Project $project): View
     {
-        $project->load(['client', 'leadConsultant', 'milestones', 'incidents', 'activities.actor']);
+        $project->load(['client', 'leadConsultant', 'milestones', 'incidents', 'activities.actor', 'consultants', 'links']);
 
         return view('admin.projects.show', [
             'project' => $project,
             'consultants' => Consultant::orderBy('name')->get(),
         ]);
+    }
+
+    public function attachConsultant(Request $request, Project $project): RedirectResponse
+    {
+        $data = $request->validate([
+            'consultant_id' => ['required', 'exists:consultants,id'],
+            'role_label' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        // syncWithoutDetaching respeta el unique (project_id, consultant_id).
+        $project->consultants()->syncWithoutDetaching([
+            $data['consultant_id'] => ['role_label' => $data['role_label'] ?? null],
+        ]);
+
+        return back()->with('status', 'Consultor asignado al proyecto.');
+    }
+
+    public function detachConsultant(Project $project, Consultant $consultant): RedirectResponse
+    {
+        $project->consultants()->detach($consultant->id);
+
+        return back()->with('status', 'Consultor removido del proyecto.');
+    }
+
+    public function storeLink(Request $request, Project $project): RedirectResponse
+    {
+        $data = $request->validate([
+            'kind' => ['required', 'in:github,repo,staging,produccion,doc,otro'],
+            'label' => ['required', 'string', 'max:120'],
+            'url' => ['required', 'url', 'max:1000'],
+        ]);
+
+        $project->links()->create($data);
+
+        return back()->with('status', 'Enlace agregado.');
+    }
+
+    public function destroyLink(ProjectLink $link): RedirectResponse
+    {
+        $projectId = $link->project_id;
+        $link->delete();
+
+        return redirect()->route('admin.projects.show', $projectId)
+            ->with('status', 'Enlace eliminado.');
     }
 
     public function update(Request $request, Project $project): RedirectResponse

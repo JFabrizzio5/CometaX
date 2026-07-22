@@ -64,4 +64,9 @@ class Project extends Model
     {
         return $this->hasMany(Incident::class);
     }
+
+    public function links(): HasMany
+    {
+        return $this->hasMany(ProjectLink::class)->latest();
+    }
 }

@@ -16,7 +16,13 @@
         {{ $client->contact_email ?? 'sin correo' }} · {{ $client->contact_phone ?? 'sin teléfono' }} · Plan: {{ $client->plan?->name ?? 'sin plan' }}
       </p>
     </div>
-    <div class="flex gap-2">
+    <div class="flex flex-wrap gap-2">
+      <form method="POST" action="{{ route('admin.clients.impersonate', $client) }}">
+        @csrf
+        <button class="h-11 flex items-center rounded-control border border-amber-500/40 bg-amber-500/10 px-4 font-mono text-xs uppercase tracking-widest text-amber-200 transition hover:bg-amber-500/20">
+          Ver como cliente
+        </button>
+      </form>
       <a href="{{ route('admin.projects.create', ['client' => $client->id]) }}"
          class="h-11 flex items-center rounded-control bg-white px-4 font-mono text-xs uppercase tracking-widest text-black transition hover:bg-zinc-200">
         + Proyecto
