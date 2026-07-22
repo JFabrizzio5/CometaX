@@ -21,7 +21,7 @@ class EnsureConsultantIsStaff
                 abort(403, 'Esta sección es solo para el equipo interno.');
             }
 
-            return redirect()->guest(route('login'));
+            return redirect()->guest(route('admin.login'));
         }
 
         // El rol vive en la base, no en la lista de correos de config: quitar un
