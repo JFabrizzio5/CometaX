@@ -17,7 +17,7 @@ class HomeRedirectController extends Controller
     public function __invoke(): RedirectResponse
     {
         if (Auth::guard('consultant')->check()) {
-            return redirect()->route('admin.subscriptions');
+            return redirect()->route('admin.dashboard');
         }
 
         return redirect()->route(Auth::guard('web')->check() ? 'dashboard' : 'login');

@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAuthController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AnnouncementAdminController;
+use App\Http\Controllers\Admin\AppointmentAdminController;
+use App\Http\Controllers\Admin\ClientAdminController;
+use App\Http\Controllers\Admin\IncidentAdminController;
+use App\Http\Controllers\Admin\ProjectAdminController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
@@ -58,5 +64,45 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Panel interno (requiere staff).
 Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', AdminDashboardController::class)->name('dashboard');
     Route::get('/suscripciones', SubscriptionOverviewController::class)->name('subscriptions');
+
+    // Clientes
+    Route::get('/clientes', [ClientAdminController::class, 'index'])->name('clients.index');
+    Route::get('/clientes/nuevo', [ClientAdminController::class, 'create'])->name('clients.create');
+    Route::post('/clientes', [ClientAdminController::class, 'store'])->name('clients.store');
+    Route::get('/clientes/{client}', [ClientAdminController::class, 'show'])->name('clients.show');
+    Route::get('/clientes/{client}/editar', [ClientAdminController::class, 'edit'])->name('clients.edit');
+    Route::put('/clientes/{client}', [ClientAdminController::class, 'update'])->name('clients.update');
+    Route::post('/clientes/{client}/usuarios', [ClientAdminController::class, 'storeUser'])->name('clients.users.store');
+
+    // Proyectos
+    Route::get('/proyectos', [ProjectAdminController::class, 'index'])->name('projects.index');
+    Route::get('/proyectos/nuevo', [ProjectAdminController::class, 'create'])->name('projects.create');
+    Route::post('/proyectos', [ProjectAdminController::class, 'store'])->name('projects.store');
+    Route::get('/proyectos/{project}', [ProjectAdminController::class, 'show'])->name('projects.show');
+    Route::put('/proyectos/{project}', [ProjectAdminController::class, 'update'])->name('projects.update');
+    Route::post('/proyectos/{project}/avances', [ProjectAdminController::class, 'storeActivity'])->name('projects.activities.store');
+    Route::post('/proyectos/{project}/hitos', [ProjectAdminController::class, 'storeMilestone'])->name('projects.milestones.store');
+    Route::put('/hitos/{milestone}', [ProjectAdminController::class, 'updateMilestone'])->name('milestones.update');
+
+    // Incidencias
+    Route::get('/incidencias', [IncidentAdminController::class, 'index'])->name('incidents.index');
+    Route::get('/incidencias/nueva', [IncidentAdminController::class, 'create'])->name('incidents.create');
+    Route::post('/incidencias', [IncidentAdminController::class, 'store'])->name('incidents.store');
+    Route::get('/incidencias/{incident}/editar', [IncidentAdminController::class, 'edit'])->name('incidents.edit');
+    Route::put('/incidencias/{incident}', [IncidentAdminController::class, 'update'])->name('incidents.update');
+
+    // Citas
+    Route::get('/citas', [AppointmentAdminController::class, 'index'])->name('appointments.index');
+    Route::get('/citas/nueva', [AppointmentAdminController::class, 'create'])->name('appointments.create');
+    Route::post('/citas', [AppointmentAdminController::class, 'store'])->name('appointments.store');
+    Route::get('/citas/{appointment}/editar', [AppointmentAdminController::class, 'edit'])->name('appointments.edit');
+    Route::put('/citas/{appointment}', [AppointmentAdminController::class, 'update'])->name('appointments.update');
+
+    // Avisos
+    Route::get('/avisos', [AnnouncementAdminController::class, 'index'])->name('announcements.index');
+    Route::get('/avisos/nuevo', [AnnouncementAdminController::class, 'create'])->name('announcements.create');
+    Route::post('/avisos', [AnnouncementAdminController::class, 'store'])->name('announcements.store');
+    Route::delete('/avisos/{announcement}', [AnnouncementAdminController::class, 'destroy'])->name('announcements.destroy');
 });

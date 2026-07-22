@@ -73,7 +73,7 @@ class GoogleController extends Controller
      */
     private function destino(Request $request, string $guard): string
     {
-        $propia = $guard === 'consultant' ? route('admin.subscriptions') : route('dashboard');
+        $propia = $guard === 'consultant' ? route('admin.dashboard') : route('dashboard');
         $intentada = $request->session()->pull('url.intended');
 
         if (! is_string($intentada) || $intentada === '') {
@@ -89,7 +89,7 @@ class GoogleController extends Controller
 
         $esDeAdmin = str_starts_with(
             (string) parse_url($intentada, PHP_URL_PATH),
-            (string) parse_url(route('admin.subscriptions'), PHP_URL_PATH),
+            (string) parse_url(route('admin.dashboard'), PHP_URL_PATH),
         );
 
         return $esDeAdmin === ($guard === 'consultant') ? $intentada : $propia;

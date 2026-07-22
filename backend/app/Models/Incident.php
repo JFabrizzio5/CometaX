@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Str;
 
 #[Fillable([
     'project_id', 'ticket_code', 'title', 'description', 'priority', 'status',
@@ -21,8 +22,17 @@ class Incident extends Model
 
     protected static function booted(): void
     {
+        // El código real sale del id autoincrement DESPUÉS del insert: derivarlo
+        // de max(id) antes del insert tiene race (dos altas concurrentes chocan
+        // contra el unique). El placeholder solo satisface NOT NULL + unique.
         static::creating(function (Incident $incident) {
-            $incident->ticket_code ??= 'A-'.(static::max('id') + 1 + 100);
+            $incident->ticket_code ??= 'tmp-'.Str::uuid();
+        });
+
+        static::created(function (Incident $incident) {
+            if (str_starts_with($incident->ticket_code, 'tmp-')) {
+                $incident->forceFill(['ticket_code' => 'A-'.($incident->id + 100)])->saveQuietly();
+            }
         });
     }
 

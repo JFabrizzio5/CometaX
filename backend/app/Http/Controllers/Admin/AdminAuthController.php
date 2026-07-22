@@ -42,7 +42,7 @@ class AdminAuthController extends Controller
         // Una sola identidad por navegador: cierra sesión de cliente si la había.
         Auth::guard('web')->logout();
 
-        return redirect()->intended(route('admin.subscriptions'));
+        return redirect()->intended(route('admin.dashboard'));
     }
 
     public function showForgot(): View

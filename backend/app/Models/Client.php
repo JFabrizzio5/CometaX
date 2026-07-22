@@ -51,4 +51,9 @@ class Client extends Model
     {
         return $this->hasMany(Invoice::class);
     }
+
+    public function announcements(): HasMany
+    {
+        return $this->hasMany(Announcement::class);
+    }
 }
