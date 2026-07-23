@@ -3,17 +3,13 @@
 @section('title', 'Incidencias')
 
 @php
-    $priorityBadge = [
-        'urgente' => 'border-red-500/30 bg-red-500/10 text-red-300',
-        'media' => 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-        'baja' => 'border-zinc-500/30 bg-zinc-500/10 text-zinc-300',
-    ];
-    $statusBadge = [
-        'nuevo' => 'border-sky-500/30 bg-sky-500/10 text-sky-300',
-        'revision' => 'border-amber-500/30 bg-amber-500/10 text-amber-300',
-        'progreso' => 'border-violet-500/30 bg-violet-500/10 text-violet-300',
-        'resuelto' => 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
-    ];
+    $cols = ['nuevo' => 'Nuevo', 'revision' => 'En revisión', 'progreso' => 'En progreso', 'resuelto' => 'Resuelto'];
+    $prBadge = ['urgente' => 'text-red-300 bg-red-400/10 border-red-400/20', 'media' => 'text-amber-300 bg-amber-400/10 border-amber-400/20', 'baja' => 'text-zinc-300 bg-white/5 border-white/15'];
+    $initials = function ($name) {
+        $p = preg_split('/\s+/', trim((string) $name));
+        return strtoupper(mb_substr($p[0] ?? '', 0, 1) . mb_substr($p[1] ?? '', 0, 1)) ?: '—';
+    };
+    $openByProject = $incidents->where('status', '!=', 'resuelto')->groupBy('project_id');
 @endphp
 
 @section('admin-content')
@@ -21,77 +17,94 @@
   <div class="flex flex-wrap items-center justify-between gap-4">
     <div>
       <h1 class="text-2xl font-semibold tracking-tight">Incidencias</h1>
-      <p class="mt-1 text-sm text-zinc-400">Tickets reportados por proyecto.</p>
+      <p class="mt-1 text-sm text-zinc-400">Tablero de todos los clientes. Cambia el estado con el selector de cada tarjeta.</p>
     </div>
-    <a href="{{ route('admin.incidents.create') }}"
-       class="h-11 flex items-center rounded-control bg-white px-5 font-mono text-xs uppercase tracking-widest text-black transition hover:bg-zinc-200">
-      + Nueva incidencia
-    </a>
+    <a href="{{ route('admin.incidents.create') }}" class="h-11 flex items-center rounded-control bg-white px-5 font-mono text-xs uppercase tracking-widest text-black transition hover:bg-zinc-200">+ Nueva incidencia</a>
   </div>
 
-  <form method="GET" action="{{ route('admin.incidents.index') }}" class="mt-6 flex flex-wrap gap-2">
-    <select name="estado"
-      class="h-11 rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
-      <option value="">Todos los estados</option>
-      <option value="nuevo" @selected($estado === 'nuevo')>Nuevo</option>
-      <option value="revision" @selected($estado === 'revision')>En revisión</option>
-      <option value="progreso" @selected($estado === 'progreso')>En progreso</option>
-      <option value="resuelto" @selected($estado === 'resuelto')>Resuelto</option>
-    </select>
-    <select name="prioridad"
-      class="h-11 rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
-      <option value="">Todas las prioridades</option>
-      <option value="urgente" @selected($prioridad === 'urgente')>Urgente</option>
-      <option value="media" @selected($prioridad === 'media')>Media</option>
-      <option value="baja" @selected($prioridad === 'baja')>Baja</option>
-    </select>
-    <button class="h-11 rounded-control border border-white/15 px-4 font-mono text-xs uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
-      Filtrar
-    </button>
-  </form>
-
-  <div class="mt-6 overflow-x-auto rounded-card border border-white/10 bg-white/[0.03]">
-    <table class="w-full min-w-[900px] text-left text-sm">
-      <thead>
-        <tr class="border-b border-white/10 font-mono text-[11px] uppercase tracking-widest text-zinc-500">
-          <th class="px-6 py-4 font-medium">Ticket</th>
-          <th class="px-6 py-4 font-medium">Título</th>
-          <th class="px-6 py-4 font-medium">Prioridad</th>
-          <th class="px-6 py-4 font-medium">Estado</th>
-          <th class="px-6 py-4 font-medium">Asignado</th>
-          <th class="px-6 py-4 font-medium">Creada</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-white/5">
-        @forelse ($incidents as $incident)
-          <tr class="transition hover:bg-white/[0.02]">
-            <td class="px-6 py-4 font-mono text-xs text-zinc-300">{{ $incident->ticket_code }}</td>
-            <td class="px-6 py-4">
-              <a href="{{ route('admin.incidents.edit', $incident) }}" class="font-medium hover:underline underline-offset-4">{{ $incident->title }}</a>
-              <p class="font-mono text-xs text-zinc-500">{{ $incident->project?->name ?? '—' }} · {{ $incident->project?->client?->name ?? '—' }}</p>
-            </td>
-            <td class="px-6 py-4">
-              <span class="inline-flex rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest {{ $priorityBadge[$incident->priority] ?? 'border-white/15 text-zinc-300' }}">
-                {{ $incident->priority }}
-              </span>
-            </td>
-            <td class="px-6 py-4">
-              <span class="inline-flex rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-widest {{ $statusBadge[$incident->status] ?? 'border-white/15 text-zinc-300' }}">
-                {{ $incident->status }}
-              </span>
-            </td>
-            <td class="px-6 py-4 text-zinc-300">{{ $incident->assignee?->name ?? '—' }}</td>
-            <td class="px-6 py-4 font-mono text-xs text-zinc-400">{{ $incident->created_at->format('d/m/Y') }}</td>
-          </tr>
-        @empty
-          <tr>
-            <td colspan="6" class="px-6 py-16 text-center text-sm text-zinc-500">
-              {{ ($estado !== '' || $prioridad !== '') ? 'Sin incidencias con esos filtros.' : 'Todavía no hay incidencias. Crea la primera.' }}
-            </td>
-          </tr>
-        @endforelse
-      </tbody>
-    </table>
+  {{-- Dividir por proyecto --}}
+  <div class="mt-8">
+    <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-500 mb-3">Dividir por proyecto</p>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <button type="button" data-project-filter="all" class="proj-filter text-left rounded-card border border-white bg-white/10 p-5 transition">
+        <p class="text-sm font-semibold mb-1">Todos los proyectos</p>
+        <p class="text-xs text-zinc-500">{{ $stats['abiertas'] }} abiertas</p>
+      </button>
+      @foreach ($projects as $p)
+        @php $op = $openByProject->get($p->id, collect()); $urg = $op->where('priority', 'urgente')->count(); @endphp
+        <button type="button" data-project-filter="{{ $p->id }}" class="proj-filter text-left rounded-card border border-white/10 hover:border-white/25 p-5 transition">
+          <div class="flex items-center justify-between mb-2 gap-2">
+            <p class="text-sm font-semibold truncate">{{ $p->name }}</p>
+            <span class="font-mono text-[10px] shrink-0 {{ $urg ? 'text-red-300' : 'text-zinc-500' }}">{{ $urg ? $urg.' urgente' : $op->count().' abierta' }}</span>
+          </div>
+          <p class="text-xs text-zinc-500 truncate">{{ $p->client?->name }}</p>
+        </button>
+      @endforeach
+    </div>
   </div>
+
+  {{-- KPIs --}}
+  <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
+    @foreach (['Nuevas' => $stats['nuevas'], 'En progreso' => $stats['progreso'], 'Resueltas (mes)' => $stats['resueltas_mes'], 'Abiertas' => $stats['abiertas']] as $label => $val)
+      <div class="rounded-card border border-white/10 bg-white/[0.03] p-5">
+        <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">{{ $label }}</p>
+        <p class="mt-2 text-2xl font-medium">{{ $val }}</p>
+      </div>
+    @endforeach
+  </div>
+
+  {{-- Kanban --}}
+  <div class="mt-6 grid md:grid-cols-4 gap-4">
+    @foreach ($cols as $key => $title)
+      @php $items = $byStatus->get($key, collect()); @endphp
+      <div class="rounded-card border border-white/10 bg-white/[0.02] p-4">
+        <div class="flex items-center justify-between mb-4 px-1">
+          <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-400">{{ $title }}</p>
+          <span class="font-mono text-[10px] text-zinc-500">{{ $items->count() }}</span>
+        </div>
+        <div class="space-y-3">
+          @forelse ($items as $inc)
+            <div data-project="{{ $inc->project_id }}" class="incident-card rounded-control bg-white/[0.04] border border-white/10 p-4 transition hover:border-white/25">
+              <div class="flex items-center justify-between mb-2">
+                <span class="font-mono text-[10px] uppercase tracking-widest rounded-full border px-2 py-0.5 {{ $prBadge[$inc->priority] ?? $prBadge['baja'] }}">{{ $inc->priority }}</span>
+                <span class="font-mono text-[10px] text-zinc-600">{{ $inc->ticket_code }}</span>
+              </div>
+              <p class="text-sm font-medium">{{ $inc->title }}</p>
+              <p class="text-xs text-zinc-500 mt-2">{{ $inc->project?->name }} · {{ $inc->project?->client?->name }}</p>
+              <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5 gap-2">
+                <form method="POST" action="{{ route('admin.incidents.move', $inc) }}">
+                  @csrf
+                  <select name="status" onchange="this.form.submit()" class="h-8 rounded-control bg-white/5 border border-white/15 px-2 text-[11px] outline-none focus:border-white/40 [&>option]:bg-zinc-900">
+                    @foreach ($cols as $sk => $sl)<option value="{{ $sk }}" @selected($inc->status === $sk)>{{ $sl }}</option>@endforeach
+                  </select>
+                </form>
+                <div class="flex items-center gap-2 shrink-0">
+                  <a href="{{ route('admin.incidents.edit', $inc) }}" class="font-mono text-[10px] uppercase tracking-widest text-zinc-500 hover:text-white">Editar</a>
+                  <div class="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center font-mono text-[9px]" title="{{ $inc->assignee?->name }}">{{ $initials($inc->assignee?->name) }}</div>
+                </div>
+              </div>
+            </div>
+          @empty
+            <p class="text-xs text-zinc-600 text-center py-6">Sin incidencias</p>
+          @endforelse
+        </div>
+      </div>
+    @endforeach
+  </div>
+
+  <script>
+    (function () {
+      var buttons = document.querySelectorAll('.proj-filter');
+      var cards = document.querySelectorAll('.incident-card');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var f = btn.getAttribute('data-project-filter');
+          buttons.forEach(function (b) { b.classList.remove('border-white', 'bg-white/10'); b.classList.add('border-white/10'); });
+          btn.classList.add('border-white', 'bg-white/10'); btn.classList.remove('border-white/10');
+          cards.forEach(function (c) { c.style.display = (f === 'all' || c.getAttribute('data-project') === f) ? '' : 'none'; });
+        });
+      });
+    })();
+  </script>
 
 @endsection

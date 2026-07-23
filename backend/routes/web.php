@@ -141,6 +141,7 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/incidencias', [IncidentAdminController::class, 'store'])->name('incidents.store');
     Route::get('/incidencias/{incident}/editar', [IncidentAdminController::class, 'edit'])->name('incidents.edit');
     Route::put('/incidencias/{incident}', [IncidentAdminController::class, 'update'])->name('incidents.update');
+    Route::post('/incidencias/{incident}/mover', [IncidentAdminController::class, 'move'])->name('incidents.move');
 
     // Citas
     Route::get('/citas', [AppointmentAdminController::class, 'index'])->name('appointments.index');

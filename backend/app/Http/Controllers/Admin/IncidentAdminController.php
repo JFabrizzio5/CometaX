@@ -23,20 +23,31 @@ class IncidentAdminController extends Controller
 
     public function index(Request $request): View
     {
-        $estado = (string) $request->query('estado', '');
-        $prioridad = (string) $request->query('prioridad', '');
-
-        $incidents = Incident::with(['project.client', 'assignee'])
-            ->when(in_array($estado, self::STATUSES, true), fn ($query) => $query->where('status', $estado))
-            ->when(in_array($prioridad, self::PRIORITIES, true), fn ($query) => $query->where('priority', $prioridad))
-            ->latest()
-            ->get();
+        $incidents = Incident::with(['project.client', 'assignee'])->latest()->get();
 
         return view('admin.incidents.index', [
             'incidents' => $incidents,
-            'estado' => $estado,
-            'prioridad' => $prioridad,
+            'byStatus' => $incidents->groupBy('status'),
+            'projects' => Project::with('client')->orderBy('name')->get(),
+            'stats' => [
+                'nuevas' => $incidents->where('status', 'nuevo')->count(),
+                'progreso' => $incidents->whereIn('status', ['revision', 'progreso'])->count(),
+                'abiertas' => $incidents->where('status', '!=', 'resuelto')->count(),
+                'resueltas_mes' => $incidents->where('status', 'resuelto')
+                    ->filter(fn ($i) => $i->resolved_at && $i->resolved_at->isSameMonth(now()))->count(),
+            ],
         ]);
+    }
+
+    /** Cambio rápido de estado (mover de columna en el tablero). */
+    public function move(Request $request, Incident $incident): RedirectResponse
+    {
+        $data = $request->validate(['status' => ['required', Rule::in(self::STATUSES)]]);
+
+        $data['resolved_at'] = $data['status'] === 'resuelto' ? ($incident->resolved_at ?? now()) : null;
+        $incident->update($data);
+
+        return back()->with('status', "Incidencia «{$incident->ticket_code}» movida a {$data['status']}.");
     }
 
     public function create(Request $request): View
