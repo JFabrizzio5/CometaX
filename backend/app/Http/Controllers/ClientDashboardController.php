@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Announcement;
 use App\Models\Appointment;
+use App\Models\BlockedSlot;
 use App\Models\Project;
 use App\Models\ProjectActivity;
 use Illuminate\Http\RedirectResponse;
@@ -169,6 +170,17 @@ class ClientDashboardController extends Controller
                 'appts' => $porDia->get($d, collect()),
             ];
         }
+        // Días con bloqueo de día completo → no disponibles para el cliente.
+        $bloqueados = BlockedSlot::whereYear('date', $monthDate->year)->whereMonth('date', $monthDate->month)
+            ->where('all_day', true)->get()->map(fn ($b) => (int) $b->date->format('j'))->all();
+
+        foreach ($cells as &$cell) {
+            if ($cell !== null) {
+                $cell['blocked'] = in_array($cell['day'], $bloqueados, true);
+            }
+        }
+        unset($cell);
+
         while (count($cells) % 7 !== 0) {
             $cells[] = null;
         }
@@ -194,6 +206,22 @@ class ClientDashboardController extends Controller
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'notes' => ['nullable', 'string', 'max:1000'],
         ]);
+
+        // No permitir agendar en días u horarios bloqueados por el equipo.
+        $blocked = BlockedSlot::whereDate('date', $data['appointment_date'])->get()->contains(function ($b) use ($data) {
+            if ($b->all_day) {
+                return true;
+            }
+
+            return $b->start_time && $b->end_time
+                && $data['start_time'] < substr($b->end_time, 0, 5)
+                && $data['end_time'] > substr($b->start_time, 0, 5);
+        });
+
+        if ($blocked) {
+            return back()->withInput()
+                ->withErrors(['appointment_date' => 'Ese día u horario no está disponible. Elige otro.']);
+        }
 
         $this->client()->appointments()->create([...$data, 'status' => 'solicitada']);
 

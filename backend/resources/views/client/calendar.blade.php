@@ -60,6 +60,11 @@
                   {{ $cell['day'] }}
                   @if ($hasAppt)<span class="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-white/30"></span>@endif
                 </div>
+              @elseif (! empty($cell['blocked']))
+                <div class="relative aspect-square rounded-control border border-red-400/30 bg-red-500/5 flex items-center justify-center text-sm text-zinc-500 cursor-not-allowed" title="No disponible">
+                  {{ $cell['day'] }}
+                  <span class="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-red-400"></span>
+                </div>
               @else
                 <div class="relative aspect-square rounded-control flex items-center justify-center text-sm cursor-pointer transition {{ $hasAppt ? 'bg-white/10 border border-white/30' : 'border border-white/15 hover:border-white/40 hover:bg-white/5' }}"
                      data-date="{{ $cell['date'] }}" data-label="{{ $label }}">

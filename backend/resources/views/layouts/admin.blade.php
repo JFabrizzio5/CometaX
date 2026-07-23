@@ -13,7 +13,8 @@
         ['admin.clients.index', 'admin.clients.*', 'Clientes'],
         ['admin.projects.index', 'admin.projects.*', 'Proyectos'],
         ['admin.incidents.index', 'admin.incidents.*', 'Incidencias'],
-        ['admin.appointments.index', 'admin.appointments.*', 'Citas'],
+        ['admin.appointments.calendar', 'admin.appointments.calendar', 'Calendario'],
+        ['admin.appointments.index', 'admin.appointments.index', 'Citas'],
         ['admin.announcements.index', 'admin.announcements.*', 'Avisos'],
         ['admin.subscriptions', 'admin.subscriptions', 'Suscripciones'],
     ];

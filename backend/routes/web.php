@@ -144,6 +144,11 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
 
     // Citas
     Route::get('/citas', [AppointmentAdminController::class, 'index'])->name('appointments.index');
+    Route::get('/calendario', [AppointmentAdminController::class, 'calendar'])->name('appointments.calendar');
+    Route::post('/citas/{appointment}/confirmar', [AppointmentAdminController::class, 'confirm'])->name('appointments.confirm');
+    Route::post('/citas/{appointment}/cancelar', [AppointmentAdminController::class, 'cancel'])->name('appointments.cancel');
+    Route::post('/bloqueos', [AppointmentAdminController::class, 'block'])->name('blocks.store');
+    Route::delete('/bloqueos/{block}', [AppointmentAdminController::class, 'unblock'])->name('blocks.destroy');
     Route::get('/citas/nueva', [AppointmentAdminController::class, 'create'])->name('appointments.create');
     Route::post('/citas', [AppointmentAdminController::class, 'store'])->name('appointments.store');
     Route::get('/citas/{appointment}/editar', [AppointmentAdminController::class, 'edit'])->name('appointments.edit');
