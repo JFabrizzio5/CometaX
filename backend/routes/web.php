@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Auth\ClientAuthController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
+use App\Http\Controllers\ClientDashboardController;
 use App\Http\Controllers\DemoController;
 use App\Http\Controllers\HomeRedirectController;
 use App\Http\Controllers\StripeWebhookController;
@@ -51,7 +52,8 @@ Route::middleware('auth:web')->group(function () {
 
 // Portal de cliente — requiere correo verificado.
 Route::middleware(['auth:web', 'verified'])->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+    Route::post('/citas/solicitar', [ClientDashboardController::class, 'requestMeeting'])->name('client.appointments.request');
 
     // Activar plan gratuito no depende de Stripe.
     Route::post('/planes/{plan}/gratis', [BillingController::class, 'activarGratis'])->name('billing.gratis');
