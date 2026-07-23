@@ -53,7 +53,16 @@ Route::middleware('auth:web')->group(function () {
 // Portal de cliente — requiere correo verificado.
 Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/mis-proyectos', [ClientDashboardController::class, 'projects'])->name('client.projects');
+    Route::get('/mis-proyectos/{project}', [ClientDashboardController::class, 'projectShow'])->name('client.projects.show');
+    Route::get('/mis-incidencias', [ClientDashboardController::class, 'incidents'])->name('client.incidents');
+    Route::post('/mis-incidencias', [ClientDashboardController::class, 'reportIncident'])->name('client.incidents.store');
+    Route::get('/mi-facturacion', [ClientDashboardController::class, 'invoices'])->name('client.invoices');
+    Route::get('/mis-contratos', [ClientDashboardController::class, 'contracts'])->name('client.contracts');
+    Route::get('/mi-calendario', [ClientDashboardController::class, 'calendar'])->name('client.calendar');
     Route::post('/citas/solicitar', [ClientDashboardController::class, 'requestMeeting'])->name('client.appointments.request');
+    Route::get('/soporte', [ClientDashboardController::class, 'support'])->name('client.support');
+    Route::post('/soporte', [ClientDashboardController::class, 'submitSupport'])->name('client.support.store');
 
     // Activar plan gratuito no depende de Stripe.
     Route::post('/planes/{plan}/gratis', [BillingController::class, 'activarGratis'])->name('billing.gratis');
