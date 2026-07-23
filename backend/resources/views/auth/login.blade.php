@@ -89,5 +89,10 @@
     </p>
   </div>
 
+  <p class="mt-6 text-center text-sm text-zinc-500">
+    ¿Eres del equipo?
+    <a href="{{ route('admin.login') }}" class="text-zinc-300 underline underline-offset-4 hover:text-white">Acceso staff →</a>
+  </p>
+
 </div>
 @endsection
