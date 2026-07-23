@@ -121,17 +121,49 @@ class ClientDashboardController extends Controller
         ]);
     }
 
-    public function calendar(): View
+    public function calendar(Request $request): View
     {
         $client = $this->client();
 
+        $ym = (string) $request->query('ym', '');
+        $monthDate = preg_match('/^\d{4}-\d{2}$/', $ym)
+            ? Carbon::createFromFormat('Y-m-d', $ym.'-01')->startOfMonth()
+            : Carbon::today()->startOfMonth();
+
+        $today = Carbon::today();
+
+        // Citas del mes agrupadas por número de día, para marcarlas en la rejilla.
+        $porDia = Appointment::where('client_id', $client->id)
+            ->whereYear('appointment_date', $monthDate->year)
+            ->whereMonth('appointment_date', $monthDate->month)
+            ->where('status', '!=', 'cancelada')
+            ->orderBy('start_time')->get()
+            ->groupBy(fn ($a) => (int) $a->appointment_date->format('j'));
+
+        // Rejilla que empieza en lunes (dayOfWeekIso: 1=lun … 7=dom).
+        $cells = array_fill(0, $monthDate->dayOfWeekIso - 1, null);
+        for ($d = 1; $d <= $monthDate->daysInMonth; $d++) {
+            $date = $monthDate->copy()->day($d);
+            $cells[] = [
+                'day' => $d,
+                'date' => $date->toDateString(),
+                'today' => $date->isSameDay($today),
+                'past' => $date->lt($today),
+                'appts' => $porDia->get($d, collect()),
+            ];
+        }
+        while (count($cells) % 7 !== 0) {
+            $cells[] = null;
+        }
+
         return view('client.calendar', [
+            'monthDate' => $monthDate,
+            'weeks' => array_chunk($cells, 7),
+            'prevYm' => $monthDate->copy()->subMonthNoOverflow()->format('Y-m'),
+            'nextYm' => $monthDate->copy()->addMonthNoOverflow()->format('Y-m'),
             'proximas' => Appointment::where('client_id', $client->id)
-                ->whereDate('appointment_date', '>=', Carbon::today())->where('status', '!=', 'cancelada')
-                ->orderBy('appointment_date')->orderBy('start_time')->get(),
-            'pasadas' => Appointment::where('client_id', $client->id)
-                ->whereDate('appointment_date', '<', Carbon::today())
-                ->orderByDesc('appointment_date')->limit(10)->get(),
+                ->whereDate('appointment_date', '>=', $today)->where('status', '!=', 'cancelada')
+                ->orderBy('appointment_date')->orderBy('start_time')->limit(6)->get(),
         ]);
     }
 
