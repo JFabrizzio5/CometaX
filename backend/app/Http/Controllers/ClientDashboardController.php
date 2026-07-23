@@ -60,7 +60,7 @@ class ClientDashboardController extends Controller
     public function projects(): View
     {
         return view('client.projects', [
-            'projects' => $this->client()->projects()->withCount(['incidents'])->latest()->get(),
+            'projects' => $this->client()->projects()->with('incidents')->latest()->get(),
         ]);
     }
 
@@ -68,19 +68,36 @@ class ClientDashboardController extends Controller
     {
         abort_unless($project->client_id === $this->client()->id, 403);
 
-        $project->load(['milestones', 'incidents', 'links', 'activities.actor', 'leadConsultant']);
+        $project->load([
+            'milestones', 'incidents', 'links', 'activities.actor', 'leadConsultant',
+            'consultants', 'documents', 'timeEntries.consultant',
+        ]);
 
-        return view('client.project-show', ['project' => $project]);
+        return view('client.project-show', [
+            'project' => $project,
+            'incidentsByStatus' => $project->incidents->groupBy('status'),
+        ]);
     }
 
     public function incidents(): View
     {
         $client = $this->client();
+        $projects = $client->projects()->with('incidents')->orderBy('name')->get();
+
+        $incidents = \App\Models\Incident::whereIn('project_id', $projects->pluck('id'))
+            ->with('project', 'assignee')->latest()->get();
 
         return view('client.incidents', [
-            'incidents' => \App\Models\Incident::whereIn('project_id', $client->projects()->pluck('id'))
-                ->with('project')->latest()->get(),
-            'projects' => $client->projects()->orderBy('name')->get(),
+            'projects' => $projects,
+            'incidents' => $incidents,
+            'byStatus' => $incidents->groupBy('status'),
+            'stats' => [
+                'nuevas' => $incidents->where('status', 'nuevo')->count(),
+                'progreso' => $incidents->whereIn('status', ['revision', 'progreso'])->count(),
+                'abiertas' => $incidents->where('status', '!=', 'resuelto')->count(),
+                'resueltas_mes' => $incidents->where('status', 'resuelto')
+                    ->filter(fn ($i) => $i->resolved_at && $i->resolved_at->isSameMonth(Carbon::now()))->count(),
+            ],
         ]);
     }
 
