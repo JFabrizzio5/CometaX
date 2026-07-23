@@ -85,6 +85,48 @@
         </a>
       </div>
     </form>
+
+    @if ($incident->exists)
+      <div class="mt-6 rounded-card border border-white/10 bg-white/[0.03] p-6">
+        <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Evidencia</h2>
+
+        <div class="mt-4 flex flex-wrap gap-3">
+          @forelse ($incident->attachments as $att)
+            <div class="relative group">
+              @if ($att->kind === 'image')
+                <a href="{{ $att->url }}" target="_blank" rel="noopener"><img src="{{ $att->url }}" alt="evidencia" class="h-20 w-20 rounded-lg object-cover border border-white/10" loading="lazy"></a>
+              @else
+                <a href="{{ $att->url }}" target="_blank" rel="noopener" class="inline-flex h-20 items-center gap-1 rounded-lg border border-white/15 px-3 text-sm text-sky-300 hover:border-white/30">🔗 {{ $att->label }}</a>
+              @endif
+              <span class="absolute -top-1 -left-1 rounded-full bg-black/70 px-1.5 py-0.5 font-mono text-[8px] uppercase text-zinc-400">{{ $att->source }}</span>
+              <form method="POST" action="{{ route('admin.incidents.attachments.destroy', $att) }}" class="absolute -top-1 -right-1"
+                    onsubmit="return confirm('¿Eliminar esta evidencia?')">
+                @csrf @method('DELETE')
+                <button class="h-5 w-5 rounded-full bg-black/70 text-red-300 text-xs leading-none hover:bg-red-500/30">&times;</button>
+              </form>
+            </div>
+          @empty
+            <p class="text-sm text-zinc-500">Sin evidencia todavía.</p>
+          @endforelse
+        </div>
+
+        <form method="POST" action="{{ route('admin.incidents.attachments.store', $incident) }}" enctype="multipart/form-data" class="mt-5 border-t border-white/10 pt-5 grid gap-3 sm:grid-cols-2">
+          @csrf
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Imagen</label>
+            <input type="file" name="image" accept="image/*" class="mt-2 w-full text-sm text-zinc-400 file:mr-3 file:rounded-full file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-xs file:text-white hover:file:bg-white/20">
+          </div>
+          <div>
+            <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Enlace (Drive, video…)</label>
+            <input type="url" name="link" placeholder="https://drive.google.com/…" class="mt-2 w-full rounded-control bg-white/5 border border-white/15 px-4 py-3 text-sm outline-none focus:border-white/40">
+          </div>
+          <div class="sm:col-span-2 flex items-center gap-3">
+            <input type="text" name="label" placeholder="Etiqueta (opcional)" class="h-11 flex-1 rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40">
+            <button class="h-11 rounded-control bg-white px-5 font-mono text-xs uppercase tracking-widest text-black transition hover:bg-zinc-200">Agregar evidencia</button>
+          </div>
+        </form>
+      </div>
+    @endif
   </div>
 
 @endsection

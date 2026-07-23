@@ -86,7 +86,7 @@ class ClientDashboardController extends Controller
         $projects = $client->projects()->with('incidents')->orderBy('name')->get();
 
         $incidents = \App\Models\Incident::whereIn('project_id', $projects->pluck('id'))
-            ->with('project', 'assignee')->latest()->get();
+            ->with('project', 'assignee', 'attachments')->latest()->get();
 
         return view('client.incidents', [
             'projects' => $projects,
@@ -113,13 +113,28 @@ class ClientDashboardController extends Controller
             'priority' => ['required', Rule::in(['baja', 'media', 'urgente'])],
         ]);
 
-        \App\Models\Incident::create([
+        $incident = \App\Models\Incident::create([
             ...$data,
             'status' => 'nuevo',
             'reporter_user_id' => auth()->id(),
         ]);
 
+        // Evidencia opcional al reportar (imagen y/o enlace).
+        if ($request->hasFile('image') || $request->filled('link')) {
+            app(\App\Actions\AttachIncidentEvidence::class)($incident, $request, 'cliente');
+        }
+
         return redirect()->route('client.incidents')->with('status', 'Incidencia reportada. La revisamos pronto.');
+    }
+
+    /** El cliente adjunta evidencia (imagen o enlace) a una incidencia propia. */
+    public function addIncidentEvidence(Request $request, \App\Models\Incident $incident, \App\Actions\AttachIncidentEvidence $attach): RedirectResponse
+    {
+        abort_unless($incident->project?->client_id === $this->client()->id, 403);
+
+        $attach($incident, $request, 'cliente');
+
+        return redirect()->route('client.incidents')->with('status', 'Evidencia agregada.');
     }
 
     public function invoices(): View

@@ -40,7 +40,7 @@
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
-      <form method="POST" action="{{ route('client.incidents.store') }}" class="grid md:grid-cols-2 gap-4">
+      <form method="POST" action="{{ route('client.incidents.store') }}" enctype="multipart/form-data" class="grid md:grid-cols-2 gap-4">
         @csrf
         <div>
           <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Proyecto relacionado</label>
@@ -67,6 +67,14 @@
           <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Descripción</label>
           <textarea name="description" rows="3" placeholder="Describe el problema, cuándo ocurre y a quién afecta..."
             class="mt-2 w-full rounded-control bg-white/5 border border-white/15 px-4 py-3 text-sm placeholder:text-zinc-600 outline-none focus:border-white/40 resize-none">{{ old('description') }}</textarea>
+        </div>
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Imagen de evidencia (opcional)</label>
+          <input type="file" name="image" accept="image/*" class="mt-2 w-full text-sm text-zinc-400 file:mr-3 file:rounded-full file:border-0 file:bg-white/10 file:px-4 file:py-2 file:text-xs file:text-white hover:file:bg-white/20" />
+        </div>
+        <div>
+          <label class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">Enlace (Drive, video…) (opcional)</label>
+          <input type="url" name="link" placeholder="https://drive.google.com/…" class="mt-2 w-full rounded-control bg-white/5 border border-white/15 px-4 py-3 text-sm placeholder:text-zinc-600 outline-none focus:border-white/40" />
         </div>
         <div class="md:col-span-2 flex items-center justify-end gap-3 pt-2">
           <button id="cancelIncidentBtn" type="button" class="rounded-full border border-white/15 text-sm font-medium px-5 py-2.5 hover:bg-white/5 transition">Cancelar</button>
@@ -150,6 +158,29 @@
                 </div>
                 <p class="text-sm font-medium">{{ $incident->title }}</p>
                 <p class="text-xs text-zinc-500 mt-2">{{ $incident->project?->name }}</p>
+
+                @if ($incident->attachments->isNotEmpty())
+                  <div class="mt-3 flex flex-wrap gap-2">
+                    @foreach ($incident->attachments as $att)
+                      @if ($att->kind === 'image')
+                        <a href="{{ $att->url }}" target="_blank" rel="noopener"><img src="{{ $att->url }}" alt="evidencia" class="h-12 w-12 rounded-lg object-cover border border-white/10" loading="lazy"></a>
+                      @else
+                        <a href="{{ $att->url }}" target="_blank" rel="noopener" class="inline-flex items-center gap-1 rounded-full border border-white/15 px-2.5 py-1 text-[11px] text-sky-300 hover:border-white/30">🔗 {{ $att->label }}</a>
+                      @endif
+                    @endforeach
+                  </div>
+                @endif
+
+                <details class="mt-3">
+                  <summary class="cursor-pointer font-mono text-[10px] uppercase tracking-widest text-zinc-500 hover:text-white">+ Evidencia</summary>
+                  <form method="POST" action="{{ route('client.incidents.evidence', $incident) }}" enctype="multipart/form-data" class="mt-2 space-y-2">
+                    @csrf
+                    <input type="file" name="image" accept="image/*" class="w-full text-[11px] text-zinc-400 file:mr-2 file:rounded-full file:border-0 file:bg-white/10 file:px-2 file:py-1 file:text-[10px] file:text-white">
+                    <input type="url" name="link" placeholder="Enlace (Drive/video)…" class="w-full rounded-control bg-white/5 border border-white/15 px-3 py-2 text-[11px] outline-none focus:border-white/40">
+                    <button class="w-full rounded-control border border-white/15 py-1.5 font-mono text-[10px] uppercase tracking-widest text-zinc-300 hover:border-white/30 hover:text-white">Subir</button>
+                  </form>
+                </details>
+
                 <div class="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
                   <span class="text-[11px] text-zinc-500">{{ $incident->created_at->format('d M') }}</span>
                   <div class="h-6 w-6 rounded-full bg-white/10 flex items-center justify-center font-mono text-[9px]">{{ $ini }}</div>

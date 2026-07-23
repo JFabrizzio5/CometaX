@@ -50,4 +50,9 @@ class Incident extends Model
     {
         return $this->belongsTo(User::class, 'reporter_user_id');
     }
+
+    public function attachments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(IncidentAttachment::class)->latest();
+    }
 }

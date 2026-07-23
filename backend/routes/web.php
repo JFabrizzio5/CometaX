@@ -57,6 +57,7 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     Route::get('/mis-proyectos/{project}', [ClientDashboardController::class, 'projectShow'])->name('client.projects.show');
     Route::get('/mis-incidencias', [ClientDashboardController::class, 'incidents'])->name('client.incidents');
     Route::post('/mis-incidencias', [ClientDashboardController::class, 'reportIncident'])->name('client.incidents.store');
+    Route::post('/mis-incidencias/{incident}/evidencia', [ClientDashboardController::class, 'addIncidentEvidence'])->name('client.incidents.evidence');
     Route::get('/mi-facturacion', [ClientDashboardController::class, 'invoices'])->name('client.invoices');
     Route::get('/mis-contratos', [ClientDashboardController::class, 'contracts'])->name('client.contracts');
     Route::get('/mi-calendario', [ClientDashboardController::class, 'calendar'])->name('client.calendar');
@@ -142,6 +143,8 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/incidencias/{incident}/editar', [IncidentAdminController::class, 'edit'])->name('incidents.edit');
     Route::put('/incidencias/{incident}', [IncidentAdminController::class, 'update'])->name('incidents.update');
     Route::post('/incidencias/{incident}/mover', [IncidentAdminController::class, 'move'])->name('incidents.move');
+    Route::post('/incidencias/{incident}/adjuntos', [IncidentAdminController::class, 'storeAttachment'])->name('incidents.attachments.store');
+    Route::delete('/adjuntos/{attachment}', [IncidentAdminController::class, 'destroyAttachment'])->name('incidents.attachments.destroy');
 
     // Citas
     Route::get('/citas', [AppointmentAdminController::class, 'index'])->name('appointments.index');

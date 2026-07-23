@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\AttachIncidentEvidence;
 use App\Http\Controllers\Controller;
 use App\Models\Consultant;
 use App\Models\Incident;
+use App\Models\IncidentAttachment;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
@@ -81,10 +84,27 @@ class IncidentAdminController extends Controller
     public function edit(Incident $incident): View
     {
         return view('admin.incidents.form', [
-            'incident' => $incident,
+            'incident' => $incident->load('attachments'),
             'projects' => Project::with('client')->orderBy('name')->get(),
             'consultants' => Consultant::orderBy('name')->get(),
         ]);
+    }
+
+    public function storeAttachment(Request $request, Incident $incident, AttachIncidentEvidence $attach): RedirectResponse
+    {
+        $attach($incident, $request, 'equipo');
+
+        return back()->with('status', 'Evidencia agregada.');
+    }
+
+    public function destroyAttachment(IncidentAttachment $attachment): RedirectResponse
+    {
+        if ($attachment->path) {
+            Storage::disk('public')->delete($attachment->path);
+        }
+        $attachment->delete();
+
+        return back()->with('status', 'Evidencia eliminada.');
     }
 
     public function update(Request $request, Incident $incident): RedirectResponse
