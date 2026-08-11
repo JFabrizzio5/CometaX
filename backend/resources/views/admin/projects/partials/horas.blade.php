@@ -2,8 +2,10 @@
     use App\Models\TimeEntry;
     use App\Services\DesgloseHoras;
 
-    $entries = $project->timeEntries;
-    $totalHoras = $entries->sum('hours');
+    // $entries ya viene filtrado desde el controlador; $resumen se calcula sobre
+    // ese mismo conjunto para que los totales no contradigan a la tabla.
+    $totalHoras = $resumen['total'];
+    $filtrando = $totalHoras !== $totalSinFiltrar;
 
     // Los lotes reconstruidos se deshacen completos: se cuentan aparte para
     // ofrecer el botón una sola vez por lote.
@@ -22,7 +24,12 @@
   <div class="flex flex-wrap items-center justify-between gap-4">
     <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Registro de horas</h2>
     <p class="font-mono text-xs text-zinc-500">
-      {{ number_format($totalHoras, 2) }} h registradas
+      {{ number_format($totalHoras, 2) }} h
+      @if ($filtrando)
+        <span class="text-amber-300">filtradas</span> de {{ number_format($totalSinFiltrar, 2) }} h
+      @else
+        registradas
+      @endif
       @if ($project->hours_budgeted > 0)
         · {{ number_format($project->hours_budgeted, 2) }} h presupuestadas
       @endif
@@ -225,6 +232,91 @@
 
   </div>
 
+  {{-- Filtros: viajan por GET para poder compartir la vista filtrada. --}}
+  <form method="GET" action="{{ route('admin.projects.show', $project) }}" class="mt-6 border-t border-white/10 pt-5">
+    <p class="{{ $labelClass }}">Filtrar</p>
+    <div class="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      <div>
+        <label class="{{ $labelClass }}">Desde</label>
+        <input type="date" name="desde" value="{{ $filtros['desde'] }}" class="mt-1 {{ $inputClass }}" />
+      </div>
+      <div>
+        <label class="{{ $labelClass }}">Hasta</label>
+        <input type="date" name="hasta" value="{{ $filtros['hasta'] }}" class="mt-1 {{ $inputClass }}" />
+      </div>
+      <div>
+        <label class="{{ $labelClass }}">Hito</label>
+        <select name="hito" class="mt-1 {{ $selectClass }}">
+          <option value="">Todos</option>
+          @foreach ($project->milestones as $milestone)
+            <option value="{{ $milestone->id }}" @selected((string) $filtros['hito'] === (string) $milestone->id)>{{ $milestone->label }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div>
+        <label class="{{ $labelClass }}">Tipo</label>
+        <select name="categoria" class="mt-1 {{ $selectClass }}">
+          <option value="">Todos</option>
+          @foreach (TimeEntry::CATEGORIAS as $valor => $etiqueta)
+            <option value="{{ $valor }}" @selected($filtros['categoria'] === $valor)>{{ $etiqueta }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div>
+        <label class="{{ $labelClass }}">Quién</label>
+        <select name="quien" class="mt-1 {{ $selectClass }}">
+          <option value="">Todos</option>
+          @foreach ($consultants as $consultant)
+            <option value="{{ $consultant->id }}" @selected((string) $filtros['quien'] === (string) $consultant->id)>{{ $consultant->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div>
+        <label class="{{ $labelClass }}">Orden</label>
+        <select name="orden" class="mt-1 {{ $selectClass }}">
+          <option value="desc" @selected($filtros['orden'] === 'desc')>Más reciente primero</option>
+          <option value="asc" @selected($filtros['orden'] === 'asc')>Cronológico</option>
+        </select>
+      </div>
+    </div>
+    <div class="mt-3 flex gap-2">
+      <button class="{{ $btnClass }}">Aplicar</button>
+      @if ($filtrando || $filtros['orden'] === 'asc')
+        <a href="{{ route('admin.projects.show', $project) }}" class="{{ $btnClass }} flex items-center">Limpiar</a>
+      @endif
+    </div>
+  </form>
+
+  {{-- Análisis: en qué se va el tiempo, sobre el conjunto filtrado. --}}
+  @if ($entries->isNotEmpty())
+    <div class="mt-6 grid gap-6 border-t border-white/10 pt-5 lg:grid-cols-3">
+      @foreach ([
+        'Por tipo de trabajo' => $resumen['por_categoria'],
+        'Por persona' => $resumen['por_persona'],
+        'Por fase / sprint' => $resumen['por_fase'],
+      ] as $titulo => $grupos)
+        <div>
+          <p class="{{ $labelClass }}">{{ $titulo }}</p>
+          <ul class="mt-3 space-y-2">
+            @foreach ($grupos as $grupo)
+              <li>
+                <div class="flex items-baseline justify-between gap-3 text-sm">
+                  <span class="truncate">{{ $grupo['etiqueta'] }}</span>
+                  <span class="shrink-0 font-mono text-xs text-zinc-400">
+                    {{ number_format($grupo['horas'], 2) }} h · {{ $grupo['porcentaje'] }}%
+                  </span>
+                </div>
+                <div class="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/5">
+                  <div class="h-full rounded-full bg-white/40" style="width: {{ $grupo['porcentaje'] }}%"></div>
+                </div>
+              </li>
+            @endforeach
+          </ul>
+        </div>
+      @endforeach
+    </div>
+  @endif
+
   {{-- Lo ya registrado --}}
   <div class="mt-6 border-t border-white/10 pt-5">
     @if ($lotes->isNotEmpty())
@@ -266,6 +358,36 @@
                   {{-- Marca interna: no viaja al reporte del cliente. --}}
                   <span class="ml-2 rounded border border-zinc-500/30 bg-zinc-500/10 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-widest text-zinc-400">reconstruido</span>
                 @endif
+
+                {{-- Corregir fecha, horas, tipo o a qué hito pertenece. --}}
+                <details class="mt-1">
+                  <summary class="cursor-pointer {{ $labelClass }} hover:text-zinc-300">Editar</summary>
+                  <form method="POST" action="{{ route('admin.time.update', $entry) }}" class="mt-2 grid gap-2 sm:grid-cols-2">
+                    @csrf
+                    @method('PUT')
+                    <input type="date" name="entry_date" value="{{ $entry->entry_date->format('Y-m-d') }}" required class="{{ $inputClass }}" />
+                    <input type="number" name="hours" value="{{ $entry->hours }}" min="0.25" step="0.25" required class="{{ $inputClass }}" />
+                    <input type="text" name="activity" value="{{ $entry->activity }}" required maxlength="255" class="{{ $inputClass }} sm:col-span-2" />
+                    <select name="category" class="{{ $selectClass }}">
+                      @foreach (TimeEntry::CATEGORIAS as $valor => $etiqueta)
+                        <option value="{{ $valor }}" @selected($entry->category === $valor)>{{ $etiqueta }}</option>
+                      @endforeach
+                    </select>
+                    <select name="consultant_id" class="{{ $selectClass }}">
+                      <option value="">Sin asignar</option>
+                      @foreach ($consultants as $consultant)
+                        <option value="{{ $consultant->id }}" @selected($entry->consultant_id === $consultant->id)>{{ $consultant->name }}</option>
+                      @endforeach
+                    </select>
+                    <select name="milestone_id" class="{{ $selectClass }}">
+                      <option value="">Sin hito</option>
+                      @foreach ($project->milestones as $milestone)
+                        <option value="{{ $milestone->id }}" @selected($entry->milestone_id === $milestone->id)>{{ $milestone->label }}</option>
+                      @endforeach
+                    </select>
+                    <button class="{{ $btnClass }}">Guardar</button>
+                  </form>
+                </details>
               </td>
               <td class="py-3 pr-3 font-mono text-xs text-zinc-400">{{ $entry->categoriaLegible() }}</td>
               <td class="py-3 pr-3 text-xs text-zinc-400">{{ $entry->consultant?->name ?? '—' }}</td>

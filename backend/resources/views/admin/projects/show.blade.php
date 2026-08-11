@@ -124,43 +124,112 @@
   <div class="mt-6 grid gap-6 lg:grid-cols-2">
 
     <section class="rounded-card border border-white/10 bg-white/[0.03] p-6">
-      <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Hitos</h2>
+      <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Hitos por fase / sprint</h2>
 
-      <ul class="mt-4 divide-y divide-white/5">
-        @forelse ($project->milestones as $milestone)
-          <li class="py-3 flex flex-wrap items-center justify-between gap-3">
-            <div class="flex min-w-0 items-center gap-3">
-              <p class="truncate text-sm font-medium">{{ $milestone->label }}</p>
-              <span class="inline-flex shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest {{ $milestoneBadge[$milestone->status] ?? $milestoneBadge['pending'] }}">
-                {{ $milestoneLabels[$milestone->status] ?? $milestone->status }}
-              </span>
-            </div>
-            <form method="POST" action="{{ route('admin.milestones.update', $milestone) }}" class="flex shrink-0 items-center gap-2">
-              @csrf
-              @method('PUT')
-              <select name="status"
-                class="h-9 rounded-control bg-white/5 border border-white/15 px-3 text-xs outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
-                @foreach ($milestoneLabels as $value => $label)
-                  <option value="{{ $value }}" @selected($milestone->status === $value)>{{ $label }}</option>
-                @endforeach
-              </select>
-              <button class="h-9 rounded-control border border-white/15 px-3 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
-                OK
-              </button>
-            </form>
-          </li>
-        @empty
-          <li class="py-6 text-center text-sm text-zinc-500">Sin hitos todavía.</li>
-        @endforelse
-      </ul>
+      @php
+        // La fase es el agrupador de sprint. Los hitos sin fase caen en un grupo
+        // propio al final para que nunca se pierdan de vista.
+        // toBase(): groupBy sobre una Eloquent\Collection devuelve otra Eloquent,
+        // y ahí filter/reject tratan las llaves como IDs de modelo, no como fases.
+        $grupos = $project->milestones->groupBy(fn ($m) => $m->phase ?: 'Sin fase')->toBase();
+        $porFase = $grupos->reject(fn ($hitos, $fase) => $fase === 'Sin fase')
+            ->merge($grupos->filter(fn ($hitos, $fase) => $fase === 'Sin fase'));
+        $campo = 'w-full rounded-control bg-white/5 border border-white/15 px-3 py-2 text-sm outline-none focus:border-white/40 transition';
+        $mini = 'font-mono text-[10px] uppercase tracking-widest text-zinc-500';
+      @endphp
 
-      <form method="POST" action="{{ route('admin.projects.milestones.store', $project) }}" class="mt-5 flex gap-2 border-t border-white/10 pt-5">
+      @forelse ($porFase as $fase => $hitos)
+        <div class="mt-5">
+          <div class="flex items-baseline justify-between gap-3">
+            <p class="{{ $mini }}">{{ $fase }}</p>
+            <p class="font-mono text-[10px] text-zinc-600">
+              {{ number_format($hitos->sum('horas_registradas'), 2) }} h
+              @if ($hitos->sum('hours_budgeted') > 0) / {{ number_format($hitos->sum('hours_budgeted'), 2) }} h @endif
+            </p>
+          </div>
+
+          <ul class="mt-2 divide-y divide-white/5 border-t border-white/5">
+            @foreach ($hitos as $milestone)
+              <li class="py-3">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div class="flex min-w-0 items-center gap-3">
+                    <p class="truncate text-sm font-medium">{{ $milestone->label }}</p>
+                    <span class="inline-flex shrink-0 rounded-full border px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-widest {{ $milestoneBadge[$milestone->status] ?? $milestoneBadge['pending'] }}">
+                      {{ $milestoneLabels[$milestone->status] ?? $milestone->status }}
+                    </span>
+                  </div>
+                  <form method="POST" action="{{ route('admin.milestones.update', $milestone) }}" class="flex shrink-0 items-center gap-2">
+                    @csrf
+                    @method('PUT')
+                    <select name="status" onchange="this.form.submit()"
+                      class="h-9 rounded-control bg-white/5 border border-white/15 px-3 text-xs outline-none focus:border-white/40 transition [&>option]:bg-zinc-900">
+                      @foreach ($milestoneLabels as $value => $label)
+                        <option value="{{ $value }}" @selected($milestone->status === $value)>{{ $label }}</option>
+                      @endforeach
+                    </select>
+                  </form>
+                </div>
+
+                <p class="mt-1 font-mono text-[11px] text-zinc-500">
+                  {{ $milestone->starts_on?->format('d/m/Y') ?? 'sin inicio' }} → {{ $milestone->due_on?->format('d/m/Y') ?? 'sin fin' }}
+                  · {{ number_format($milestone->horas_registradas ?? 0, 2) }} h registradas
+                  @if ($milestone->hours_budgeted > 0) de {{ number_format($milestone->hours_budgeted, 2) }} h @endif
+                </p>
+
+                {{-- Edición completa: fechas, fase y presupuesto del hito. --}}
+                <details class="mt-2">
+                  <summary class="cursor-pointer {{ $mini }} hover:text-zinc-300">Editar fechas y datos</summary>
+                  <form method="POST" action="{{ route('admin.milestones.update', $milestone) }}" class="mt-3 space-y-3">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="status" value="{{ $milestone->status }}" />
+                    <input type="text" name="label" value="{{ $milestone->label }}" required maxlength="255" class="{{ $campo }}" />
+                    <div class="grid gap-3 sm:grid-cols-2">
+                      <div>
+                        <label class="{{ $mini }}">Fase / sprint</label>
+                        <input type="text" name="phase" value="{{ $milestone->phase }}" maxlength="120" placeholder="ej. Sprint 3" class="mt-1 {{ $campo }}" />
+                      </div>
+                      <div>
+                        <label class="{{ $mini }}">Horas presupuestadas</label>
+                        <input type="number" name="hours_budgeted" value="{{ $milestone->hours_budgeted }}" min="0" step="0.25" class="mt-1 {{ $campo }}" />
+                      </div>
+                      <div>
+                        <label class="{{ $mini }}">Inicio</label>
+                        <input type="date" name="starts_on" value="{{ $milestone->starts_on?->format('Y-m-d') }}" class="mt-1 {{ $campo }}" />
+                      </div>
+                      <div>
+                        <label class="{{ $mini }}">Fin</label>
+                        <input type="date" name="due_on" value="{{ $milestone->due_on?->format('Y-m-d') }}" class="mt-1 {{ $campo }}" />
+                      </div>
+                    </div>
+                    <textarea name="description" rows="2" placeholder="Qué incluye este hito" class="{{ $campo }}">{{ $milestone->description }}</textarea>
+                    <button class="h-10 rounded-control border border-white/15 px-4 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+                      Guardar hito
+                    </button>
+                  </form>
+                </details>
+              </li>
+            @endforeach
+          </ul>
+        </div>
+      @empty
+        <p class="mt-4 py-6 text-center text-sm text-zinc-500">Sin hitos todavía.</p>
+      @endforelse
+
+      <form method="POST" action="{{ route('admin.projects.milestones.store', $project) }}" class="mt-5 space-y-3 border-t border-white/10 pt-5">
         @csrf
-        <input type="text" name="label" placeholder="Nuevo hito…" required
-          class="h-11 w-full rounded-control bg-white/5 border border-white/15 px-4 text-sm outline-none focus:border-white/40 transition" />
-        <button class="h-11 shrink-0 rounded-control border border-white/15 px-4 font-mono text-xs uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
-          + Hito
-        </button>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <input type="text" name="label" placeholder="Nuevo hito…" required class="{{ $campo }}" />
+          <input type="text" name="phase" placeholder="Fase / sprint (opcional)" maxlength="120" class="{{ $campo }}" />
+          <input type="date" name="starts_on" class="{{ $campo }}" />
+          <input type="date" name="due_on" class="{{ $campo }}" />
+        </div>
+        <div class="flex gap-2">
+          <input type="number" name="hours_budgeted" placeholder="Horas presupuestadas" min="0" step="0.25" class="{{ $campo }}" />
+          <button class="h-11 shrink-0 rounded-control border border-white/15 px-4 font-mono text-xs uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+            + Hito
+          </button>
+        </div>
       </form>
     </section>
 

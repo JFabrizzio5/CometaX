@@ -35,7 +35,9 @@
         <button type="button" data-project-filter="{{ $p->id }}" class="proj-filter text-left rounded-card border border-white/10 hover:border-white/25 p-5 transition">
           <div class="flex items-center justify-between mb-2 gap-2">
             <p class="text-sm font-semibold truncate">{{ $p->name }}</p>
-            <span class="font-mono text-[10px] shrink-0 {{ $urg ? 'text-red-300' : 'text-zinc-500' }}">{{ $urg ? $urg.' urgente' : $op->count().' abierta' }}</span>
+            <span class="font-mono text-[10px] shrink-0 {{ $urg ? 'text-red-300' : 'text-zinc-500' }}">
+              {{ $urg ? $urg.' urgente'.($urg === 1 ? '' : 's') : $op->count().' abierta'.($op->count() === 1 ? '' : 's') }}
+            </span>
           </div>
           <p class="text-xs text-zinc-500 truncate">{{ $p->client?->name }}</p>
         </button>
@@ -45,10 +47,11 @@
 
   {{-- KPIs --}}
   <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4">
-    @foreach (['Nuevas' => $stats['nuevas'], 'En progreso' => $stats['progreso'], 'Resueltas (mes)' => $stats['resueltas_mes'], 'Abiertas' => $stats['abiertas']] as $label => $val)
+    @foreach (['nuevas' => ['Nuevas', $stats['nuevas']], 'progreso' => ['En progreso', $stats['progreso']], 'resueltas_mes' => ['Resueltas (mes)', $stats['resueltas_mes']], 'abiertas' => ['Abiertas', $stats['abiertas']]] as $kpi => [$label, $val])
       <div class="rounded-card border border-white/10 bg-white/[0.03] p-5">
         <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-500">{{ $label }}</p>
-        <p class="mt-2 text-2xl font-medium">{{ $val }}</p>
+        {{-- data-kpi: el filtro por proyecto recalcula estos números en el cliente. --}}
+        <p class="mt-2 text-2xl font-medium" data-kpi="{{ $kpi }}">{{ $val }}</p>
       </div>
     @endforeach
   </div>
@@ -60,11 +63,16 @@
       <div class="rounded-card border border-white/10 bg-white/[0.02] p-4">
         <div class="flex items-center justify-between mb-4 px-1">
           <p class="font-mono text-[10px] uppercase tracking-widest text-zinc-400">{{ $title }}</p>
-          <span class="font-mono text-[10px] text-zinc-500">{{ $items->count() }}</span>
+          <span class="font-mono text-[10px] text-zinc-500" data-col-count="{{ $key }}">{{ $items->count() }}</span>
         </div>
         <div class="space-y-3">
-          @forelse ($items as $inc)
-            <div data-project="{{ $inc->project_id }}" class="incident-card rounded-control bg-white/[0.04] border border-white/10 p-4 transition hover:border-white/25">
+          {{-- Siempre en el DOM: al filtrar por proyecto no hay render nuevo del servidor. --}}
+          <p class="{{ $items->isEmpty() ? '' : 'hidden' }} text-xs text-zinc-600 text-center py-6" data-col-empty="{{ $key }}">Sin incidencias</p>
+          @foreach ($items as $inc)
+            <div data-project="{{ $inc->project_id }}"
+                 data-status="{{ $inc->status }}"
+                 data-resuelta-mes="{{ $inc->resolved_at && $inc->resolved_at->isSameMonth(now()) ? '1' : '0' }}"
+                 class="incident-card rounded-control bg-white/[0.04] border border-white/10 p-4 transition hover:border-white/25">
               <div class="flex items-center justify-between mb-2">
                 <span class="font-mono text-[10px] uppercase tracking-widest rounded-full border px-2 py-0.5 {{ $prBadge[$inc->priority] ?? $prBadge['baja'] }}">{{ $inc->priority }}</span>
                 <span class="font-mono text-[10px] text-zinc-600">{{ $inc->ticket_code }}</span>
@@ -84,9 +92,7 @@
                 </div>
               </div>
             </div>
-          @empty
-            <p class="text-xs text-zinc-600 text-center py-6">Sin incidencias</p>
-          @endforelse
+          @endforeach
         </div>
       </div>
     @endforeach
@@ -95,13 +101,51 @@
   <script>
     (function () {
       var buttons = document.querySelectorAll('.proj-filter');
-      var cards = document.querySelectorAll('.incident-card');
+      var cards = Array.prototype.slice.call(document.querySelectorAll('.incident-card'));
+
+      // Los contadores vienen del servidor sobre TODOS los proyectos. Al filtrar
+      // en el cliente hay que recalcularlos o el tablero muestra números que no
+      // corresponden a lo que se está viendo (y columnas vacías con conteo > 0).
+      function pintar(filtro) {
+        var visibles = [];
+
+        cards.forEach(function (c) {
+          var visible = filtro === 'all' || c.getAttribute('data-project') === filtro;
+          c.style.display = visible ? '' : 'none';
+          if (visible) { visibles.push(c); }
+        });
+
+        var porEstado = {};
+        visibles.forEach(function (c) {
+          var e = c.getAttribute('data-status');
+          porEstado[e] = (porEstado[e] || 0) + 1;
+        });
+
+        document.querySelectorAll('[data-col-count]').forEach(function (el) {
+          el.textContent = porEstado[el.getAttribute('data-col-count')] || 0;
+        });
+
+        document.querySelectorAll('[data-col-empty]').forEach(function (el) {
+          el.classList.toggle('hidden', (porEstado[el.getAttribute('data-col-empty')] || 0) > 0);
+        });
+
+        var kpis = {
+          nuevas: porEstado['nuevo'] || 0,
+          progreso: (porEstado['revision'] || 0) + (porEstado['progreso'] || 0),
+          resueltas_mes: visibles.filter(function (c) { return c.getAttribute('data-resuelta-mes') === '1'; }).length,
+          abiertas: visibles.filter(function (c) { return c.getAttribute('data-status') !== 'resuelto'; }).length
+        };
+
+        document.querySelectorAll('[data-kpi]').forEach(function (el) {
+          el.textContent = kpis[el.getAttribute('data-kpi')];
+        });
+      }
+
       buttons.forEach(function (btn) {
         btn.addEventListener('click', function () {
-          var f = btn.getAttribute('data-project-filter');
           buttons.forEach(function (b) { b.classList.remove('border-white', 'bg-white/10'); b.classList.add('border-white/10'); });
           btn.classList.add('border-white', 'bg-white/10'); btn.classList.remove('border-white/10');
-          cards.forEach(function (c) { c.style.display = (f === 'all' || c.getAttribute('data-project') === f) ? '' : 'none'; });
+          pintar(btn.getAttribute('data-project-filter'));
         });
       });
     })();

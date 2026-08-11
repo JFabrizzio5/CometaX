@@ -8,6 +8,7 @@ use App\Models\Consultant;
 use App\Models\Milestone;
 use App\Models\Project;
 use App\Models\ProjectLink;
+use App\Services\ResumenHoras;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -70,17 +71,54 @@ class ProjectAdminController extends Controller
             ->with('status', "Proyecto «{$project->name}» creado.");
     }
 
-    public function show(Project $project): View
+    public function show(Request $request, Project $project, ResumenHoras $resumen): View
     {
         $project->load([
-            'client', 'leadConsultant', 'milestones', 'incidents', 'activities.actor', 'consultants', 'links',
-            'timeEntries' => fn ($query) => $query->with('consultant', 'milestone')->orderByDesc('entry_date')->orderByDesc('id'),
+            'client', 'leadConsultant', 'incidents', 'activities.actor', 'consultants', 'links',
+            // withSum evita una consulta por hito al pintar el avance de cada uno.
+            'milestones' => fn ($query) => $query->withSum('timeEntries as horas_registradas', 'hours'),
         ]);
+
+        // Los filtros del registro de horas viajan por query string para que la
+        // vista filtrada se pueda compartir y guardar como favorito.
+        $filtros = [
+            'desde' => $request->query('desde'),
+            'hasta' => $request->query('hasta'),
+            'hito' => $request->query('hito'),
+            'categoria' => $request->query('categoria'),
+            'quien' => $request->query('quien'),
+            'orden' => $request->query('orden') === 'asc' ? 'asc' : 'desc',
+        ];
+
+        $entries = $project->timeEntries()
+            ->with('consultant', 'milestone')
+            ->enRango($filtros['desde'], $filtros['hasta'])
+            ->when($filtros['hito'] !== null && $filtros['hito'] !== '', fn ($q) => $q->where('milestone_id', $filtros['hito']))
+            ->when($filtros['categoria'], fn ($q) => $q->where('category', $filtros['categoria']))
+            ->when($filtros['quien'], fn ($q) => $q->where('consultant_id', $filtros['quien']))
+            ->orderBy('entry_date', $filtros['orden'])
+            ->orderBy('id', $filtros['orden'])
+            ->get();
 
         return view('admin.projects.show', [
             'project' => $project,
             'consultants' => Consultant::orderBy('name')->get(),
+            'entries' => $entries,
+            'filtros' => $filtros,
+            'resumen' => $resumen->de($entries),
+            // Sin filtro no hay que consultar de nuevo: el total es el de la tabla.
+            'totalSinFiltrar' => $this->hayFiltro($filtros)
+                ? (float) $project->timeEntries()->sum('hours')
+                : (float) $entries->sum('hours'),
         ]);
+    }
+
+    /**
+     * @param  array<string, mixed>  $filtros
+     */
+    private function hayFiltro(array $filtros): bool
+    {
+        return collect($filtros)->except('orden')->filter(fn ($v) => $v !== null && $v !== '')->isNotEmpty();
     }
 
     public function attachConsultant(Request $request, Project $project): RedirectResponse
@@ -180,10 +218,16 @@ class ProjectAdminController extends Controller
     {
         $data = $request->validate([
             'label' => ['required', 'string', 'max:255'],
+            'phase' => ['nullable', 'string', 'max:120'],
+            'description' => ['nullable', 'string', 'max:2000'],
+            'starts_on' => ['nullable', 'date'],
+            'due_on' => ['nullable', 'date', 'after_or_equal:starts_on'],
+            'hours_budgeted' => ['nullable', 'numeric', 'min:0', 'max:999999.99'],
         ]);
 
         $project->milestones()->create([
-            'label' => $data['label'],
+            ...$data,
+            'hours_budgeted' => $data['hours_budgeted'] ?? 0,
             'status' => 'pending',
             'sort_order' => ((int) $project->milestones()->max('sort_order')) + 1,
         ]);
@@ -192,10 +236,21 @@ class ProjectAdminController extends Controller
             ->with('status', 'Hito agregado.');
     }
 
+    /**
+     * El tablero manda solo `status` (cambio rápido) y el formulario de edición
+     * manda todo: se valida lo que venga y se actualiza únicamente eso.
+     */
     public function updateMilestone(Request $request, Milestone $milestone): RedirectResponse
     {
         $data = $request->validate([
             'status' => ['required', 'in:pending,in_progress,done'],
+            'label' => ['sometimes', 'required', 'string', 'max:255'],
+            'phase' => ['sometimes', 'nullable', 'string', 'max:120'],
+            'description' => ['sometimes', 'nullable', 'string', 'max:2000'],
+            'starts_on' => ['sometimes', 'nullable', 'date'],
+            'due_on' => ['sometimes', 'nullable', 'date', 'after_or_equal:starts_on'],
+            'hours_budgeted' => ['sometimes', 'nullable', 'numeric', 'min:0', 'max:999999.99'],
+            'sort_order' => ['sometimes', 'integer', 'min:0', 'max:9999'],
         ]);
 
         $milestone->update($data);
