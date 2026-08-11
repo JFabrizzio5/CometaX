@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\ConsultantAdminController;
 use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\IncidentAdminController;
 use App\Http\Controllers\Admin\ProjectAdminController;
+use App\Http\Controllers\Admin\ReporteHorasController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
 use App\Http\Controllers\Admin\TimeEntryAdminController;
 use App\Http\Controllers\Auth\ClientAuthController;
@@ -142,6 +143,9 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::post('/proyectos/{project}/horas/proponer', [TimeEntryAdminController::class, 'proponer'])->name('time.propose');
     Route::post('/proyectos/{project}/horas/confirmar', [TimeEntryAdminController::class, 'confirmar'])->name('time.confirm');
     Route::delete('/proyectos/{project}/horas/lote/{batch}', [TimeEntryAdminController::class, 'deshacerLote'])->name('time.batch.destroy');
+    // Reportes descargables. Respetan los mismos filtros de la tabla de horas.
+    Route::get('/proyectos/{project}/reporte.xlsx', [ReporteHorasController::class, 'excel'])->name('projects.report.excel');
+    Route::get('/proyectos/{project}/reporte.pdf', [ReporteHorasController::class, 'pdf'])->name('projects.report.pdf');
     Route::put('/horas/{entry}', [TimeEntryAdminController::class, 'update'])->name('time.update');
     Route::delete('/horas/{entry}', [TimeEntryAdminController::class, 'destroy'])->name('time.destroy');
 

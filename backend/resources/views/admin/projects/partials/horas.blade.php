@@ -21,8 +21,28 @@
 @endphp
 
 <section class="mt-6 rounded-card border border-white/10 bg-white/[0.03] p-6">
+  @php
+    // Los reportes salen con el filtro activo: lo que ves es lo que descargas.
+    $queryReporte = array_filter([
+        'desde' => $filtros['desde'], 'hasta' => $filtros['hasta'], 'hito' => $filtros['hito'],
+        'categoria' => $filtros['categoria'], 'quien' => $filtros['quien'],
+    ], fn ($v) => $v !== null && $v !== '');
+  @endphp
+
   <div class="flex flex-wrap items-center justify-between gap-4">
-    <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Registro de horas</h2>
+    <div class="flex flex-wrap items-center gap-3">
+      <h2 class="font-mono text-[11px] uppercase tracking-widest text-zinc-500">Registro de horas</h2>
+      @if ($entries->isNotEmpty())
+        <a href="{{ route('admin.projects.report.excel', [$project, ...$queryReporte]) }}"
+           class="rounded-control border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+          ↓ Excel
+        </a>
+        <a href="{{ route('admin.projects.report.pdf', [$project, ...$queryReporte]) }}"
+           class="rounded-control border border-white/15 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-zinc-300 transition hover:border-white/30 hover:text-white">
+          ↓ PDF
+        </a>
+      @endif
+    </div>
     <p class="font-mono text-xs text-zinc-500">
       {{ number_format($totalHoras, 2) }} h
       @if ($filtrando)
