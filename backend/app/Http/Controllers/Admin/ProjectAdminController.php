@@ -72,7 +72,10 @@ class ProjectAdminController extends Controller
 
     public function show(Project $project): View
     {
-        $project->load(['client', 'leadConsultant', 'milestones', 'incidents', 'activities.actor', 'consultants', 'links']);
+        $project->load([
+            'client', 'leadConsultant', 'milestones', 'incidents', 'activities.actor', 'consultants', 'links',
+            'timeEntries' => fn ($query) => $query->with('consultant', 'milestone')->orderByDesc('entry_date')->orderByDesc('id'),
+        ]);
 
         return view('admin.projects.show', [
             'project' => $project,

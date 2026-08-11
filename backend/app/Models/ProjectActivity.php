@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-#[Fillable(['project_id', 'actor_type', 'actor_id', 'action', 'description', 'occurred_at'])]
+#[Fillable(['project_id', 'milestone_id', 'actor_type', 'actor_id', 'action', 'description', 'occurred_at'])]
 class ProjectActivity extends Model
 {
     protected function casts(): array
@@ -20,6 +20,11 @@ class ProjectActivity extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function milestone(): BelongsTo
+    {
+        return $this->belongsTo(Milestone::class);
     }
 
     public function actor(): MorphTo

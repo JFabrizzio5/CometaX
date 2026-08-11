@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 #[Fillable([
-    'project_id', 'ticket_code', 'title', 'description', 'priority', 'status',
+    'project_id', 'milestone_id', 'ticket_code', 'title', 'description', 'priority', 'status',
     'assignee_consultant_id', 'reporter_user_id', 'resolved_at',
 ])]
 class Incident extends Model
@@ -39,6 +39,11 @@ class Incident extends Model
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    public function milestone(): BelongsTo
+    {
+        return $this->belongsTo(Milestone::class);
     }
 
     public function assignee(): BelongsTo

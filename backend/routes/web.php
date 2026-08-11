@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\ImpersonationController;
 use App\Http\Controllers\Admin\IncidentAdminController;
 use App\Http\Controllers\Admin\ProjectAdminController;
 use App\Http\Controllers\Admin\SubscriptionOverviewController;
+use App\Http\Controllers\Admin\TimeEntryAdminController;
 use App\Http\Controllers\Auth\ClientAuthController;
 use App\Http\Controllers\Auth\GoogleController;
 use App\Http\Controllers\BillingController;
@@ -135,6 +136,14 @@ Route::middleware('staff')->prefix('admin')->name('admin.')->group(function () {
     Route::delete('/proyectos/{project}/consultores/{consultant}', [ProjectAdminController::class, 'detachConsultant'])->name('projects.consultants.detach');
     Route::post('/proyectos/{project}/enlaces', [ProjectAdminController::class, 'storeLink'])->name('projects.links.store');
     Route::delete('/enlaces/{link}', [ProjectAdminController::class, 'destroyLink'])->name('projects.links.destroy');
+
+    // Horas: captura renglón por renglón y reconstrucción por lote.
+    Route::post('/proyectos/{project}/horas', [TimeEntryAdminController::class, 'store'])->name('time.store');
+    Route::post('/proyectos/{project}/horas/proponer', [TimeEntryAdminController::class, 'proponer'])->name('time.propose');
+    Route::post('/proyectos/{project}/horas/confirmar', [TimeEntryAdminController::class, 'confirmar'])->name('time.confirm');
+    Route::delete('/proyectos/{project}/horas/lote/{batch}', [TimeEntryAdminController::class, 'deshacerLote'])->name('time.batch.destroy');
+    Route::put('/horas/{entry}', [TimeEntryAdminController::class, 'update'])->name('time.update');
+    Route::delete('/horas/{entry}', [TimeEntryAdminController::class, 'destroy'])->name('time.destroy');
 
     // Incidencias
     Route::get('/incidencias', [IncidentAdminController::class, 'index'])->name('incidents.index');

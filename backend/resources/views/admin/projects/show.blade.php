@@ -283,4 +283,6 @@
 
   </div>
 
+  @include('admin.projects.partials.horas')
+
 @endsection
