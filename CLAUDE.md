@@ -6,13 +6,24 @@ por CDN, ninguna ruta local que pueda dar 404.
 
 ## Archivos
 
-- `index.html` — **el sitio**. Todo vive aquí (HTML + `<style>` + `<script>` inline).
-- `Landing/index.html` — copia idéntica del mismo archivo.
+> **Desde 2026-11-09 el sitio es la v2** (estilo Defi FZ). Lo de abajo sobre la
+> estructura de secciones y el shader describe la v1, que quedó en
+> `index.backup-1109-v1.html`.
+
+- `index.html` — **el sitio (v2)**. HTML + CSS + JS inline, sin Tailwind. Usa `assets/`.
+- `assets/` — capturas reales de Eventotes y RanKIT, clips de fondo (Higgsfield, desaturados),
+  `logo-3d.webp` (imagen fija del logo 3D), fotos del equipo (de LinkedIn).
+- `diagnostico/index.html` — cuestionario de 16 preguntas que recomienda un plan
+  (reglas en `RULES`) y manda el resultado por WhatsApp o correo. i18n propio (`T.en`/`T.es`).
+- `index.backup-1109-v1.html` — la landing anterior (con Social Hub y chatbot).
+- `Landing/index.html` — copia de la **v1**; no se actualizó (la v2 depende de `assets/`).
 - `index.backup-*.html` — respaldo previo a la reescritura de julio 2026.
 - `frontend/`, `backend/` — otra app (Vite + TS), **no** es la landing.
 
-Dependencias por CDN: Tailwind (config inline en el `<head>`), Three.js r128,
-Font Awesome, Google Fonts (Archivo Black + Space Grotesk).
+v2: Three.js r128 + SVGLoader se cargan **después** y solo si el equipo da (modo ligero
+automático; `?lite=1` lo fuerza). Font Awesome y Google Fonts (Archivo Black + Space Grotesk).
+Planes: Essential/Growth/Enterprise del catálogo 2026 (aprobados por el usuario el 2026-11-09).
+Los links "Diagnóstico gratis" van a `diagnostico/`; "Elegir plan" pasa `?plan=`.
 
 ## Estructura de la página (`<main id="view-home">`)
 

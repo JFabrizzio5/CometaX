@@ -3,6 +3,7 @@
 CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y mantenimiento de software con un equipo de 6+ especialistas, al costo de una sola contratación interna.
 
 - [Sitio web](https://cometax.click/)
+- [Diagnóstico gratis](https://cometax.click/diagnostico/)
 - [Portal de clientes](https://cometax.click/panel/login)
 
 ## Servicios
@@ -13,10 +14,18 @@ CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y man
 
 ## Planes
 
-- **Consultoría gratis**: reunión de diagnóstico sin costo, sin tarjeta.
-- **Básico**: $28,000 MXN/mes ($26,000 con domiciliación) — 40 horas de equipo al mes.
-- **Pro**: $52,000 MXN/mes ($50,000 con domiciliación) — 80 horas de equipo al mes.
-- **A medida**: se cotiza según alcance.
+Precios en MXN más IVA, congelados por 6 meses (mes a mes entre paréntesis, mínimo 3 meses).
+
+- **Diagnóstico gratis**: cuestionario en https://cometax.click/diagnostico/ que recomienda un plan, más una llamada de 30–45 minutos sin costo.
+- **Essential**: $16,500/mes ($19,500 mes a mes) — que todo siga funcionando: errores, mantenimiento, incidencias y reporte mensual.
+- **Growth**: $39,500/mes ($46,500 mes a mes) — mejoras continuas, automatización e integración de plataformas.
+- **Enterprise**: $54,000/mes ($63,500 mes a mes) — dirección técnica externa, arquitectura y supervisión de infraestructura.
+- **Proyectos puntuales**: se cotizan según alcance, con anticipo y entregas por etapas.
+
+## Productos propios
+
+- [Eventotes](https://eventotes.com) — The Party Operating System: contratos, pagos y micrositios para salones de eventos.
+- [RanKIT](https://rankit.pro) — torneos y ligas: inscripciones, brackets, estadísticas en vivo y widgets para OBS.
 
 ## Contacto
 
