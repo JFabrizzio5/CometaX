@@ -19,6 +19,11 @@ por CDN, ninguna ruta local que pueda dar 404.
   `logo-3d.webp` (imagen fija del logo 3D), fotos del equipo (de LinkedIn).
 - `diagnostico/index.html` — cuestionario de 16 preguntas que recomienda un plan
   (reglas en `RULES`) y manda el resultado por WhatsApp o correo. i18n propio (`T.en`/`T.es`).
+- `portafolio/index.html` — **generado**, no se edita a mano: el generador vive fuera del repo en
+  `~/Documents/GitHub/CometaX-Hero-Opciones/portafolio-gen/` (`build.py` + `template.html` + `mid.json`;
+  `python3 build.py` reescribe el HTML y valida que ES/EN tengan las mismas claves). Regla del usuario:
+  **los clientes van sin nombre de empresa** ("Cliente confidencial · giro"), con marcas y datos sensibles
+  difuminados en las capturas; las capturas de prototipos son de cuentas demo locales.
 - `index.backup-1109-v1.html` — la landing anterior (con Social Hub y chatbot).
 - `Landing/index.html` — copia de la **v1**; no se actualizó (la v2 depende de `assets/`).
 - `index.backup-*.html` — respaldo previo a la reescritura de julio 2026.
