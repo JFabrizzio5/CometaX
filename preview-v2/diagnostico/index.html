@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico gratis — CometaX</title>
+    <!-- PREVIEW v2 (local). No indexar mientras no se apruebe. -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="description" content="Responde unas preguntas sobre tu empresa y tu proyecto, recibe un plan recomendado y agenda tu diagnóstico gratis con CometaX.">
+    <meta name="theme-color" content="#060608">
+    <link rel="icon" type="image/png" href="../../FinalLogoCometax.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"></noscript>
+
+    <style>
+        :root {
+            --bg: #060608; --ink: #0b0b0f; --mut: #9a99a6; --violet: #7c3aed; --lav: #c4b5fd;
+            --card: rgba(18, 18, 22, .9); --line: rgba(255,255,255,.08); --line2: rgba(255,255,255,.16);
+            --pad: clamp(16px, 3vw, 28px); --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0; color: #fff; font-family: 'Space Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            background: radial-gradient(60% 50% at 85% 10%, rgba(124,58,237,.18), transparent 70%), radial-gradient(50% 45% at 0% 100%, rgba(124,58,237,.12), transparent 70%), var(--bg);
+            background-attachment: fixed;
+        }
+        a { color: inherit; text-decoration: none; }
+        button, input, textarea { font-family: inherit; }
+        ::selection { background: #fff; color: #000; }
+        .euro-style { font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 900; text-transform: uppercase; letter-spacing: -0.04em; transform: scaleX(1.1); display: inline-block; transform-origin: left center; }
+        .euro-wrapper { display: block; }
+
+        /* ---- barra superior ---- */
+        .top { position: sticky; top: 0; z-index: 20; padding: 12px; }
+        .top-in { max-width: 1240px; margin: 0 auto; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 8px 0 18px; border-radius: 999px; background: rgba(10,10,13,.9); border: 1px solid var(--line); }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand img { height: 26px; width: auto; filter: invert(1); }
+        .brand .euro-style { font-size: 18px; transform-origin: center; }
+        .top-r { display: flex; align-items: center; gap: 8px; }
+        .lang { display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid var(--line); cursor: pointer; user-select: none; }
+        .lang span { font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; opacity: .5; transition: .25s; }
+        .lang span.active { background: #fff; color: #000; opacity: 1; }
+        .pill { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; font-weight: 600; font-size: 14px; padding: 13px 22px; white-space: nowrap; border: 0; cursor: pointer; transition: transform .2s, background .2s, color .2s, opacity .2s; }
+        .pill:hover { transform: translateY(-1px); }
+        .pill:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+        .pill-light { color: #0b0b0f; background: #fff; }
+        .pill-light:hover { background: #e4e4ea; }
+        .pill-ghost { color: #fff; background: rgba(255,255,255,.06); border: 1px solid var(--line2); }
+        .pill-ghost:hover { background: rgba(255,255,255,.12); }
+        .pill-wa { color: #000; background: #25D366; }
+        .pill-wa:hover { background: #3ee07c; }
+        .top .back-site { padding: 10px 16px; font-size: 13px; }
+        @media (max-width: 560px) { .top .back-site span { display: none; } .brand .euro-style { font-size: 16px; } }
+
+        /* ---- disposición ---- */
+        .diag { max-width: 1240px; margin: 0 auto; overflow-x: clip; padding: 24px var(--pad) 60px; display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(24px, 4vw, 64px); align-items: start; }
+        .intro { position: sticky; top: 100px; }
+        .kicker { display: flex; width: max-content; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--lav); margin-bottom: 18px; }
+        .kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 12px #a855f7; }
+        .intro h1 { margin: 0; font-weight: 400; font-size: clamp(40px, 5.6vw, 84px); line-height: .92; }
+        .intro .lead { color: #c9c8d2; font-size: 16px; line-height: 1.6; margin: 22px 0 0; max-width: 460px; }
+        .intro ul { list-style: none; padding: 0; margin: 26px 0 0; display: grid; gap: 12px; }
+        .intro li { display: flex; gap: 12px; align-items: flex-start; color: #d6d6de; font-size: 14px; line-height: 1.5; }
+        .intro li i { width: 28px; height: 28px; flex-shrink: 0; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 12px; background: rgba(124,58,237,.2); color: var(--lav); }
+        .intro .logo { width: min(200px, 45%); height: auto; margin-top: 30px; opacity: .85; }
+
+        .flow { scroll-margin-top: 92px; position: relative; border-radius: 28px; background: var(--card); border: 1px solid var(--line); padding: clamp(22px, 3.4vw, 40px); min-height: 560px; display: flex; flex-direction: column; overflow: hidden; }
+        .flow::before { content: ''; position: absolute; right: -120px; top: -120px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(closest-side, rgba(124,58,237,.22), transparent); pointer-events: none; }
+        .bar { height: 4px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden; }
+        .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #7c3aed, #d946ef); transition: width .45s cubic-bezier(.16,1,.3,1); }
+        .count { margin-top: 12px; display: flex; justify-content: space-between; gap: 12px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mut); }
+        .count b { color: var(--lav); font-weight: 400; }
+
+        .step { flex: 1; margin-top: 26px; opacity: 0; transform: translateY(14px); transition: opacity .35s, transform .35s; }
+        .step.show { opacity: 1; transform: none; }
+        .step h2 { margin: 0; font-weight: 600; font-size: clamp(24px, 2.6vw, 34px); line-height: 1.15; letter-spacing: -.02em; }
+        .step .sub { color: var(--mut); font-size: 14px; margin: 10px 0 0; line-height: 1.55; }
+        .opts { display: grid; gap: 10px; margin-top: 24px; }
+        .opts.two { grid-template-columns: 1fr 1fr; }
+        @media (max-width: 640px) { .opts.two { grid-template-columns: 1fr; } }
+        .opt { display: flex; align-items: center; gap: 14px; width: 100%; text-align: left; color: #fff; background: rgba(255,255,255,.04); border: 1px solid var(--line2); border-radius: 16px; padding: 14px 16px; cursor: pointer; font-size: 15px; line-height: 1.35; transition: background .2s, border-color .2s, transform .15s; }
+        .opt:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.28); }
+        .opt:active { transform: scale(.99); }
+        .opt:focus-visible, .pill:focus-visible { outline: 2px solid rgba(196,181,253,.85); outline-offset: 2px; }
+        .opt:focus:not(:focus-visible) { outline: none; }
+        .opt .k { width: 26px; height: 26px; flex-shrink: 0; border-radius: 8px; border: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; color: var(--mut); }
+        .opt .ic { width: 18px; text-align: center; color: var(--lav); flex-shrink: 0; }
+        .opt .tx { display: flex; flex-direction: column; gap: 2px; }
+        .opt .tx small { color: var(--mut); font-size: 12px; }
+        .opt[aria-checked="true"] { background: rgba(124,58,237,.22); border-color: rgba(168,85,247,.75); }
+        .opt[aria-checked="true"] .k { background: #fff; color: #0b0b0f; border-color: #fff; }
+        .opts.multi .opt .k { border-radius: 6px; }
+        .opts.multi .opt[aria-checked="true"] .k::before { content: '✓'; }
+        .opts.multi .opt[aria-checked="true"] .k span { display: none; }
+
+        .fl { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8d8c98; margin-bottom: 6px; }
+        .in { width: 100%; background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.14); padding: 14px 16px; color: #fff; font-size: 15px; border-radius: 14px; outline: none; transition: .2s; }
+        .in:focus { border-color: rgba(168,85,247,.8); background: rgba(124,58,237,.08); }
+        textarea.in { resize: vertical; min-height: 150px; line-height: 1.55; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 24px; }
+        @media (max-width: 560px) { .grid { grid-template-columns: 1fr; } }
+
+        /* ---- recomendación ---- */
+        .rec { margin-top: 22px; border-radius: 22px; padding: 24px; background: linear-gradient(140deg, rgba(124,58,237,.28), rgba(18,18,22,.6) 60%); border: 1px solid rgba(168,85,247,.5); }
+        .rec .tag { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--lav); }
+        .rec .name { font-size: clamp(34px, 4vw, 52px); margin: 8px 0 4px; }
+        .rec .line { color: #d6d6de; font-size: 15px; }
+        .rec .price { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+        .rec .price b { font-family: 'Archivo Black', sans-serif; font-style: italic; font-size: 30px; font-weight: 400; }
+        .rec .price span { font-family: var(--mono); font-size: 11px; color: var(--mut); }
+        .why { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; }
+        .why li { display: flex; gap: 10px; font-size: 14px; color: #e4e4ea; line-height: 1.5; }
+        .why li i { color: #86efac; margin-top: 4px; font-size: 12px; }
+        .note { margin-top: 14px; font-size: 13px; color: #fde68a; background: rgba(251,191,36,.08); border: 1px solid rgba(251,191,36,.25); border-radius: 12px; padding: 10px 14px; line-height: 1.5; }
+        .fit { margin-top: 20px; display: grid; gap: 8px; }
+        .fit .row { display: grid; grid-template-columns: 110px 1fr 44px; gap: 10px; align-items: center; font-size: 12px; color: #c9c8d2; }
+        .fit .track { height: 6px; border-radius: 6px; background: rgba(255,255,255,.08); overflow: hidden; }
+        .fit .track i { display: block; height: 100%; border-radius: 6px; background: rgba(255,255,255,.35); }
+        .fit .row.win .track i { background: linear-gradient(90deg, #7c3aed, #d946ef); }
+        .fit .row b { font-family: var(--mono); font-weight: 400; text-align: right; }
+        .disclaimer { font-size: 12px; color: #77768a; margin-top: 14px; line-height: 1.5; }
+        .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .chip { font-size: 13px; color: #fff; background: rgba(255,255,255,.05); border: 1px solid var(--line2); border-radius: 999px; padding: 9px 14px; cursor: pointer; transition: .2s; }
+        .chip:hover { background: rgba(255,255,255,.1); }
+        .chip[aria-pressed="true"] { background: #fff; color: #0b0b0f; border-color: #fff; }
+        .rec-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; align-items: center; }
+        .linkish { background: none; border: 0; color: var(--lav); cursor: pointer; font-size: 14px; padding: 6px 2px; }
+
+        /* recomendación a todo lo ancho, con catálogo */
+        .wide .diag { grid-template-columns: 1fr; max-width: 1180px; }
+        .wide .intro { display: none; }
+        .cat-h { margin: 34px 0 14px; }
+        .cat-h h3 { margin: 0; font-size: 22px; font-weight: 600; }
+        .cat-h p { margin: 6px 0 0; color: var(--mut); font-size: 14px; }
+        .plans { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        @media (max-width: 860px) { .plans { grid-template-columns: 1fr; } }
+        .pcard { position: relative; display: flex; flex-direction: column; border-radius: 20px; padding: 20px; background: rgba(255,255,255,.035); border: 1px solid var(--line2); }
+        .pcard.best { border-color: rgba(168,85,247,.7); background: linear-gradient(180deg, rgba(124,58,237,.18), rgba(255,255,255,.03) 55%); }
+        .pcard.on { box-shadow: 0 0 0 2px #fff inset; }
+        .pcard .badge { position: absolute; top: -10px; right: 16px; background: var(--violet); color: #fff; font-family: var(--mono); font-size: 9px; letter-spacing: .14em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; }
+        .pname { font-family: 'Archivo Black', sans-serif; font-style: italic; font-size: 26px; }
+        .ptag { color: #c9c8d2; font-size: 13px; margin-top: 2px; }
+        .pprice { margin-top: 14px; } .pprice b { font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 400; font-size: 24px; } .pprice span { display: block; font-family: var(--mono); font-size: 10px; color: var(--mut); margin-top: 2px; }
+        .pm2m { font-family: var(--mono); font-size: 11px; color: var(--mut); margin-top: 4px; }
+        .inc { list-style: none; padding: 0; margin: 0; display: grid; gap: 7px; font-size: 13px; color: #e4e4ea; flex-grow: 1; }
+        .inc li { display: flex; gap: 8px; line-height: 1.4; } .inc i { color: var(--lav); font-size: 10px; margin-top: 5px; }
+        .pno { font-size: 12px; color: #77768a; margin: 12px 0 0; line-height: 1.45; }
+        .pfoot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; }
+        .pfoot .pill { padding: 10px 16px; font-size: 13px; }
+        .pfit { font-family: var(--mono); font-size: 11px; color: var(--lav); }
+        .svcs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        @media (max-width: 860px) { .svcs { grid-template-columns: 1fr; } }
+        .svc { display: grid; grid-template-columns: 20px 1fr auto; gap: 10px; align-items: center; width: 100%; text-align: left; color: #fff; background: rgba(255,255,255,.035); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; cursor: pointer; font-size: 13px; transition: .2s; }
+        .svc:hover { background: rgba(255,255,255,.07); }
+        .svc[aria-pressed="true"] { background: rgba(124,58,237,.2); border-color: rgba(168,85,247,.7); }
+        .svc .ck { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--line2); display: flex; align-items: center; justify-content: center; font-size: 11px; }
+        .svc[aria-pressed="true"] .ck { background: #fff; color: #0b0b0f; border-color: #fff; }
+        .svc .sn { line-height: 1.35; } .svc .sn small { display: block; color: var(--mut); font-size: 11px; margin-top: 2px; }
+        .svc .sp { font-family: var(--mono); font-size: 11px; color: #d6d6de; white-space: nowrap; }
+        .other-card { margin-top: 26px; border-radius: 20px; padding: 20px; border: 1px dashed rgba(196,181,253,.4); background: rgba(124,58,237,.06); }
+        .other-card h3 { margin: 0; font-size: 18px; font-weight: 600; } .other-card p { margin: 6px 0 12px; color: var(--mut); font-size: 14px; }
+        .other-card textarea.in { min-height: 90px; }
+        .review { margin: 22px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+        .review > div { display: grid; grid-template-columns: 150px 1fr auto; gap: 12px; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+        .review dt { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #8d8c98; }
+        .review dd { margin: 0; color: #e4e4ea; line-height: 1.45; word-break: break-word; }
+        .review button { background: none; border: 0; color: var(--lav); font-size: 12px; cursor: pointer; padding: 0; }
+        @media (max-width: 560px) { .review > div { grid-template-columns: 1fr auto; } .review dd { grid-column: 1 / -1; } }
+        .send { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+        @media (max-width: 560px) { .send { grid-template-columns: 1fr; } }
+        .status { margin-top: 14px; border-radius: 14px; padding: 12px 16px; font-size: 14px; }
+        .status.ok { background: rgba(34,197,94,.1); border: 1px solid rgba(34,197,94,.3); color: #86efac; }
+        .status.bad { background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.3); color: #fca5a5; }
+
+        .done { text-align: center; padding-top: 30px; }
+        .done .ok-ic { width: 72px; height: 72px; margin: 0 auto 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; background: rgba(34,197,94,.14); color: #86efac; border: 1px solid rgba(34,197,94,.35); }
+        .done p { color: #c9c8d2; max-width: 440px; margin: 14px auto 0; line-height: 1.6; }
+        .done .pill { margin-top: 26px; }
+
+        .nav { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 28px; }
+        .hint { font-family: var(--mono); font-size: 11px; color: #77768a; }
+        @media (max-width: 560px) { .hint { display: none; } }
+
+        @media (max-width: 900px) {
+            .diag { grid-template-columns: 1fr; padding-top: 8px; }
+            .intro { position: static; }
+            .intro h1 { font-size: clamp(36px, 11vw, 56px); }
+            .intro .lead { font-size: 14px; margin-top: 14px; }
+            .intro ul, .intro .logo { display: none; }
+            .flow { min-height: 0; }
+            .fit .row { grid-template-columns: 90px 1fr 40px; }
+        }
+        @media (prefers-reduced-motion: reduce) { .step { transition: none; } .bar i { transition: none; } }
+    </style>
+</head>
+<body>
+
+<header class="top">
+    <div class="top-in">
+        <a href="../" class="brand" aria-label="CometaX">
+            <img src="../../image_2025-12-16_083018257-removebg-preview%20(1).png" alt="CometaX" width="668" height="373">
+            <span class="euro-style">COMETAX</span>
+        </a>
+        <div class="top-r">
+            <div class="lang" onclick="toggleLanguage()" role="button" aria-label="Cambiar idioma"><span id="lang-en" class="active">EN</span><span id="lang-es">ES</span></div>
+            <a href="../" class="pill pill-ghost back-site"><i class="fas fa-arrow-left"></i><span data-t="back_site">Back to site</span></a>
+        </div>
+    </div>
+</header>
+
+<main class="diag">
+    <aside class="intro">
+        <div class="kicker" data-t="kicker">Free diagnosis</div>
+        <div class="euro-wrapper"><h1 class="euro-style" data-t="title">LET'S LOOK AT YOUR CASE</h1></div>
+        <p class="lead" data-t="lead">Answer a few questions — about 3 minutes — and get a recommended plan right away.</p>
+        <ul>
+            <li><i class="fas fa-wand-magic-sparkles"></i><span data-t="b0">At the end we recommend the plan that fits your answers, and why.</span></li>
+            <li><i class="fas fa-clock"></i><span data-t="b1">On the call, in 30–45 minutes, we tell you exactly what you have, what breaks first, and what we would do about it.</span></li>
+            <li><i class="fas fa-hand-holding-dollar"></i><span data-t="b2">No cost, no commitment — and you keep the plan even if you never hire us.</span></li>
+            <li><i class="fas fa-bolt"></i><span data-t="b3">Same-day reply, by WhatsApp or email.</span></li>
+        </ul>
+        <img class="logo" src="../assets/logo-3d.webp" alt="" width="900" height="760">
+    </aside>
+
+    <section class="flow" aria-live="polite">
+        <div class="bar"><i id="bar"></i></div>
+        <div class="count"><b id="section"></b><span id="count"></span></div>
+        <div class="step" id="step"></div>
+        <div class="nav" id="nav">
+            <button class="pill pill-ghost" id="backBtn" onclick="back()"><i class="fas fa-arrow-left"></i><span data-t="back">Back</span></button>
+            <span class="hint" id="hint"></span>
+            <button class="pill pill-light" id="nextBtn" onclick="next()"><span data-t="next">Continue</span> <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </section>
+</main>
+
+<script>
+    // ================= Textos EN/ES (mismas claves en los dos) =================
+    const T = {
+        en: {
+            back_site: 'Back to site', kicker: 'Free diagnosis', title: "LET'S LOOK AT YOUR CASE",
+            lead: 'Answer a few questions — about 3 minutes — and get a recommended plan right away.',
+            b0: 'At the end we recommend the plan that fits your answers, and why.',
+            b1: 'On the call, in 30–45 minutes, we tell you exactly what you have, what breaks first, and what we would do about it.',
+            b2: 'No cost, no commitment — and you keep the plan even if you never hire us.',
+            b3: 'Same-day reply, by WhatsApp or email.',
+            back: 'Back', next: 'Continue', skip: 'Skip', count: '{n} of {t}', count_last: 'Last step',
+            hint_keys: 'Press a letter to choose', hint_multi: 'Choose all that apply · Enter ↵ to continue', hint_enter: 'Press Enter ↵ to continue', hint_text: 'Ctrl/⌘ + Enter to continue',
+            sec_company: 'Your company', sec_tech: 'Your technology today', sec_project: 'The project', sec_work: 'How we would work', sec_close: 'Almost done', sec_rec: 'Your recommendation',
+
+            q_need: 'What brings you here?',
+            o_need_idea: 'I have a product idea and need to build it', o_need_maint: 'I have a platform and no one reliable to maintain it',
+            o_need_team: "My tech team can't keep up", o_need_ai: 'I want to use AI in my processes',
+            o_need_invest: 'Investment or partnership', o_need_grant: 'Support for an NGO or school', o_need_other: 'Something else',
+            q_industry: 'What does your company do?',
+            o_industry_services: 'Professional services (accounting, legal, consulting)', o_industry_retail: 'Retail and commerce', o_industry_industry: 'Manufacturing and logistics',
+            o_industry_health: 'Health', o_industry_edu: 'Education', o_industry_events: 'Events, hospitality and tourism', o_industry_energy: 'Fuel stations and energy', o_industry_other: 'Other',
+            q_size: 'How many people work at your company?',
+            o_size_s1: '1–10', o_size_s2: '11–50', o_size_s3: '51–250', o_size_s4: 'More than 250',
+            q_role: 'What is your role?',
+            o_role_owner: 'Owner / general management', o_role_ops: 'Operations or finance', o_role_it: 'IT / systems', o_role_other: 'Other',
+            q_current: 'Do you already have a system?',
+            o_current_none: 'No, we start from zero', o_current_works: 'Yes, and it works', o_current_issues: 'Yes, but it has problems', o_current_nocode: 'Yes, but nobody has the source code',
+            q_team: 'Who handles technology today?',
+            o_team_nobody: 'Nobody, we do what we can', o_team_freelance: 'A freelancer or a single developer', o_team_vendor: 'An external vendor', o_team_internal: 'An in-house team',
+            q_pains: 'What hurts today?', s_pains: 'Choose all that apply.',
+            o_pains_manual: 'Manual work and Excel', o_pains_fail: 'Failures or outages', o_pains_slow: 'The system is slow', o_pains_scattered: 'Data scattered across tools',
+            o_pains_reports: 'No reliable reports', o_pains_security: 'Security or backups', o_pains_person: 'Everything depends on one person', o_pains_integ: 'Systems that don’t talk to each other', o_pains_other: 'Something else',
+            q_critical: 'If the system goes down, what happens?',
+            o_critical_low: 'Nothing serious', o_critical_annoy: "It's annoying but we keep going", o_critical_stops: 'Operations stop', o_critical_money: 'We lose money or customers right away',
+            q_kind: 'What kind of solution do you have in mind?',
+            o_kind_web: 'Website / web app', o_kind_app: 'Mobile app', o_kind_api: 'Integration / API', o_kind_auto: 'Automation', o_kind_unsure: 'Not sure yet', o_kind_other: 'Something else',
+            q_modules: 'About how many modules or main screens?', s_modules: 'For example: sales, inventory, billing, reports… An estimate is enough.',
+            o_modules_m1: '1–3 modules', o_modules_m2: '4–6 modules', o_modules_m3: '7–10 modules', o_modules_m4: 'More than 10', o_modules_m5: 'Not sure yet',
+            q_integ: 'What does it need to connect to?', s_integ: 'Choose all that apply.',
+            o_integ_sat: 'Invoicing / SAT (CFDI)', o_integ_pay: 'Payments (card, transfer)', o_integ_msg: 'WhatsApp or email', o_integ_erp: 'ERP or accounting (CONTPAQi, Aspel, SAP…)', o_integ_other: 'Another system or service', o_integ_none: 'Nothing for now',
+            q_ai: 'Does it need artificial intelligence?',
+            o_ai_no: 'No', o_ai_yes: "Yes, it's key", o_ai_maybe: 'Maybe',
+            q_users: 'Who would use it?',
+            o_users_u1: '1–5 people on my team', o_users_u2: '6–20 people', o_users_u3: '21–100 people', o_users_u4: 'More than 100 people', o_users_public: 'My customers or the public',
+            q_time: 'When do you need it?',
+            o_time_t1: 'Urgent (under 1 month)', o_time_t2: '1–3 months', o_time_t3: '3–6 months', o_time_t4: 'Flexible',
+            q_ongoing: 'After it is delivered, what do you expect?',
+            o_ongoing_maint: 'That someone keeps it running', o_ongoing_improve: 'That it keeps improving every month', o_ongoing_direction: 'Long-term technical direction', o_ongoing_project: 'Nothing else — just the project',
+            q_budget: 'What monthly budget do you have in mind for technology?', s_budget: 'In MXN. It only helps us recommend; nothing is charged here.',
+            o_budget_b1: 'Less than 15,000', o_budget_b2: '15,000 – 30,000', o_budget_b3: '30,000 – 50,000', o_budget_b4: 'More than 50,000', o_budget_b5: "I don't know yet",
+            q_msg: 'Tell us the problem in your own words', s_msg: "What's happening, what you've tried and what success would look like. Optional, but it helps a lot.",
+            ph_msg: 'E.g. we bill by hand in Excel and it takes us two days every month…',
+
+            rec_kicker: 'Recommended for you', rec_why: 'Why', rec_fit: 'Fit with your answers', rec_frozen: 'MXN / month · frozen 6 months', rec_m2m: 'Month to month MXN',
+            rec_project_price: 'Quoted', rec_project_terms: 'Down payment and staged deliveries',
+            rec_project_after: 'When we deliver it, it can move to a Growth or Enterprise plan and the same team stays in charge.',
+            rec_disclaimer: 'An automatic recommendation based on your answers. We confirm it on the call.',
+            rec_take: 'I want this plan',
+            other_label: 'Which one? Describe it in a few words', other_ph: 'Write it here…', err_other: 'Tell us briefly what “other” is.',
+            rec_title: 'Your recommendation', rec_all: 'Monthly plans', rec_all_sub: 'Choose the one you prefer — the recommended one is marked.',
+            rec_pick: 'Choose', rec_picked: 'Chosen', rec_badge: 'Recommended', rec_fit_short: 'fit', rec_includes: 'Includes',
+            rec_svc: 'One-off services', rec_svc_sub: 'One-time payment. Pick any you are interested in; you can combine them with a plan.',
+            rec_from: 'from MXN', rec_svc_note: 'Prices in MXN + VAT, valid until Dec 31, 2026. Projects with a down payment and staged deliveries. AI solutions include 30 days of adjustments; AI model and API usage is billed separately.',
+            rec_other_t: 'Need something else?', rec_other_d: 'Describe it and we will quote it on the call.', rec_other_ph: 'E.g. an app for my field technicians with photos and signatures…',
+            rec_advise: 'I am not sure — advise me on the call', rec_continue_hint: 'Choose a plan, services or describe your need, then continue',
+            g_ai: 'AI and automation', g_dev: 'Consulting and custom development', g_web: 'Landing pages and web',
+            s_chatbot: 'Business chatbot', s_ai_integ: 'AI integration with existing systems', s_assistant: 'AI assistant', s_docs: 'Intelligent document processing', s_agents: 'Automation with AI agents',
+            s_diag: 'In-depth technology diagnosis', s_sysint: 'Systems integration', s_apis: 'API development', s_security: 'Security audit', s_arch: 'Software architecture',
+            s_autom: 'Business automation', s_modern: 'Systems modernization', s_mvp: 'MVP development',
+            s_land_e: 'Landing Essential · up to 5 sections', s_land_b: 'Landing Business · up to 8 sections and basic SEO', s_land_p: 'Landing Premium · custom design with animations', s_site: 'Custom website',
+            d_diag: 'Credited to your first payment if you hire a 6-month plan within 30 days',
+            inc_essential_1: 'Bug fixing', inc_essential_2: 'Preventive maintenance and technical updates', inc_essential_3: 'Performance and backup checks', inc_essential_4: 'Incident handling', inc_essential_5: 'Monthly report',
+            no_essential: 'Does not include new features, integrations or additional development.',
+            inc_growth_1: 'Everything in Essential', inc_growth_2: 'Improvements to existing features', inc_growth_3: 'Process automation', inc_growth_4: 'Platform integrations', inc_growth_5: 'Monthly improvement planning and request tracking',
+            no_growth: 'Does not include full platforms or extraordinary projects.',
+            inc_enterprise_1: 'Everything in Growth', inc_enterprise_2: 'External technical direction', inc_enterprise_3: 'Software architecture and technology planning', inc_enterprise_4: 'Infrastructure, security and quality oversight', inc_enterprise_5: 'Developer coordination and technical debt management',
+            no_enterprise: 'Does not include dedicated staff or projects outside the agreed scope.',
+            r_services: 'One-off services', r_plan_other: 'Something else', o_plan_other: 'Something else',
+            rec_note_budget: "It's above what you have in mind; on the call we adjust the scope so it fits.",
+            rec_interest: 'On the site you picked {p}; based on your answers {r} fits better. You can keep either one.',
+            rec_generic: 'It is the most balanced option for what you told us.',
+            p_essential: 'Essential', p_growth: 'Growth', p_enterprise: 'Enterprise', p_project: 'Project',
+            t_essential: 'Keep everything running', t_growth: 'Your system improves every month', t_enterprise: 'Your tech department, with direction', t_project: 'A one-off project with defined scope',
+            o_plan_essential: 'Essential', o_plan_growth: 'Growth', o_plan_enterprise: 'Enterprise', o_plan_project: 'One-off project', o_plan_advise: 'Advise me on the call',
+
+            why_need_idea: 'You want to build a new product: it is best handled as a project with defined scope.',
+            why_need_maint: 'You have a platform that needs someone reliable to keep it running.',
+            why_need_team: 'Your team needs capacity and technical direction, not just more hands.',
+            why_need_ai: 'AI needs adjustments after it goes live; that work fits a monthly plan.',
+            why_cur_none: 'You start from zero: the first step is to build it.',
+            why_cur_works: 'Your system already works: the value is in improving it every month.',
+            why_cur_issues: 'Your system has problems: the first thing is to stabilize it.',
+            why_cur_nocode: 'Without the source code you need architecture and a rescue plan.',
+            why_team_nobody: 'Nobody handles technology today: you need a team behind you.',
+            why_team_internal: 'You already have an in-house team: external technical direction makes it stronger.',
+            why_pain_manual: 'Manual work is solved with process automation, part of Growth.',
+            why_pain_fail: 'Failures and outages call for preventive maintenance and incident handling.',
+            why_pain_integ: 'Connecting your tools is platform integration, part of Growth.',
+            why_pain_security: 'Security and quality need oversight, part of Enterprise.',
+            why_pain_person: 'Depending on a single person is a risk; a team removes it.',
+            why_crit_money: 'If an outage costs you money, someone must be accountable for the whole architecture.',
+            why_size_big: 'For a company your size, planning for scale matters.',
+            why_mod_many: 'That many modules need architecture and coordination.',
+            why_integ: 'Integrations with the SAT, payments or your ERP are ongoing work.',
+            why_ong_maint: 'You want it kept running after delivery.',
+            why_ong_improve: 'You want it to keep improving every month.',
+            why_ong_direction: 'You want long-term technical direction.',
+            why_ong_project: 'You only need the project delivered.',
+            why_budget: 'It fits the budget you have in mind.',
+
+            q_contact: 'How do we reach you?', s_contact: 'Your name and an email or WhatsApp are enough.',
+            f_name: 'Full name', f_company: 'Company', f_email: 'Email', f_phone: 'WhatsApp',
+            err_contact: 'Write your name and an email or WhatsApp.', err_email: 'To send by email we need your email.',
+            q_review: 'Check and send', s_review: 'Choose how to send it. WhatsApp opens with the message already written.',
+            edit: 'Edit', send_wa: 'Send via WhatsApp', send_mail: 'Send by email',
+            r_need: 'Need', r_industry: 'Industry', r_size: 'Company size', r_role: 'Role', r_current: 'Current system', r_team: 'Tech today', r_pains: 'Pain points', r_critical: 'If it goes down',
+            r_kind: 'Solution', r_modules: 'Modules', r_integ: 'Integrations', r_ai: 'AI', r_users: 'Users', r_time: 'Timeline', r_ongoing: 'After delivery', r_budget: 'Monthly budget',
+            r_msg: 'Message', r_contact: 'Contact', r_rec: 'Recommended', r_plan: 'Chosen plan',
+            sending: 'Sending…', too_many: 'Too many sends. Try again in an hour or use WhatsApp.',
+            fail_mail: 'Could not send. Use WhatsApp or write to cometax@cometax.click.', net_fail: 'Network error. Use WhatsApp or write to cometax@cometax.click.',
+            done_t: 'Received!', done_p: "We'll reply the same day to set up your 30–45 minute call.", done_wa: "If WhatsApp didn't open, write to us at cometax@cometax.click or +52 55 3235 1392.", done_back: 'Back to site',
+            wa_hi: 'Hi CometaX, I want my free diagnosis.', wa_rec: 'Questionnaire recommendation', wa_fit: 'fit'
+        },
+        es: {
+            back_site: 'Volver al sitio', kicker: 'Diagnóstico gratis', title: 'VEAMOS TU CASO',
+            lead: 'Responde unas preguntas — unos 3 minutos — y recibe al instante un plan recomendado.',
+            b0: 'Al final te recomendamos el plan que encaja con tus respuestas, y por qué.',
+            b1: 'En la llamada, en 30–45 minutos, te decimos exactamente qué tienes, qué se va a romper primero y qué haríamos nosotros.',
+            b2: 'Sin costo, sin compromiso — y te quedas con el plan aunque nunca nos contrates.',
+            b3: 'Respondemos el mismo día, por WhatsApp o correo.',
+            back: 'Atrás', next: 'Continuar', skip: 'Omitir', count: '{n} de {t}', count_last: 'Último paso',
+            hint_keys: 'Presiona una letra para elegir', hint_multi: 'Elige todas las que apliquen · Enter ↵ para seguir', hint_enter: 'Presiona Enter ↵ para continuar', hint_text: 'Ctrl/⌘ + Enter para continuar',
+            sec_company: 'Tu empresa', sec_tech: 'Tu tecnología hoy', sec_project: 'El proyecto', sec_work: 'Cómo trabajaríamos', sec_close: 'Ya casi', sec_rec: 'Tu recomendación',
+
+            q_need: '¿Qué te trae por aquí?',
+            o_need_idea: 'Tengo una idea de producto y necesito construirla', o_need_maint: 'Tengo una plataforma y nadie confiable que la mantenga',
+            o_need_team: 'Mi equipo técnico no da abasto', o_need_ai: 'Quiero usar IA en mis procesos',
+            o_need_invest: 'Inversión o alianza', o_need_grant: 'Apoyo para una ONG o escuela', o_need_other: 'Otra cosa',
+            q_industry: '¿A qué se dedica tu empresa?',
+            o_industry_services: 'Servicios profesionales (contables, legales, consultoría)', o_industry_retail: 'Comercio y retail', o_industry_industry: 'Manufactura y logística',
+            o_industry_health: 'Salud', o_industry_edu: 'Educación', o_industry_events: 'Eventos, hospitalidad y turismo', o_industry_energy: 'Gasolineras y energía', o_industry_other: 'Otro',
+            q_size: '¿Cuántas personas trabajan en tu empresa?',
+            o_size_s1: '1–10', o_size_s2: '11–50', o_size_s3: '51–250', o_size_s4: 'Más de 250',
+            q_role: '¿Cuál es tu rol?',
+            o_role_owner: 'Dueño / dirección general', o_role_ops: 'Operaciones o finanzas', o_role_it: 'TI / sistemas', o_role_other: 'Otro',
+            q_current: '¿Ya tienes un sistema?',
+            o_current_none: 'No, empezamos de cero', o_current_works: 'Sí, y funciona', o_current_issues: 'Sí, pero tiene problemas', o_current_nocode: 'Sí, pero nadie tiene el código fuente',
+            q_team: '¿Quién se encarga hoy de la tecnología?',
+            o_team_nobody: 'Nadie, hacemos lo que podemos', o_team_freelance: 'Un freelance o un solo desarrollador', o_team_vendor: 'Un proveedor externo', o_team_internal: 'Un equipo interno',
+            q_pains: '¿Qué te duele hoy?', s_pains: 'Elige todas las que apliquen.',
+            o_pains_manual: 'Trabajo manual y Excel', o_pains_fail: 'Fallas o caídas', o_pains_slow: 'El sistema es lento', o_pains_scattered: 'Datos regados en varias herramientas',
+            o_pains_reports: 'No hay reportes confiables', o_pains_security: 'Seguridad o respaldos', o_pains_person: 'Todo depende de una sola persona', o_pains_integ: 'Sistemas que no se hablan entre sí', o_pains_other: 'Otro',
+            q_critical: 'Si el sistema se cae, ¿qué pasa?',
+            o_critical_low: 'Nada grave', o_critical_annoy: 'Molesta, pero seguimos', o_critical_stops: 'Se detiene la operación', o_critical_money: 'Perdemos dinero o clientes al instante',
+            q_kind: '¿Qué tipo de solución tienes en mente?',
+            o_kind_web: 'Sitio web / web app', o_kind_app: 'App móvil', o_kind_api: 'Integración / API', o_kind_auto: 'Automatización', o_kind_unsure: 'Todavía no sé', o_kind_other: 'Otro',
+            q_modules: '¿Cuántos módulos o pantallas principales, más o menos?', s_modules: 'Por ejemplo: ventas, inventario, facturación, reportes… Con una estimación basta.',
+            o_modules_m1: '1–3 módulos', o_modules_m2: '4–6 módulos', o_modules_m3: '7–10 módulos', o_modules_m4: 'Más de 10', o_modules_m5: 'Aún no lo sé',
+            q_integ: '¿Con qué necesita conectarse?', s_integ: 'Elige todas las que apliquen.',
+            o_integ_sat: 'Facturación / SAT (CFDI)', o_integ_pay: 'Pagos (tarjeta, transferencia)', o_integ_msg: 'WhatsApp o correo', o_integ_erp: 'ERP o contabilidad (CONTPAQi, Aspel, SAP…)', o_integ_other: 'Otro sistema o servicio', o_integ_none: 'Nada por ahora',
+            q_ai: '¿Necesita inteligencia artificial?',
+            o_ai_no: 'No', o_ai_yes: 'Sí, es clave', o_ai_maybe: 'Tal vez',
+            q_users: '¿Quién lo usaría?',
+            o_users_u1: '1–5 personas de mi equipo', o_users_u2: '6–20 personas', o_users_u3: '21–100 personas', o_users_u4: 'Más de 100 personas', o_users_public: 'Mis clientes o el público',
+            q_time: '¿Para cuándo lo necesitas?',
+            o_time_t1: 'Urgente (menos de 1 mes)', o_time_t2: '1–3 meses', o_time_t3: '3–6 meses', o_time_t4: 'Flexible',
+            q_ongoing: 'Después de entregarlo, ¿qué esperas?',
+            o_ongoing_maint: 'Que alguien lo mantenga funcionando', o_ongoing_improve: 'Que siga mejorando cada mes', o_ongoing_direction: 'Dirección técnica de largo plazo', o_ongoing_project: 'Nada más, solo el proyecto',
+            q_budget: '¿Qué presupuesto mensual contemplas para tecnología?', s_budget: 'En pesos. Solo nos ayuda a recomendarte; aquí no se cobra nada.',
+            o_budget_b1: 'Menos de 15,000', o_budget_b2: '15,000 – 30,000', o_budget_b3: '30,000 – 50,000', o_budget_b4: 'Más de 50,000', o_budget_b5: 'Aún no lo sé',
+            q_msg: 'Cuéntanos el problema con tus palabras', s_msg: 'Qué está pasando, qué has intentado y cómo se vería el éxito. Es opcional, pero ayuda mucho.',
+            ph_msg: 'Ej. facturamos a mano en Excel y cada mes nos toma dos días…',
+
+            rec_kicker: 'Recomendado para ti', rec_why: 'Por qué', rec_fit: 'Afinidad con tus respuestas', rec_frozen: 'MXN / mes · congelado 6 meses', rec_m2m: 'Mes a mes MXN',
+            rec_project_price: 'Cotización', rec_project_terms: 'Anticipo y entregas por etapas',
+            rec_project_after: 'Al entregarlo, puede pasar a un plan Growth o Enterprise y el mismo equipo sigue a cargo.',
+            rec_disclaimer: 'Es una recomendación automática con tus respuestas. La confirmamos en la llamada.',
+            rec_take: 'Quiero este plan',
+            other_label: '¿Cuál? Descríbelo en pocas palabras', other_ph: 'Escríbelo aquí…', err_other: 'Cuéntanos brevemente cuál es el “otro”.',
+            rec_title: 'Tu recomendación', rec_all: 'Planes mensuales', rec_all_sub: 'Elige el que prefieras — el recomendado está marcado.',
+            rec_pick: 'Elegir', rec_picked: 'Elegido', rec_badge: 'Recomendado', rec_fit_short: 'afinidad', rec_includes: 'Incluye',
+            rec_svc: 'Servicios puntuales', rec_svc_sub: 'Pago único. Marca los que te interesen; puedes combinarlos con un plan.',
+            rec_from: 'desde MXN', rec_svc_note: 'Precios en pesos más IVA, vigentes al 31-dic-2026. Proyectos con anticipo y entregas por etapas. Las soluciones de IA incluyen 30 días de ajustes; el consumo de modelos de IA y APIs se cobra por separado.',
+            rec_other_t: '¿Necesitas otra cosa?', rec_other_d: 'Descríbelo y te lo cotizamos en la llamada.', rec_other_ph: 'Ej. una app para mis técnicos de campo con fotos y firmas…',
+            rec_advise: 'No sé, asesórenme en la llamada', rec_continue_hint: 'Elige un plan, servicios o describe lo que necesitas y continúa',
+            g_ai: 'IA y automatización', g_dev: 'Consultoría y desarrollo a medida', g_web: 'Landing pages y web',
+            s_chatbot: 'Chatbot empresarial', s_ai_integ: 'Integración de IA con sistemas existentes', s_assistant: 'Asistente con IA', s_docs: 'Procesamiento inteligente de documentos', s_agents: 'Automatización con agentes de IA',
+            s_diag: 'Diagnóstico tecnológico a fondo', s_sysint: 'Integración de sistemas', s_apis: 'Desarrollo de APIs', s_security: 'Auditoría de seguridad', s_arch: 'Arquitectura de software',
+            s_autom: 'Automatización empresarial', s_modern: 'Modernización de sistemas', s_mvp: 'Desarrollo de MVP',
+            s_land_e: 'Landing Essential · hasta 5 secciones', s_land_b: 'Landing Business · hasta 8 secciones y SEO básico', s_land_p: 'Landing Premium · diseño a la medida con animaciones', s_site: 'Sitio web personalizado',
+            d_diag: 'Se acredita a tu primera mensualidad si contratas un plan de 6 meses dentro de 30 días',
+            inc_essential_1: 'Corrección de errores', inc_essential_2: 'Mantenimiento preventivo y actualizaciones técnicas', inc_essential_3: 'Revisión de rendimiento y verificación de respaldos', inc_essential_4: 'Atención de incidencias', inc_essential_5: 'Reporte mensual',
+            no_essential: 'No incluye nuevas funcionalidades, integraciones ni desarrollo adicional.',
+            inc_growth_1: 'Todo lo de Essential', inc_growth_2: 'Mejoras a funcionalidades existentes', inc_growth_3: 'Automatización de procesos', inc_growth_4: 'Integración de plataformas', inc_growth_5: 'Planeación mensual de mejoras y seguimiento de solicitudes',
+            no_growth: 'No incluye plataformas completas ni proyectos extraordinarios.',
+            inc_enterprise_1: 'Todo lo de Growth', inc_enterprise_2: 'Dirección técnica externa', inc_enterprise_3: 'Arquitectura de software y planeación tecnológica', inc_enterprise_4: 'Supervisión de infraestructura, seguridad y calidad', inc_enterprise_5: 'Coordinación técnica de desarrolladores y gestión de deuda técnica',
+            no_enterprise: 'No incluye personal exclusivo ni proyectos fuera del alcance acordado.',
+            r_services: 'Servicios puntuales', r_plan_other: 'Otra necesidad', o_plan_other: 'Otra necesidad',
+            rec_note_budget: 'Está arriba de lo que contemplas; en la llamada ajustamos el alcance para que te cuadre.',
+            rec_interest: 'En la página elegiste {p}; por tus respuestas te queda mejor {r}. Puedes quedarte con cualquiera.',
+            rec_generic: 'Es la opción más equilibrada para lo que nos contaste.',
+            p_essential: 'Essential', p_growth: 'Growth', p_enterprise: 'Enterprise', p_project: 'Proyecto',
+            t_essential: 'Que todo siga funcionando', t_growth: 'Que tu sistema mejore cada mes', t_enterprise: 'Tu área de tecnología, con dirección', t_project: 'Un proyecto puntual con alcance definido',
+            o_plan_essential: 'Essential', o_plan_growth: 'Growth', o_plan_enterprise: 'Enterprise', o_plan_project: 'Proyecto puntual', o_plan_advise: 'Asesórenme en la llamada',
+
+            why_need_idea: 'Quieres construir un producto nuevo: conviene como proyecto con alcance definido.',
+            why_need_maint: 'Tienes una plataforma que necesita a alguien confiable que la mantenga funcionando.',
+            why_need_team: 'Tu equipo necesita capacidad y dirección técnica, no solo más manos.',
+            why_need_ai: 'La IA necesita ajustes después de salir a producción; ese trabajo encaja en un plan mensual.',
+            why_cur_none: 'Empiezas de cero: el primer paso es construirlo.',
+            why_cur_works: 'Tu sistema ya funciona: el valor está en mejorarlo cada mes.',
+            why_cur_issues: 'Tu sistema tiene problemas: lo primero es estabilizarlo.',
+            why_cur_nocode: 'Sin código fuente hace falta arquitectura y un plan de rescate.',
+            why_team_nobody: 'Hoy nadie se encarga de la tecnología: necesitas un equipo detrás.',
+            why_team_internal: 'Ya tienes equipo interno: una dirección técnica externa lo potencia.',
+            why_pain_manual: 'El trabajo manual se resuelve con automatización de procesos, parte de Growth.',
+            why_pain_fail: 'Las fallas y caídas piden mantenimiento preventivo y atención de incidencias.',
+            why_pain_integ: 'Conectar tus herramientas es integración de plataformas, parte de Growth.',
+            why_pain_security: 'La seguridad y la calidad necesitan supervisión, parte de Enterprise.',
+            why_pain_person: 'Depender de una sola persona es un riesgo; un equipo lo quita.',
+            why_crit_money: 'Si una caída te cuesta dinero, alguien debe responder por toda la arquitectura.',
+            why_size_big: 'Para una empresa de tu tamaño, planear la escala importa.',
+            why_mod_many: 'Tantos módulos necesitan arquitectura y coordinación.',
+            why_integ: 'Las integraciones con el SAT, pagos o tu ERP son trabajo continuo.',
+            why_ong_maint: 'Quieres que lo mantengan funcionando después de entregarlo.',
+            why_ong_improve: 'Quieres que siga mejorando cada mes.',
+            why_ong_direction: 'Quieres dirección técnica de largo plazo.',
+            why_ong_project: 'Solo necesitas que se entregue el proyecto.',
+            why_budget: 'Encaja con el presupuesto que contemplas.',
+
+            q_contact: '¿Cómo te contactamos?', s_contact: 'Con tu nombre y un correo o WhatsApp basta.',
+            f_name: 'Nombre completo', f_company: 'Empresa', f_email: 'Correo', f_phone: 'WhatsApp',
+            err_contact: 'Escribe tu nombre y un correo o WhatsApp.', err_email: 'Para enviarlo por correo necesitamos tu correo.',
+            q_review: 'Revisa y envía', s_review: 'Elige cómo enviarlo. WhatsApp se abre con el mensaje ya escrito.',
+            edit: 'Editar', send_wa: 'Enviar por WhatsApp', send_mail: 'Enviar por correo',
+            r_need: 'Necesidad', r_industry: 'Giro', r_size: 'Tamaño', r_role: 'Rol', r_current: 'Sistema actual', r_team: 'Tecnología hoy', r_pains: 'Dolores', r_critical: 'Si se cae',
+            r_kind: 'Solución', r_modules: 'Módulos', r_integ: 'Integraciones', r_ai: 'IA', r_users: 'Usuarios', r_time: 'Plazo', r_ongoing: 'Después de entregar', r_budget: 'Presupuesto mensual',
+            r_msg: 'Mensaje', r_contact: 'Contacto', r_rec: 'Recomendado', r_plan: 'Plan elegido',
+            sending: 'Enviando…', too_many: 'Demasiados envíos. Intenta en una hora o usa WhatsApp.',
+            fail_mail: 'No se pudo enviar. Usa WhatsApp o escribe a cometax@cometax.click.', net_fail: 'Error de red. Usa WhatsApp o escribe a cometax@cometax.click.',
+            done_t: '¡Listo!', done_p: 'Te respondemos el mismo día para agendar tu llamada de 30–45 minutos.', done_wa: 'Si no se abrió WhatsApp, escríbenos a cometax@cometax.click o al +52 55 3235 1392.', done_back: 'Volver al sitio',
+            wa_hi: 'Hola CometaX, quiero mi diagnóstico gratis.', wa_rec: 'Recomendación del cuestionario', wa_fit: 'afinidad'
+        }
+    };
+
+    // ================= Preguntas =================
+    const WA_NUMBER = '525532351392';
+    const CONTACT_ENDPOINT = 'https://cometax.click/panel/api/v1/contacto';   // el mismo de la landing actual
+    const STORE = 'cx_diag2';
+    // project: true → se salta si viene por inversión/ONG. multi: true → varias respuestas.
+    const STEPS = [
+        { id: 'need', sec: 'company', type: 'choice', opts: [['idea', 'fa-lightbulb'], ['maint', 'fa-screwdriver-wrench'], ['team', 'fa-people-group'], ['ai', 'fa-wand-magic-sparkles'], ['invest', 'fa-chart-line'], ['grant', 'fa-hand-holding-heart'], ['other', 'fa-pen']], other: 'other' },
+        { id: 'industry', sec: 'company', type: 'choice', project: true, opts: [['services', 'fa-briefcase'], ['retail', 'fa-store'], ['industry', 'fa-industry'], ['health', 'fa-heart-pulse'], ['edu', 'fa-graduation-cap'], ['events', 'fa-champagne-glasses'], ['energy', 'fa-gas-pump'], ['other', 'fa-pen']], other: 'other' },
+        { id: 'size', sec: 'company', type: 'choice', project: true, opts: [['s1', 'fa-user'], ['s2', 'fa-user-group'], ['s3', 'fa-users'], ['s4', 'fa-building']] },
+        { id: 'role', sec: 'company', type: 'choice', opts: [['owner', 'fa-crown'], ['ops', 'fa-chart-pie'], ['it', 'fa-server'], ['other', 'fa-pen']], other: 'other' },
+        { id: 'current', sec: 'tech', type: 'choice', project: true, opts: [['none', 'fa-seedling'], ['works', 'fa-circle-check'], ['issues', 'fa-triangle-exclamation'], ['nocode', 'fa-lock']] },
+        { id: 'team', sec: 'tech', type: 'choice', project: true, opts: [['nobody', 'fa-user-slash'], ['freelance', 'fa-user'], ['vendor', 'fa-handshake'], ['internal', 'fa-people-group']] },
+        { id: 'pains', sec: 'tech', type: 'choice', multi: true, project: true, opts: [['manual', 'fa-table'], ['fail', 'fa-bug'], ['slow', 'fa-hourglass-half'], ['scattered', 'fa-shuffle'], ['reports', 'fa-chart-column'], ['security', 'fa-shield-halved'], ['person', 'fa-user-lock'], ['integ', 'fa-plug-circle-xmark'], ['other', 'fa-pen']], other: 'other' },
+        { id: 'critical', sec: 'tech', type: 'choice', project: true, opts: [['low', 'fa-face-smile'], ['annoy', 'fa-face-meh'], ['stops', 'fa-circle-pause'], ['money', 'fa-sack-dollar']] },
+        { id: 'kind', sec: 'project', type: 'choice', project: true, opts: [['web', 'fa-display'], ['app', 'fa-mobile-screen'], ['api', 'fa-plug'], ['auto', 'fa-gears'], ['unsure', 'fa-circle-question'], ['other', 'fa-pen']], other: 'other' },
+        { id: 'modules', sec: 'project', type: 'choice', project: true, opts: [['m1'], ['m2'], ['m3'], ['m4'], ['m5']] },
+        { id: 'integ', sec: 'project', type: 'choice', multi: true, exclusive: 'none', project: true, opts: [['sat', 'fa-file-invoice'], ['pay', 'fa-credit-card'], ['msg', 'fa-comments'], ['erp', 'fa-calculator'], ['other', 'fa-pen'], ['none', 'fa-ban']], other: 'other' },
+        { id: 'ai', sec: 'project', type: 'choice', project: true, opts: [['no'], ['yes'], ['maybe']] },
+        { id: 'users', sec: 'project', type: 'choice', project: true, opts: [['u1', 'fa-user'], ['u2', 'fa-user-group'], ['u3', 'fa-users'], ['u4', 'fa-building'], ['public', 'fa-globe']] },
+        { id: 'time', sec: 'project', type: 'choice', project: true, opts: [['t1'], ['t2'], ['t3'], ['t4']] },
+        { id: 'ongoing', sec: 'work', type: 'choice', project: true, opts: [['maint', 'fa-wrench'], ['improve', 'fa-arrow-trend-up'], ['direction', 'fa-compass'], ['project', 'fa-flag-checkered']] },
+        { id: 'budget', sec: 'work', type: 'choice', project: true, opts: [['b1'], ['b2'], ['b3'], ['b4'], ['b5']] },
+        { id: 'msg', sec: 'close', type: 'text' },
+        { id: 'rec', sec: 'rec', type: 'rec', project: true },
+        { id: 'contact', sec: 'close', type: 'contact' },
+        { id: 'review', sec: 'close', type: 'review' },
+        { id: 'done', sec: 'close', type: 'done' }
+    ];
+    const LETTERS = 'ABCDEFGHIJ';
+
+    // ================= Reglas de la recomendación (transparentes y fáciles de ajustar) =================
+    // Cada respuesta suma puntos a Essential (E), Growth (G), Enterprise (X) o Proyecto (P);
+    // `why` es la razón que se muestra si esa respuesta ayudó al plan ganador.
+    const RULES = {
+        need:     { idea: [{ P: 3, G: 1 }, 'need_idea'], maint: [{ E: 3 }, 'need_maint'], team: [{ G: 2, X: 2 }, 'need_team'], ai: [{ G: 2, P: 2 }, 'need_ai'] },
+        size:     { s1: [{ E: 1, P: 1 }], s2: [{ G: 1 }], s3: [{ G: 1, X: 1 }, 'size_big'], s4: [{ X: 3 }, 'size_big'] },
+        current:  { none: [{ P: 2 }, 'cur_none'], works: [{ G: 2, E: 1 }, 'cur_works'], issues: [{ E: 2, G: 1 }, 'cur_issues'], nocode: [{ X: 2, P: 1 }, 'cur_nocode'] },
+        team:     { nobody: [{ E: 1, G: 1 }, 'team_nobody'], freelance: [{ E: 1, G: 1 }, 'pain_person'], vendor: [{ G: 1 }], internal: [{ X: 2, G: 1 }, 'team_internal'] },
+        pains:    { manual: [{ G: 1 }, 'pain_manual'], fail: [{ E: 2 }, 'pain_fail'], slow: [{ E: 1, G: 1 }], scattered: [{ G: 1 }, 'pain_integ'], reports: [{ G: 1 }],
+                    security: [{ X: 1, E: 1 }, 'pain_security'], person: [{ E: 1, X: 1 }, 'pain_person'], integ: [{ G: 2 }, 'pain_integ'] },
+        critical: { annoy: [{ E: 1 }], stops: [{ E: 1, G: 1 }], money: [{ X: 2, G: 1 }, 'crit_money'] },
+        modules:  { m1: [{ E: 1, P: 1 }], m2: [{ G: 1 }], m3: [{ G: 1, X: 1 }, 'mod_many'], m4: [{ X: 2 }, 'mod_many'] },
+        integ:    { sat: [{ G: 1 }, 'integ'], pay: [{ G: 1 }, 'integ'], msg: [{ G: 1 }], erp: [{ G: 1 }, 'integ'], other: [{ G: 1 }, 'integ'] },
+        ai:       { yes: [{ G: 1 }, 'need_ai'] },
+        users:    { u4: [{ X: 1 }, 'size_big'], public: [{ G: 1, X: 1 }] },
+        time:     { t1: [{ P: 1, G: 1 }] },
+        ongoing:  { maint: [{ E: 3 }, 'ong_maint'], improve: [{ G: 3 }, 'ong_improve'], direction: [{ X: 3 }, 'ong_direction'], project: [{ P: 4 }, 'ong_project'] },
+        budget:   { b1: [{ P: 2, E: 1 }], b2: [{ E: 2 }, 'budget'], b3: [{ G: 2 }, 'budget'], b4: [{ X: 2, G: 1 }, 'budget'] }
+    };
+    const PLAN_KEY = { E: 'essential', G: 'growth', X: 'enterprise', P: 'project' };
+    const PRICES = { essential: ['16,500', '19,500'], growth: ['39,500', '46,500'], enterprise: ['54,000', '63,500'] };
+    const ORDER = ['G', 'E', 'X', 'P'];   // desempate
+    // Servicios puntuales del catálogo 2026 (CometaX-Consultoria/servicios-2026), precios "desde", pago único
+    const SERVICES = [
+        ['ai', [['chatbot', '18,500'], ['ai_integ', '24,500'], ['assistant', '29,500'], ['docs', '32,000'], ['agents', '38,000']]],
+        ['dev', [['diag', '14,500'], ['sysint', '16,500'], ['apis', '18,500'], ['security', '19,500'], ['arch', '26,000'], ['autom', '26,000'], ['modern', '45,000'], ['mvp', '95,000']]],
+        ['web', [['land_e', '9,900'], ['land_b', '16,900'], ['land_p', '27,900'], ['site', '34,000']]]
+    ];
+    const SVC_PRICE = Object.fromEntries(SERVICES.flatMap(g => g[1]));
+
+    function recommend() {
+        const score = { E: 0, G: 0, X: 0, P: 0 }, hits = [];
+        Object.keys(RULES).forEach(q => {
+            const vals = Array.isArray(A[q]) ? A[q] : (A[q] ? [A[q]] : []);
+            vals.forEach(v => {
+                const r = RULES[q][v];
+                if (!r) return;
+                Object.entries(r[0]).forEach(([k, n]) => { score[k] += n; });
+                if (r[1]) hits.push({ pts: r[0], why: r[1] });
+            });
+        });
+        let win = ORDER[0];
+        ORDER.forEach(k => { if (score[k] > score[win]) win = k; });
+        const reasons = [];
+        hits.filter(h => (h.pts[win] || 0) > 0).sort((a, b) => b.pts[win] - a.pts[win])
+            .forEach(h => { if (!reasons.includes(h.why) && reasons.length < 3) reasons.push(h.why); });
+        const total = Object.values(score).reduce((a, b) => a + b, 0) || 1;
+        const fit = ORDER.map(k => ({ k, plan: PLAN_KEY[k], pct: Math.round(100 * score[k] / total) })).sort((a, b) => b.pct - a.pct);
+        const plan = PLAN_KEY[win];
+        const over = (A.budget === 'b1' && plan !== 'project') || (A.budget === 'b2' && (plan === 'growth' || plan === 'enterprise')) || (A.budget === 'b3' && plan === 'enterprise');
+        return { plan, reasons, fit, over, pct: fit.find(f => f.plan === plan).pct };
+    }
+
+    // ================= Estado =================
+    let lang = 'en', A = {}, cur = 'need', interest = null;
+    const t = k => (T[lang][k] != null ? T[lang][k] : (T.en[k] != null ? T.en[k] : k));
+    const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const isPartner = () => A.need === 'invest' || A.need === 'grant';
+    const active = () => STEPS.filter(s => !(s.project && isPartner()));
+    const stepOf = id => STEPS.find(s => s.id === id);
+    const answered = s => s.multi ? (A[s.id] || []).length > 0 : !!A[s.id];
+    const one = (id, x) => t('o_' + id + '_' + x) + (x === 'other' && A[id + '_other'] ? ': ' + A[id + '_other'] : '');
+    const label = (id, v) => Array.isArray(v) ? v.map(x => one(id, x)).join(', ') : one(id, v);
+    const hasOther = st => st.other && (st.multi ? (A[st.id] || []).includes(st.other) : A[st.id] === st.other);
+    const planText = () => A.plan ? t('o_plan_' + A.plan) : '';
+    const svcText = () => (A.services || []).map(k => t('s_' + k) + ' (' + t('rec_from') + ' ' + SVC_PRICE[k] + ')').join(', ');
+    const save = () => { try { localStorage.setItem(STORE, JSON.stringify(A)); } catch (e) {} };
+
+    // ================= Idioma (comparte preferencia con la landing) =================
+    function setLang(l) {
+        lang = l;
+        document.documentElement.lang = l;
+        try { localStorage.setItem('cx_lang', l); } catch (e) {}
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-es').classList.toggle('active', l === 'es');
+        document.querySelectorAll('[data-t]').forEach(el => { el.textContent = t(el.dataset.t); });
+        document.title = (l === 'es' ? 'Diagnóstico gratis' : 'Free diagnosis') + ' — CometaX';
+        render(false);
+    }
+    function toggleLanguage() { captureInputs(); setLang(lang === 'en' ? 'es' : 'en'); }
+
+    // ================= Pintado de cada paso =================
+    function render(animate = true) {
+        const st = stepOf(cur);
+        const list = active();
+        const qs = list.filter(s => s.type !== 'review' && s.type !== 'done' && s.type !== 'rec');
+        const qi = qs.findIndex(s => s.id === cur);
+        const total = qs.length;
+        const pos = list.findIndex(s => s.id === cur), last = list.length - 1;
+        document.getElementById('bar').style.width = Math.round(100 * pos / last) + '%';
+        document.getElementById('section').textContent = st.type === 'done' ? '' : t('sec_' + st.sec);
+        document.getElementById('count').textContent = st.type === 'done' || st.type === 'rec' ? '' : st.type === 'review' ? t('count_last') : t('count').replace('{n}', qi + 1).replace('{t}', total);
+
+        let h = '';
+        if (st.type === 'choice') {
+            const many = st.opts.length >= 5;
+            h += `<h2>${esc(t('q_' + st.id))}</h2>` + (T.en['s_' + st.id] ? `<p class="sub">${esc(t('s_' + st.id))}</p>` : '');
+            h += `<div class="opts${many ? ' two' : ''}${st.multi ? ' multi' : ''}" role="${st.multi ? 'group' : 'radiogroup'}" aria-label="${esc(t('q_' + st.id))}">`;
+            st.opts.forEach(([v, ic], i) => {
+                const on = st.multi ? (A[st.id] || []).includes(v) : A[st.id] === v;
+                h += `<button type="button" class="opt" role="${st.multi ? 'checkbox' : 'radio'}" aria-checked="${on}" data-v="${v}"><span class="k"><span>${LETTERS[i]}</span></span>` +
+                     (ic ? `<i class="fas ${ic} ic"></i>` : '') + `<span class="tx">${esc(t('o_' + st.id + '_' + v))}</span></button>`;
+            });
+            h += '</div>';
+            if (hasOther(st)) h += `<div style="margin-top:14px"><label class="fl" for="f-other">${esc(t('other_label'))}</label><input class="in" id="f-other" type="text" maxlength="160" placeholder="${esc(t('other_ph'))}" value="${esc(A[st.id + '_other'])}"></div>`;
+            h += '<div id="err"></div>';
+        } else if (st.type === 'text') {
+            h += `<h2>${esc(t('q_msg'))}</h2><p class="sub">${esc(t('s_msg'))}</p>` +
+                 `<textarea class="in" id="f-msg" style="margin-top:22px" placeholder="${esc(t('ph_msg'))}">${esc(A.msg)}</textarea>`;
+        } else if (st.type === 'rec') {
+            h += recHTML();
+        } else if (st.type === 'contact') {
+            h += `<h2>${esc(t('q_contact'))}</h2><p class="sub">${esc(t('s_contact'))}</p><div class="grid">` +
+                 field('name', 'text', 'name') + field('company', 'text', 'organization') +
+                 field('email', 'email', 'email') + field('phone', 'tel', 'tel') + '</div><div id="err"></div>';
+        } else if (st.type === 'review') {
+            h += `<h2>${esc(t('q_review'))}</h2><p class="sub">${esc(t('s_review'))}</p><dl class="review">`;
+            if (!isPartner()) {
+                const r = recommend();
+                h += row('rec', t('p_' + r.plan) + ' · ' + r.pct + '% ' + t('wa_fit'), 'rec');
+                if (A.plan) h += row('plan', planText(), 'rec');
+                if ((A.services || []).length) h += row('services', svcText(), 'rec');
+                if (A.plan_other) h += row('plan_other', A.plan_other, 'rec');
+            }
+            list.filter(s => s.type === 'choice' && answered(s)).forEach(s => { h += row(s.id, label(s.id, A[s.id]), s.id); });
+            if (A.msg) h += row('msg', A.msg, 'msg');
+            h += row('contact', [A.name, A.company, A.email, A.phone].filter(Boolean).join(' · '), 'contact') + '</dl>';
+            h += `<div class="send"><button type="button" class="pill pill-wa" onclick="sendWA()"><i class="fab fa-whatsapp"></i>${esc(t('send_wa'))}</button>` +
+                 `<button type="button" class="pill pill-ghost" onclick="sendMail(event)"><i class="fas fa-envelope"></i>${esc(t('send_mail'))}</button></div><div id="err"></div>`;
+        } else if (st.type === 'done') {
+            h += `<div class="done"><div class="ok-ic"><i class="fas fa-check"></i></div><h2>${esc(t('done_t'))}</h2><p>${esc(t('done_p'))}</p><p style="font-size:13px;color:#8d8c98">${esc(t('done_wa'))}</p>` +
+                 `<a href="../" class="pill pill-light">${esc(t('done_back'))} <i class="fas fa-arrow-right"></i></a></div>`;
+        }
+
+        const el = document.getElementById('step');
+        el.innerHTML = h;
+        if (animate) { el.classList.remove('show'); void el.offsetWidth; }
+        el.classList.add('show');
+
+        // botones de abajo
+        const backBtn = document.getElementById('backBtn'), nextBtn = document.getElementById('nextBtn');
+        document.getElementById('nav').style.display = st.type === 'done' ? 'none' : '';
+        backBtn.style.visibility = pos === 0 ? 'hidden' : 'visible';
+        nextBtn.style.display = st.type === 'review' ? 'none' : '';
+        document.body.classList.toggle('wide', st.type === 'rec');
+        nextBtn.disabled = st.type === 'choice' && !answered(st);
+        nextBtn.querySelector('span').textContent = st.type === 'text' && !A.msg ? t('skip') : t('next');
+        document.getElementById('hint').textContent = st.type === 'choice' ? (st.multi ? t('hint_multi') : t('hint_keys')) : st.type === 'text' ? t('hint_text') : st.type === 'contact' ? t('hint_enter') : st.type === 'rec' ? t('rec_continue_hint') : '';
+
+        el.querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => choose(b.dataset.v)));
+        el.querySelectorAll('[data-plan]').forEach(b => b.addEventListener('click', () => pickPlan(b.dataset.plan, !!b.dataset.go)));
+        el.querySelectorAll('[data-svc]').forEach(b => b.addEventListener('click', () => toggleSvc(b.dataset.svc)));
+        const oth = document.getElementById('f-other');
+        if (oth) oth.addEventListener('input', () => { A[cur + '_other'] = oth.value; save(); });
+        const po = document.getElementById('f-planother');
+        if (po) po.addEventListener('input', () => { A.plan_other = po.value; save(); });
+        const msg = document.getElementById('f-msg');
+        if (msg) msg.addEventListener('input', () => { A.msg = msg.value; save(); nextBtn.querySelector('span').textContent = msg.value.trim() ? t('next') : t('skip'); });
+        if (animate) {
+            const focusable = el.querySelector('textarea, input') || el.querySelector('.opt[aria-checked="true"]') || el.querySelector('.opt, .pill');
+            if (focusable && matchMedia('(hover: hover)').matches) focusable.focus({ preventScroll: true });
+            if (matchMedia('(max-width: 900px)').matches) document.querySelector('.flow').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    function row(k, v, edit) {
+        return `<div><dt>${esc(t('r_' + k))}</dt><dd>${esc(v)}</dd><button type="button" onclick="go('${edit}')">${esc(t('edit'))}</button></div>`;
+    }
+    function recHTML() {
+        const r = recommend(), p = r.plan, fitOf = k => (r.fit.find(f => f.plan === k) || { pct: 0 }).pct;
+        // 1) Por qué te recomendamos este
+        let h = `<h2>${esc(t('rec_title'))}</h2><div class="rec"><div class="tag">${esc(t('rec_kicker'))} · ${r.pct}% ${esc(t('rec_fit_short'))}</div>` +
+                `<div class="euro-wrapper"><div class="euro-style name">${esc(t('p_' + p))}</div></div><div class="line">${esc(t('t_' + p))}</div>`;
+        h += p === 'project'
+            ? `<div class="price"><b>${esc(t('rec_project_price'))}</b><span>${esc(t('rec_project_terms'))}</span></div>`
+            : `<div class="price"><b>MXN ${PRICES[p][0]}</b><span>${esc(t('rec_frozen'))} · ${esc(t('rec_m2m'))} ${PRICES[p][1]}</span></div>`;
+        const reasons = r.reasons.length ? r.reasons : ['generic'];
+        h += `<ul class="why">${reasons.map(w => `<li><i class="fas fa-check"></i><span>${esc(w === 'generic' ? t('rec_generic') : t('why_' + w))}</span></li>`).join('')}</ul>`;
+        if (p === 'project') h += `<p class="disclaimer" style="color:#c9c8d2">${esc(t('rec_project_after'))}</p>`;
+        if (r.over) h += `<div class="note">${esc(t('rec_note_budget'))}</div>`;
+        if (interest && interest !== p && PRICES[interest]) h += `<div class="note" style="color:#e9d5ff;background:rgba(124,58,237,.12);border-color:rgba(168,85,247,.35)">${esc(t('rec_interest').replace('{p}', t('o_plan_' + interest)).replace('{r}', t('p_' + p)))}</div>`;
+        h += `<div class="rec-actions"><button type="button" class="pill pill-light" data-plan="${p === 'project' ? 'project' : p}" data-go="1">${esc(t('rec_take'))} <i class="fas fa-arrow-right"></i></button></div></div>`;
+
+        // 2) Los tres planes mensuales, con lo que incluyen
+        h += `<div class="cat-h"><h3>${esc(t('rec_all'))}</h3><p>${esc(t('rec_all_sub'))}</p></div><div class="plans">`;
+        ['essential', 'growth', 'enterprise'].forEach(k => {
+            const on = A.plan === k;
+            h += `<div class="pcard${k === p ? ' best' : ''}${on ? ' on' : ''}">` +
+                 (k === p ? `<span class="badge">${esc(t('rec_badge'))}</span>` : '') +
+                 `<div class="pname">${esc(t('p_' + k))}</div><div class="ptag">${esc(t('t_' + k))}</div>` +
+                 `<div class="pprice"><b>MXN ${PRICES[k][0]}</b> <span>${esc(t('rec_frozen'))}</span></div><div class="pm2m">${esc(t('rec_m2m'))} ${PRICES[k][1]}</div>` +
+                 `<div class="fl" style="margin:14px 0 8px">${esc(t('rec_includes'))}</div><ul class="inc">` +
+                 [1, 2, 3, 4, 5].map(i => `<li><i class="fas fa-check"></i>${esc(t('inc_' + k + '_' + i))}</li>`).join('') + `</ul>` +
+                 `<p class="pno">${esc(t('no_' + k))}</p>` +
+                 `<div class="pfoot"><span class="pfit">${fitOf(k)}% ${esc(t('rec_fit_short'))}</span>` +
+                 `<button type="button" class="pill ${on ? 'pill-light' : 'pill-ghost'}" data-plan="${k}" aria-pressed="${on}">${on ? '<i class="fas fa-check"></i> ' + esc(t('rec_picked')) : esc(t('rec_pick'))}</button></div></div>`;
+        });
+        h += '</div>';
+
+        // 3) Servicios puntuales (pago único) con precio "desde"
+        h += `<div class="cat-h"><h3>${esc(t('rec_svc'))}</h3><p>${esc(t('rec_svc_sub'))}</p></div><div class="svcs">`;
+        SERVICES.forEach(([g, items]) => {
+            h += `<div class="sgroup"><div class="fl" style="margin:0 0 8px">${esc(t('g_' + g))}</div>` +
+                 items.map(([k, price]) => {
+                     const on = (A.services || []).includes(k);
+                     return `<button type="button" class="svc" data-svc="${k}" aria-pressed="${on}"><span class="ck">${on ? '✓' : ''}</span>` +
+                            `<span class="sn">${esc(t('s_' + k))}${T.en['d_' + k] ? `<small>${esc(t('d_' + k))}</small>` : ''}</span><span class="sp">${esc(t('rec_from'))} ${price}</span></button>`;
+                 }).join('') + '</div>';
+        });
+        h += `</div><p class="disclaimer">${esc(t('rec_svc_note'))}</p>`;
+
+        // 4) Otra necesidad + asesoría
+        h += `<div class="other-card"><h3>${esc(t('rec_other_t'))}</h3><p>${esc(t('rec_other_d'))}</p>` +
+             `<textarea class="in" id="f-planother" placeholder="${esc(t('rec_other_ph'))}">${esc(A.plan_other)}</textarea>` +
+             `<button type="button" class="chip" data-plan="advise" aria-pressed="${A.plan === 'advise'}" style="margin-top:12px">${A.plan === 'advise' ? '✓ ' : ''}${esc(t('rec_advise'))}</button></div>`;
+        h += `<p class="disclaimer">${esc(t('rec_disclaimer'))}</p>`;
+        return h;
+    }
+    function field(k, type, ac) {
+        return `<div><label class="fl" for="f-${k}">${esc(t('f_' + k))}</label><input class="in" id="f-${k}" type="${type}" autocomplete="${ac}" value="${esc(A[k])}"></div>`;
+    }
+    function captureInputs() {
+        ['name', 'company', 'email', 'phone', 'msg'].forEach(k => { const el = document.getElementById('f-' + k); if (el) A[k] = el.value.trim(); });
+        const o = document.getElementById('f-other'); if (o) A[cur + '_other'] = o.value.trim();
+        const po = document.getElementById('f-planother'); if (po) A.plan_other = po.value.trim();
+        save();
+    }
+    function showErr(msg, ok) {
+        const e = document.getElementById('err');
+        if (e) e.innerHTML = msg ? `<div class="status ${ok ? 'ok' : 'bad'}">${esc(msg)}</div>` : '';
+    }
+
+    // ================= Navegación =================
+    function choose(v) {
+        const st = stepOf(cur);
+        if (st.multi) {
+            captureInputs();
+            let arr = (A[st.id] || []).slice();
+            if (arr.includes(v)) arr = arr.filter(x => x !== v);
+            else if (st.exclusive && v === st.exclusive) arr = [v];
+            else arr = arr.filter(x => x !== st.exclusive).concat(v);
+            A[st.id] = arr; save();
+            render(false);
+            if (v === st.other && arr.includes(v)) { const o = document.getElementById('f-other'); if (o) o.focus(); }
+            return;
+        }
+        A[st.id] = v; save();
+        if (v === st.other) { render(false); const o = document.getElementById('f-other'); if (o) o.focus(); return; }
+        document.querySelectorAll('.opt').forEach(b => b.setAttribute('aria-checked', b.dataset.v === v));
+        document.getElementById('nextBtn').disabled = false;
+        setTimeout(next, 260);
+    }
+    // En la recomendación: elegir/quitar un plan (uno a la vez) y marcar servicios (varios)
+    function pickPlan(p, goNow) {
+        captureInputs();
+        A.plan = A.plan === p && !goNow ? null : p; save();
+        if (goNow) { next(); return; }
+        const y = scrollY; render(false); scrollTo(0, y);
+    }
+    function toggleSvc(k) {
+        captureInputs();
+        const arr = A.services || [];
+        A.services = arr.includes(k) ? arr.filter(x => x !== k) : arr.concat(k); save();
+        const y = scrollY; render(false); scrollTo(0, y);
+    }
+    function go(id) { cur = id; render(); }
+    function next() {
+        const st = stepOf(cur);
+        captureInputs();
+        if (st.type === 'choice' && !answered(st)) return;
+        if (st.type === 'choice' && hasOther(st) && !(A[st.id + '_other'] || '').trim()) { showErr(t('err_other')); const o = document.getElementById('f-other'); if (o) o.focus(); return; }
+        if (st.type === 'rec' && !A.plan && !(A.services || []).length && !A.plan_other) { A.plan = recommend().plan; save(); }
+        if (st.type === 'contact' && (!A.name || !(A.email || A.phone))) { showErr(t('err_contact')); return; }
+        const list = active(), i = list.findIndex(s => s.id === cur);
+        if (i < list.length - 1) { cur = list[i + 1].id; render(); }
+    }
+    function back() {
+        captureInputs();
+        const list = active(), i = list.findIndex(s => s.id === cur);
+        if (i > 0) { cur = list[i - 1].id; render(); }
+    }
+    document.addEventListener('keydown', e => {
+        const st = stepOf(cur);
+        if (e.target && e.target.tagName === 'BUTTON' && e.key === 'Enter' && st.type !== 'choice') return;
+        // escribiendo en un campo: las letras no eligen opciones
+        if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) {
+            if (e.key === 'Enter' && e.target.id === 'f-other') { e.preventDefault(); next(); }
+            else if (st.type === 'text' && e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); next(); }
+            else if (st.type === 'contact' && e.key === 'Enter') { e.preventDefault(); next(); }
+            return;
+        }
+        if (st.type === 'choice' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+            const i = LETTERS.indexOf(e.key.toUpperCase());
+            if (e.key.length === 1 && i >= 0 && i < st.opts.length) { e.preventDefault(); choose(st.opts[i][0]); return; }
+            if (e.key === 'Enter' && answered(st)) { e.preventDefault(); next(); }
+        } else if (st.type === 'text' && e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); next(); }
+        else if (st.type === 'contact' && e.key === 'Enter') { e.preventDefault(); next(); }
+    });
+
+    // ================= Envío =================
+    function summary() {
+        const L = [t('wa_hi'), '', t('f_name') + ': ' + A.name];
+        if (A.company) L.push(t('f_company') + ': ' + A.company);
+        if (A.email) L.push(t('f_email') + ': ' + A.email);
+        if (A.phone) L.push(t('f_phone') + ': ' + A.phone);
+        if (!isPartner()) {
+            const r = recommend();
+            L.push('', t('wa_rec') + ': ' + t('p_' + r.plan) + ' (' + r.pct + '% ' + t('wa_fit') + ')');
+            if (A.plan) L.push(t('r_plan') + ': ' + planText());
+            if ((A.services || []).length) L.push(t('r_services') + ': ' + svcText());
+            if (A.plan_other) L.push(t('r_plan_other') + ': ' + A.plan_other);
+        }
+        L.push('');
+        active().filter(s => s.type === 'choice' && answered(s)).forEach(s => L.push(t('r_' + s.id) + ': ' + label(s.id, A[s.id])));
+        if (A.msg) L.push('', t('r_msg') + ': ' + A.msg);
+        return L.join('\n');
+    }
+    function finish() {
+        try { localStorage.removeItem(STORE); } catch (e) {}
+        cur = 'done'; render();
+    }
+    function sendWA() {
+        window.open('https://wa.me/' + WA_NUMBER + '?text=' + encodeURIComponent(summary()), '_blank', 'noopener');
+        finish();
+    }
+    async function sendMail(ev) {
+        if (!A.email) { go('contact'); setTimeout(() => showErr(t('err_email')), 50); return; }
+        const btn = ev.currentTarget;
+        btn.disabled = true;
+        showErr(t('sending'), true);
+        const type = A.need === 'invest' ? 'investor' : A.need === 'grant' ? 'grant' : 'client';
+        try {
+            const r = await fetch(CONTACT_ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify({ name: A.name, email: A.email, type, message: summary() }) });
+            const d = await r.json().catch(() => ({}));
+            if (r.ok) finish();
+            else showErr(r.status === 429 ? t('too_many') : (d.message || t('fail_mail')));
+        } catch (err) { showErr(t('net_fail')); }
+        finally { btn.disabled = false; }
+    }
+
+    // ================= Arranque =================
+    (function init() {
+        try { A = JSON.parse(localStorage.getItem(STORE) || '{}') || {}; } catch (e) { A = {}; }
+        // Atajos desde la landing: ?plan=growth (plan que le interesa), ?need=idea
+        const q = new URLSearchParams(location.search);
+        if (['essential', 'growth', 'enterprise', 'project'].includes(q.get('plan'))) { interest = q.get('plan'); A.plan = interest; }
+        else if (A.plan) interest = A.plan;
+        if (q.get('need') && stepOf('need').opts.some(o => o[0] === q.get('need'))) A.need = q.get('need');
+        // Retoma en la primera pregunta sin contestar
+        const firstOpen = active().find(s => s.type === 'choice' && !answered(s));
+        cur = firstOpen ? firstOpen.id : (A.need ? (isPartner() ? 'msg' : 'rec') : 'need');
+        let l = null;
+        try { l = localStorage.getItem('cx_lang'); } catch (e) {}
+        if (l !== 'en' && l !== 'es') l = /^es/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '') ? 'es' : 'en';
+        setLang(l);
+    })();
+</script>
+</body>
+</html>
