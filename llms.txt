@@ -4,6 +4,7 @@ CometaX es una agencia de tecnología para PYMES: arquitectura, desarrollo y man
 
 - [Sitio web](https://cometax.click/)
 - [Diagnóstico gratis](https://cometax.click/diagnostico/)
+- [Portafolio](https://cometax.click/portafolio/)
 - [Portal de clientes](https://cometax.click/panel/login)
 
 ## Servicios

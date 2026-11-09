@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portafolio — CometaX</title>
+    <meta name="description" content="Algunos proyectos reales de CometaX: productos propios y sistemas para clientes, con capturas simples.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://cometax.click/portafolio/">
+    <meta name="theme-color" content="#060608">
+    <link rel="icon" type="image/png" href="../FinalLogoCometax.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"></noscript>
+    <style>
+        :root {
+            --bg: #060608; --ink: #0b0b0f; --mut: #9a99a6; --violet: #7c3aed; --lav: #c4b5fd;
+            --card: rgba(18, 18, 22, .9); --line: rgba(255,255,255,.08); --line2: rgba(255,255,255,.16);
+            --pad: clamp(16px, 3vw, 28px); --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0; color: #fff; font-family: 'Space Grotesk', system-ui, sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            background: radial-gradient(60% 40% at 85% 0%, rgba(124,58,237,.18), transparent 70%), radial-gradient(50% 35% at 0% 60%, rgba(124,58,237,.10), transparent 70%), var(--bg);
+        }
+        a { color: inherit; text-decoration: none; }
+        button { font-family: inherit; }
+        img { display: block; max-width: 100%; height: auto; }
+        ::selection { background: #fff; color: #000; }
+        .euro-style { font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 900; text-transform: uppercase; letter-spacing: -0.04em; transform: scaleX(1.1); display: inline-block; transform-origin: left center; }
+        .euro-wrapper { display: block; }
+        .mono { font-family: var(--mono); }
+
+        /* ---- barra superior (igual que el diagnóstico) ---- */
+        .top { position: sticky; top: 0; z-index: 20; padding: 12px; }
+        .top-in { max-width: 1240px; margin: 0 auto; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 8px 0 18px; border-radius: 999px; background: rgba(10,10,13,.9); border: 1px solid var(--line); }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand img { height: 26px; width: auto; filter: invert(1); }
+        .brand .euro-style { font-size: 18px; transform-origin: center; }
+        .top-r { display: flex; align-items: center; gap: 8px; }
+        .lang { display: inline-flex; padding: 3px; border-radius: 999px; background: rgba(255,255,255,.06); border: 1px solid var(--line); cursor: pointer; user-select: none; }
+        .lang span { font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; opacity: .5; transition: .25s; }
+        .lang span.active { background: #fff; color: #000; opacity: 1; }
+        .pill { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; font-weight: 600; font-size: 14px; padding: 13px 22px; white-space: nowrap; border: 0; cursor: pointer; transition: transform .2s, background .2s; }
+        .pill:hover { transform: translateY(-1px); }
+        .pill-light { color: #0b0b0f; background: #fff; }
+        .pill-light:hover { background: #e4e4ea; }
+        .pill-ghost { color: #fff; background: rgba(255,255,255,.06); border: 1px solid var(--line2); }
+        .pill-ghost:hover { background: rgba(255,255,255,.12); }
+        .top .back-site { padding: 10px 16px; font-size: 13px; }
+        @media (max-width: 560px) { .top .back-site span { display: none; } .brand .euro-style { font-size: 16px; } .info .type { font-size: 9.5px; letter-spacing: .06em; padding: 6px 10px; border-radius: 14px; } }
+
+        .wrap { max-width: 1240px; margin: 0 auto; padding: 0 var(--pad); }
+        .kicker { display: flex; width: max-content; align-items: center; gap: 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--lav); margin-bottom: 18px; }
+        .kicker::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 12px #a855f7; }
+
+        /* ---- encabezado ---- */
+        .head { padding: clamp(40px, 7vw, 90px) 0 clamp(28px, 4vw, 44px); overflow-x: clip; }
+        .head h1 { margin: 0; font-weight: 400; font-size: clamp(34px, 7vw, 104px); line-height: .92; max-width: calc(100% / 1.1); } /* el scaleX(1.1) lo ensancha: así cabe */
+        .head .lead { color: #c9c8d2; font-size: clamp(15px, 1.4vw, 18px); line-height: 1.6; max-width: 640px; margin: 22px 0 0; }
+        .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+        .filters button { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.7); background: rgba(255,255,255,.05); border: 1px solid var(--line); border-radius: 999px; padding: 9px 16px; cursor: pointer; transition: .2s; }
+        .filters button.on { color: #0b0b0f; background: #fff; border-color: #fff; }
+
+        /* ---- proyectos ---- */
+        .list { display: grid; gap: 22px; padding-bottom: 40px; }
+        .proj { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(20px, 3vw, 44px); align-items: center; border-radius: 28px; padding: clamp(18px, 2.4vw, 30px); background: var(--card); border: 1px solid var(--line); position: relative; overflow: hidden; }
+        .proj::before { content: ''; position: absolute; right: -120px; bottom: -120px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(closest-side, rgba(124,58,237,.16), transparent); pointer-events: none; }
+        .proj:nth-child(even) { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
+        .proj:nth-child(even) .shots { order: 2; }
+        .proj.hide { display: none; }
+        .shots { position: relative; }
+        .frame { border-radius: 14px; overflow: hidden; border: 1px solid var(--line2); background: #0d0d11; box-shadow: 0 30px 60px -30px rgba(0,0,0,.9); cursor: zoom-in; }
+        .frame .bar { height: 26px; display: flex; align-items: center; gap: 6px; padding: 0 12px; background: #15151b; border-bottom: 1px solid var(--line); }
+        .frame .bar i { width: 8px; height: 8px; border-radius: 50%; background: #3a3946; }
+        .frame img { width: 100%; }
+        .frame.tall { max-width: 430px; margin-inline: auto; } /* captura casi cuadrada: que no domine la tarjeta */
+        .shots .second { position: absolute; right: -10px; bottom: -22px; width: 42%; border-radius: 10px; box-shadow: 0 24px 50px -16px rgba(0,0,0,.95); }
+        .shots .second .bar { height: 18px; }
+        .shots .second .bar i { width: 6px; height: 6px; }
+        .info .type { display: flex; width: fit-content; max-width: 100%; line-height: 1.5; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--lav); border: 1px solid rgba(196,181,253,.35); border-radius: 999px; padding: 6px 12px; }
+        .info .type.own { color: #86efac; border-color: rgba(134,239,172,.35); }
+        .info h2 { margin: 16px 0 12px; font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 400; font-size: clamp(24px, 2.6vw, 36px); line-height: 1.05; letter-spacing: -.02em; }
+        .info p { margin: 0; color: #c9c8d2; font-size: 15px; line-height: 1.65; }
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
+        .tags span { font-size: 12px; color: #e4e4ea; background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 8px; padding: 5px 10px; }
+        .note { margin-top: 14px; font-size: 12px; color: #8d8c98; display: flex; gap: 8px; align-items: center; }
+        @media (max-width: 860px) {
+            .proj, .proj:nth-child(even) { grid-template-columns: minmax(0, 1fr); }
+            .proj:nth-child(even) .shots { order: 0; }
+            .shots .second { right: 8px; bottom: -14px; width: 46%; }
+            .info { margin-top: 18px; }
+        }
+
+        /* ---- cierre ---- */
+        .cta { margin: 30px 0 70px; border-radius: 28px; padding: clamp(28px, 5vw, 56px); text-align: center; border: 1px solid rgba(168,85,247,.4); background: linear-gradient(140deg, rgba(124,58,237,.22), rgba(18,18,22,.9) 60%); }
+        .cta h2 { margin: 0; font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 400; text-transform: uppercase; font-size: clamp(28px, 4vw, 52px); line-height: 1; }
+        .cta p { color: #c9c8d2; margin: 14px auto 26px; max-width: 520px; line-height: 1.6; }
+        .cta .btns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        footer { text-align: center; color: #6b6a76; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; padding: 0 0 40px; }
+
+        /* ---- visor ---- */
+        .viewer { position: fixed; inset: 0; z-index: 50; background: rgba(4,4,6,.92); display: none; align-items: center; justify-content: center; padding: 24px; cursor: zoom-out; }
+        .viewer.open { display: flex; }
+        .viewer img { max-height: 90vh; width: auto; border-radius: 12px; border: 1px solid var(--line2); }
+    </style>
+</head>
+<body>
+
+<header class="top">
+    <div class="top-in">
+        <a href="../" class="brand" aria-label="CometaX">
+            <img src="../image_2025-12-16_083018257-removebg-preview%20(1).png" alt="CometaX" width="668" height="373">
+            <span class="euro-style">COMETAX</span>
+        </a>
+        <div class="top-r">
+            <div class="lang" onclick="toggleLanguage()" role="button" aria-label="Cambiar idioma"><span id="lang-en">EN</span><span id="lang-es" class="active">ES</span></div>
+            <a href="../" class="pill pill-ghost back-site"><i class="fas fa-arrow-left"></i><span data-t="back_site">Volver al sitio</span></a>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+    <section class="head">
+        <div class="kicker" data-t="kicker">Portafolio</div>
+        <div class="euro-wrapper"><h1 class="euro-style" data-t="title">LO QUE HEMOS CONSTRUIDO</h1></div>
+        <p class="lead" data-t="lead">Algunos proyectos reales, con capturas simples. Los de clientes van sin nombre y con los datos sensibles difuminados.</p>
+        <div class="filters" role="tablist">
+            <button class="on" data-f="all" data-t="f_all">Todos</button>
+            <button data-f="own" data-t="f_own">Productos propios</button>
+            <button data-f="client" data-t="f_client">Para clientes</button>
+        </div>
+    </section>
+
+    <section class="list" id="list">
+        <!-- Eventotes -->
+        <article class="proj" data-kind="own">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/eventotes-landing.jpg" alt="Landing de Eventotes" width="1400" height="788" loading="lazy"></div>
+                <div class="frame second"><div class="bar"><i></i><i></i><i></i></div><img src="img/eventotes-panel.jpg" alt="Panel de Eventotes" width="1400" height="788" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type own" data-t="ev_type">Producto propio · SaaS de eventos</span>
+                <h2>Eventotes</h2>
+                <p data-t="ev_desc">Software para salones de eventos: contratos, pagos, calendario, finanzas e inventario en una web app, más un micrositio móvil para cada cliente.</p>
+                <div class="tags"><span data-t="ev_t1">Web app</span><span data-t="ev_t2">Panel financiero</span><span data-t="ev_t3">Micrositios móviles</span><span data-t="ev_t4">Disponibilidad de fechas</span></div>
+            </div>
+        </article>
+
+        <!-- RanKIT -->
+        <article class="proj" data-kind="own">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/rankit-landing.jpg" alt="Landing de RanKIT" width="1400" height="788" loading="lazy"></div>
+                <div class="frame second"><div class="bar"><i></i><i></i><i></i></div><img src="img/rankit-panel.jpg" alt="Panel de organizador de RanKIT" width="1400" height="788" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type own" data-t="rk_type">Producto propio · Torneos</span>
+                <h2>RanKIT</h2>
+                <p data-t="rk_desc">Torneos y ligas desde canchas de fútbol 7 hasta arenas de esports: inscripciones, brackets, estadísticas que se actualizan solas y widgets para transmitir en OBS.</p>
+                <div class="tags"><span>Laravel</span><span data-t="rk_t1">Inscripciones</span><span data-t="rk_t2">Brackets</span><span data-t="rk_t3">Estadísticas en vivo</span><span data-t="rk_t4">Widgets para OBS</span></div>
+                <div class="note"><i class="fas fa-eye-slash"></i><span data-t="note_names">Nombres de participantes difuminados.</span></div>
+            </div>
+        </article>
+
+        <!-- Plataforma fiscal -->
+        <article class="proj" data-kind="client">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/fiscal-arquitectura.jpg" alt="Arquitectura de la plataforma fiscal" width="1015" height="599" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type" data-t="fi_type">Cliente · Despacho contable</span>
+                <h2 data-t="fi_title">Plataforma contable y fiscal multiempresa</h2>
+                <p data-t="fi_desc">Concilia lo que las empresas pagan (cheques, transferencias, nómina) contra lo que el SAT dice que facturaron (CFDI) y de ahí produce pólizas, reportes y legajos. Cada empresa vive en su propia base de datos y las descargas masivas del SAT corren en microservicios aparte. Incluye documentación de entrega escrita desde el código.</p>
+                <div class="tags"><span>Laravel 11</span><span>Vue 3</span><span>MongoDB</span><span>Python · FastAPI</span><span>Redis</span><span>SAT · CFDI</span></div>
+                <div class="note"><i class="fas fa-eye-slash"></i><span data-t="note_client">Captura de la documentación; nombre del sistema difuminado.</span></div>
+            </div>
+        </article>
+
+        <!-- Facturación por foto -->
+        <article class="proj" data-kind="client">
+            <div class="shots">
+                <div class="frame tall"><div class="bar"><i></i><i></i><i></i></div><img src="img/facturacion-ticket.jpg" alt="Lectura de un ticket y su factura" width="756" height="786" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type" data-t="fa_type">Cliente · Red de gasolineras</span>
+                <h2 data-t="fa_title">Facturación con la foto del ticket</h2>
+                <p data-t="fa_desc">El cliente manda la foto de su ticket y el sistema lee folio, fecha, producto, litros y total con OCR que corre en el propio servidor, sin mandar los datos a terceros. Lo compara con lo que va en la factura y da seguimiento a cada caso: estación sin conexión, captura por WhatsApp o ayuda del bot.</p>
+                <div class="tags"><span>Python · JFast</span><span data-t="fa_t1">OCR local</span><span>Vue</span><span>Docker</span><span data-t="fa_t2">Preparado para WhatsApp</span></div>
+                <div class="note"><i class="fas fa-eye-slash"></i><span data-t="note_fiscal">Marca, estación y datos fiscales difuminados.</span></div>
+            </div>
+        </article>
+
+        <!-- Precios e inventarios -->
+        <article class="proj" data-kind="client">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/precios-acceso.jpg" alt="Acceso a la plataforma de precios e inventarios" width="1400" height="875" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type" data-t="pr_type">Cliente · Distribuidores de camiones</span>
+                <h2 data-t="pr_title">Precios e inventarios de seminuevos</h2>
+                <p data-t="pr_desc">Un libro azul para toda la red: el servidor calcula el precio base con anuncios reales del mercado (sin republicaciones, subastas ni valores atípicos), el responsable de mercado lo aprueba o ajusta y lo publica. Cada perfil ve y edita solo lo que le toca: el vendedor, por ejemplo, no ve precios de compra.</p>
+                <div class="tags"><span>.NET 10</span><span>Angular</span><span>SQL Server</span><span data-t="pr_t1">Permisos por perfil</span></div>
+                <div class="note"><i class="fas fa-eye-slash"></i><span data-t="note_brand">Marca y correos difuminados.</span></div>
+            </div>
+        </article>
+
+        <!-- JFast -->
+        <article class="proj" data-kind="own">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/jfast-sitio.jpg" alt="Sitio de JFastFramework" width="1400" height="875" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type own" data-t="jf_type">Producto propio · Open source</span>
+                <h2>JFastFramework</h2>
+                <p data-t="jf_desc">Framework de Python sobre FastAPI basado en plugins: un comando levanta la API, PostgreSQL, Redis, jobs, un frontend en Vue y el proxy, ya conectados en contenedores. Documentación en inglés y español. La facturación con la foto del ticket corre sobre él.</p>
+                <div class="tags"><span>Python</span><span>FastAPI</span><span>PostgreSQL</span><span>Redis</span><span>Docker</span></div>
+            </div>
+        </article>
+
+        <!-- BoredPowerMD -->
+        <article class="proj" data-kind="own">
+            <div class="shots">
+                <div class="frame"><div class="bar"><i></i><i></i><i></i></div><img src="img/boredpowermd.jpg" alt="BoredPowerMD" width="1400" height="788" loading="lazy"></div>
+            </div>
+            <div class="info">
+                <span class="type own" data-t="bp_type">Producto propio · App de escritorio</span>
+                <h2>BoredPowerMD</h2>
+                <p data-t="bp_desc">App de escritorio local-first para organizar la documentación de proyectos como archivos reales: wiki por categorías, Markdown con diagramas Mermaid y fórmulas, exportación a PDF y ZIP. Se compila para Mac y Windows.</p>
+                <div class="tags"><span>Tauri 2</span><span>Rust</span><span>Vue 3</span><span>TypeScript</span></div>
+            </div>
+        </article>
+    </section>
+
+    <section class="cta">
+        <h2 data-t="cta_t">¿Quieres algo así?</h2>
+        <p data-t="cta_p">Cuéntanos qué necesitas en el diagnóstico gratis y te decimos cómo lo construiríamos.</p>
+        <div class="btns">
+            <a href="../diagnostico/" class="pill pill-light"><span data-t="cta_diag">Empezar diagnóstico</span> <i class="fas fa-arrow-right"></i></a>
+            <a href="https://wa.me/525532351392" target="_blank" rel="noopener" class="pill pill-ghost"><i class="fab fa-whatsapp"></i>WhatsApp</a>
+        </div>
+    </section>
+</main>
+<footer>© 2026 COMETAX · cometax.click</footer>
+
+<div class="viewer" id="viewer" onclick="this.classList.remove('open')"><img alt=""></div>
+
+<script>
+    const T = {
+        es: {
+            back_site: 'Volver al sitio', kicker: 'Portafolio', title: 'LO QUE HEMOS CONSTRUIDO',
+            lead: 'Algunos proyectos reales, con capturas simples. Los de clientes van sin nombre y con los datos sensibles difuminados.',
+            f_all: 'Todos', f_own: 'Productos propios', f_client: 'Para clientes',
+            ev_type: 'Producto propio · SaaS de eventos',
+            ev_desc: 'Software para salones de eventos: contratos, pagos, calendario, finanzas e inventario en una web app, más un micrositio móvil para cada cliente.',
+            ev_t1: 'Web app', ev_t2: 'Panel financiero', ev_t3: 'Micrositios móviles', ev_t4: 'Disponibilidad de fechas',
+            rk_type: 'Producto propio · Torneos',
+            rk_desc: 'Torneos y ligas desde canchas de fútbol 7 hasta arenas de esports: inscripciones, brackets, estadísticas que se actualizan solas y widgets para transmitir en OBS.',
+            rk_t1: 'Inscripciones', rk_t2: 'Brackets', rk_t3: 'Estadísticas en vivo', rk_t4: 'Widgets para OBS',
+            note_names: 'Nombres de participantes difuminados.',
+            fi_type: 'Cliente · Despacho contable', fi_title: 'Plataforma contable y fiscal multiempresa',
+            fi_desc: 'Concilia lo que las empresas pagan (cheques, transferencias, nómina) contra lo que el SAT dice que facturaron (CFDI) y de ahí produce pólizas, reportes y legajos. Cada empresa vive en su propia base de datos y las descargas masivas del SAT corren en microservicios aparte. Incluye documentación de entrega escrita desde el código.',
+            note_client: 'Captura de la documentación; nombre del sistema difuminado.',
+            fa_type: 'Cliente · Red de gasolineras', fa_title: 'Facturación con la foto del ticket',
+            fa_desc: 'El cliente manda la foto de su ticket y el sistema lee folio, fecha, producto, litros y total con OCR que corre en el propio servidor, sin mandar los datos a terceros. Lo compara con lo que va en la factura y da seguimiento a cada caso: estación sin conexión, captura por WhatsApp o ayuda del bot.',
+            fa_t1: 'OCR local', fa_t2: 'Preparado para WhatsApp', note_fiscal: 'Marca, estación y datos fiscales difuminados.',
+            pr_type: 'Cliente · Distribuidores de camiones', pr_title: 'Precios e inventarios de seminuevos',
+            pr_desc: 'Un libro azul para toda la red: el servidor calcula el precio base con anuncios reales del mercado (sin republicaciones, subastas ni valores atípicos), el responsable de mercado lo aprueba o ajusta y lo publica. Cada perfil ve y edita solo lo que le toca: el vendedor, por ejemplo, no ve precios de compra.',
+            pr_t1: 'Permisos por perfil', note_brand: 'Marca y correos difuminados.',
+            jf_type: 'Producto propio · Open source',
+            jf_desc: 'Framework de Python sobre FastAPI basado en plugins: un comando levanta la API, PostgreSQL, Redis, jobs, un frontend en Vue y el proxy, ya conectados en contenedores. Documentación en inglés y español. La facturación con la foto del ticket corre sobre él.',
+            bp_type: 'Producto propio · App de escritorio',
+            bp_desc: 'App de escritorio local-first para organizar la documentación de proyectos como archivos reales: wiki por categorías, Markdown con diagramas Mermaid y fórmulas, exportación a PDF y ZIP. Se compila para Mac y Windows.',
+            cta_t: '¿Quieres algo así?', cta_p: 'Cuéntanos qué necesitas en el diagnóstico gratis y te decimos cómo lo construiríamos.', cta_diag: 'Empezar diagnóstico'
+        },
+        en: {
+            back_site: 'Back to site', kicker: 'Portfolio', title: 'WHAT WE HAVE BUILT',
+            lead: 'A few real projects, with simple screenshots. Client work is shown without names and with sensitive data blurred.',
+            f_all: 'All', f_own: 'Our products', f_client: 'For clients',
+            ev_type: 'Own product · Event SaaS',
+            ev_desc: 'Software for event venues: contracts, payments, calendar, finances and inventory in one web app, plus a mobile microsite for every client.',
+            ev_t1: 'Web app', ev_t2: 'Finance dashboard', ev_t3: 'Mobile microsites', ev_t4: 'Date availability',
+            rk_type: 'Own product · Tournaments',
+            rk_desc: 'Tournaments and leagues from soccer 7 fields to esports arenas: sign-ups, brackets, stats that update themselves and widgets to stream in OBS.',
+            rk_t1: 'Sign-ups', rk_t2: 'Brackets', rk_t3: 'Live stats', rk_t4: 'OBS widgets',
+            note_names: 'Participant names blurred.',
+            fi_type: 'Client · Accounting firm', fi_title: 'Multi-company accounting and tax platform',
+            fi_desc: 'Reconciles what companies pay (checks, transfers, payroll) against what the SAT says they invoiced (CFDI), and produces journal entries, reports and filings from it. Each company lives in its own database and bulk SAT downloads run in separate microservices. Includes handover documentation written from the code.',
+            note_client: 'Screenshot of the documentation; system name blurred.',
+            fa_type: 'Client · Fuel station network', fa_title: 'Invoicing from a photo of the receipt',
+            fa_desc: 'The customer sends a photo of the receipt and the system reads folio, date, product, liters and total with OCR that runs on the server itself, without sending data to third parties. It compares that with what goes on the invoice and tracks each case: station offline, capture through WhatsApp or help from the bot.',
+            fa_t1: 'On-server OCR', fa_t2: 'WhatsApp-ready', note_fiscal: 'Brand, station and tax data blurred.',
+            pr_type: 'Client · Truck dealers', pr_title: 'Used-truck pricing and inventory',
+            pr_desc: 'A blue book for the whole network: the server calculates the base price from real market listings (without reposts, auctions or outliers), and the market lead approves or adjusts it and publishes it. Each profile sees and edits only what belongs to it: salespeople, for example, never see purchase prices.',
+            pr_t1: 'Role-based permissions', note_brand: 'Brand and emails blurred.',
+            jf_type: 'Own product · Open source',
+            jf_desc: 'A plugin-based Python framework on FastAPI: one command brings up the API, PostgreSQL, Redis, jobs, a Vue frontend and the proxy, already wired together in containers. Docs in English and Spanish. The receipt-photo invoicing runs on it.',
+            bp_type: 'Own product · Desktop app',
+            bp_desc: 'Local-first desktop app to organize project documentation as real files: a wiki by category, Markdown with Mermaid diagrams and formulas, export to PDF and ZIP. Builds for Mac and Windows.',
+            cta_t: 'Want something like this?', cta_p: 'Tell us what you need in the free diagnosis and we will tell you how we would build it.', cta_diag: 'Start diagnosis'
+        }
+    };
+    let lang = 'es';
+    function setLang(l) {
+        lang = l;
+        document.documentElement.lang = l;
+        try { localStorage.setItem('cx_lang', l); } catch (e) {}
+        document.getElementById('lang-en').classList.toggle('active', l === 'en');
+        document.getElementById('lang-es').classList.toggle('active', l === 'es');
+        document.querySelectorAll('[data-t]').forEach(el => { const v = T[l][el.dataset.t]; if (v != null) el.textContent = v; });
+        document.title = (l === 'es' ? 'Portafolio' : 'Portfolio') + ' — CometaX';
+    }
+    function toggleLanguage() { setLang(lang === 'en' ? 'es' : 'en'); }
+
+    // Filtro: todos / productos propios / clientes
+    document.querySelectorAll('.filters button').forEach(b => b.addEventListener('click', () => {
+        document.querySelectorAll('.filters button').forEach(x => x.classList.toggle('on', x === b));
+        document.querySelectorAll('.proj').forEach(p => p.classList.toggle('hide', b.dataset.f !== 'all' && p.dataset.kind !== b.dataset.f));
+    }));
+
+    // Visor: clic en una captura para verla grande
+    const viewer = document.getElementById('viewer');
+    document.querySelectorAll('.frame img').forEach(img => img.parentElement.addEventListener('click', () => {
+        viewer.querySelector('img').src = img.src; viewer.querySelector('img').alt = img.alt; viewer.classList.add('open');
+    }));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') viewer.classList.remove('open'); });
+
+    (function init() {
+        let l = null;
+        try { l = localStorage.getItem('cx_lang'); } catch (e) {}
+        if (l !== 'en' && l !== 'es') l = /^en/i.test((navigator.languages && navigator.languages[0]) || navigator.language || '') ? 'en' : 'es';
+        setLang(l);
+    })();
+</script>
+</body>
+</html>
