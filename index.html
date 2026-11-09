@@ -458,6 +458,60 @@
             .showcase { height: auto; }
             .sc-sticky { position: relative; }
         }
+        /* ============ HERO · OPCIÓN A «EL EDIFICIO» ============ */
+        .ed { position: relative; height: 560vh; z-index: 2; }
+        .ed-stick { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: #050506; }
+        #faFilm { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+        .ed-grain { position: absolute; inset: -50%; pointer-events: none; opacity: .07; z-index: 2;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+        .ed-veil { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+            background: radial-gradient(80% 70% at 50% 55%, transparent 40%, rgba(5,5,6,.75) 100%), linear-gradient(180deg, rgba(5,5,6,.55), transparent 22%, transparent 70%, rgba(5,5,6,.85)); }
+        .ed-intro { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; justify-content: space-between; padding: 120px 40px 46px; pointer-events: none; }
+        .ed-top, .ed-bot { display: flex; justify-content: space-between; gap: 16px; color: rgba(255,255,255,.62); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; }
+        .ed-mid { text-align: center; }
+        .ed-title { margin: 0; display: flex; justify-content: center; gap: 2.4vw; font-weight: 400; line-height: .82; font-size: min(8.4vw, 19vh); color: #fff; text-shadow: 0 12px 60px rgba(0,0,0,.6); }
+        .ed-title .euro-style { transform-origin: center; will-change: transform, opacity; }
+        .ed-brand { display: inline-flex; align-items: center; gap: 14px; margin-bottom: 26px; }
+        .ed-brand img { height: 40px; width: auto; filter: invert(1) drop-shadow(0 0 18px rgba(255,255,255,.25)); }
+        .ed-brand .euro-style { font-size: 30px; color: #fff; transform-origin: center; }
+        .ed-end .ed-brand { margin-bottom: 18px; }
+        .ed-end .ed-brand img { height: 70px; }
+        .ed-company { display: flex; flex-direction: column; align-items: center; gap: 2px; line-height: .9; }
+        .ed-company .euro-style { font-size: clamp(54px, 8.4vw, 132px); color: #fff; transform-origin: center; text-shadow: 0 12px 60px rgba(0,0,0,.6); }
+        .ed-company .ed-co2 { font-size: clamp(22px, 3.1vw, 48px); letter-spacing: .32em; margin-left: .32em; color: rgba(255,255,255,.88); }
+        .ed-endtag { margin: 18px 0 0; font-family: var(--mono); font-size: 13px; letter-spacing: .32em; color: #fff; text-shadow: 0 2px 16px rgba(0,0,0,.8); }
+        .ed-cue { position: absolute; z-index: 5; left: 50%; bottom: 44px; transform: translateX(-50%); display: flex; align-items: center; gap: 12px; padding: 10px 18px 10px 12px; border-radius: 999px; background: rgba(6,6,8,.55); border: 1px solid rgba(255,255,255,.18); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: #fff; pointer-events: none; white-space: nowrap; }
+        .ed-mouse { width: 18px; height: 28px; border-radius: 10px; border: 1.5px solid rgba(255,255,255,.85); position: relative; flex-shrink: 0; }
+        .ed-mouse i { position: absolute; left: 50%; top: 5px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: #fff; animation: edWheel 1.6s ease-in-out infinite; }
+        @keyframes edWheel { 0% { transform: translateY(0); opacity: 1; } 70% { transform: translateY(9px); opacity: 0; } 100% { transform: translateY(0); opacity: 0; } }
+        .lite .ed-mouse i { animation: none; }
+        .ed-tag { margin: 22px 0 0; font-size: clamp(16px, 1.6vw, 22px); color: rgba(255,255,255,.82); font-weight: 400; }
+        .ed-chap { position: absolute; z-index: 4; left: 0; right: 0; top: 50%; transform: translateY(-50%); text-align: center; padding: 0 8vw; opacity: 0; pointer-events: none; }
+        .ed-chap.low { top: auto; bottom: 15vh; transform: none; text-align: left; padding: 0 40px; }
+        .ed-chap .mono { display: block; color: rgba(255,255,255,.65); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; margin-bottom: 14px; }
+        .ed-big { margin: 0; font-weight: 300; letter-spacing: -.03em; line-height: 1.02; font-size: clamp(34px, 5.6vw, 92px); color: #fff; text-shadow: 0 10px 50px rgba(0,0,0,.55); }
+        .ed-chap.low .ed-big { font-size: clamp(30px, 4.6vw, 74px); max-width: 16ch; }
+        .ed-end .ed-big { font-family: 'Archivo Black', sans-serif; font-style: italic; font-weight: 400; text-transform: uppercase; letter-spacing: -.04em; }
+        .ed-ctas { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 30px; }
+        .ed-end.on { pointer-events: auto; }
+        .ed-ctas .pill-ghost { background: rgba(6,6,8,.5); border-color: rgba(255,255,255,.35); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+        .ed-progress { position: absolute; z-index: 5; left: 40px; right: 40px; bottom: 22px; height: 1px; background: rgba(255,255,255,.14); }
+        .ed-progress i { position: absolute; inset: 0; background: rgba(255,255,255,.75); transform-origin: left; transform: scaleX(0); }
+        @media (max-width: 820px) {
+            .ed { height: 520vh; }
+            .ed-intro { padding: 96px 16px 34px; }
+            .ed-top, .ed-bot { font-size: 10px; }
+            .ed-bot span:first-child, .ed-bot span:last-child { display: none; }
+            .ed-bot { justify-content: center; }
+            .ed-title { flex-direction: column; align-items: center; gap: 0; font-size: 14.5vw; }
+            .ed-top span:last-child { display: none; }
+            .ed-brand img { height: 30px; } .ed-brand .euro-style { font-size: 22px; }
+            .ed-end .ed-brand img { height: 48px; }
+            .ed-company .euro-style { font-size: 15vw; } .ed-company .ed-co2 { font-size: 6.2vw; }
+            .ed-cue { bottom: 40px; }
+            .ed-chap.low { padding: 0 16px; bottom: 16vh; }
+            .ed-progress { left: 16px; right: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -501,45 +555,46 @@
     <div class="space-orb" style="width:46rem;height:46rem;top:48%;left:-20rem"></div>
     <div class="space-orb" style="width:50rem;height:50rem;top:72%;right:-16rem"></div>
 
-    <!-- ============ HERO ============ -->
-    <header class="hero">
-        <div class="sheet">
-            <div class="badge-row"><span class="pulse-dot"></span><span data-i18n="hero_badge">Available for new projects</span></div>
-            <h1 class="mega-wrap">
-                <span class="euro-style mega" id="mega" aria-hidden="true">COMETAX</span>
-                <span class="sr-only">CometaX — software a la medida y equipo de tecnología para PYMES</span>
-            </h1>
+    <!-- ============ HERO · OPCIÓN A «EL EDIFICIO»: recorrido filmado por scroll (mecánica del MVP de pádel) ============ -->
+    <section class="ed" id="filmhero">
+        <div class="ed-stick">
+            <canvas id="faFilm" aria-hidden="true"></canvas>
+            <div class="ed-grain" aria-hidden="true"></div>
+            <div class="ed-veil" id="faVeil" aria-hidden="true"></div>
 
-            <div class="hero-body">
-                <div class="cut">
-                    <h2 class="head-grad" data-i18n="hero_head">Technology that gets delivered,<br>not just promised.</h2>
-                    <div class="cut-row">
-                        <p data-i18n="hero_lead">We take SMBs where a single developer can't — architecture, development and maintenance from a team of 6+ specialists, at the cost of one in-house hire.</p>
-                        <a href="diagnostico/" class="pill pill-dark"><span data-i18n="hero_cta">Get a free diagnosis</span> <span class="arr">↗</span></a>
-                    </div>
+            <div class="ed-intro" id="faIntro">
+                <div class="ed-top mono"><span>( 19.43° N · CDMX )</span><span data-i18n="fa_l2">( Custom software )</span></div>
+                <div class="ed-mid">
+                    <div class="ed-brand ed-brand-top"><img src="image_2025-12-16_083018257-removebg-preview%20(1).png" alt="CometaX" width="668" height="373"><span class="euro-style">COMETAX</span></div>
+                    <h1 class="ed-title" aria-label="CometaX — Future engineered">
+                        <span class="euro-style" id="faT1" data-i18n="fa_t1">FUTURE</span>
+                        <span class="euro-style" id="faT2" data-i18n="fa_t2">ENGINEERED.</span>
+                    </h1>
+                    <p class="ed-tag" data-i18n="fa_tag">Architecture, development and maintenance for SMBs.</p>
                 </div>
-
-                <div class="stage" id="heroStage">
-                    <div class="comet" id="heroComet"></div>
-                    <i class="beam b1"></i><i class="beam b2"></i><i class="beam b3"></i><i class="beam b4"></i>
-                    <div class="floor"></div>
-                    <!-- Imagen fija del logo 3D (sale primero y es lo único en modo ligero); el WebGL se monta encima después -->
-                    <div class="logo3d" id="logo3d" aria-hidden="true"><img src="assets/logo-3d.webp" alt="" width="900" height="760" decoding="async"></div>
-                    <div class="chip c1"><span class="tag">Fiscal · Scale</span><strong data-i18n="case1_title">Millions of invoices, zero downtime</strong></div>
-                    <div class="chip c2"><span class="tag">Rescue · AWS</span><strong data-i18n="case2_title">An insurer rescued without its source code</strong></div>
-                    <div class="chip c3"><span class="tag">Enterprise · Resilience</span><strong data-i18n="case3_title">Resilient architecture for 16 fuel stations</strong></div>
-                    <a href="diagnostico/" class="cursor-tag"><i class="fas fa-location-arrow fa-flip-horizontal"></i><span data-i18n="wa_btn">Free diagnosis</span></a>
-                </div>
+                <div class="ed-bot mono"><span data-i18n="fa_b1">Architecture · from the foundations</span><span></span><span data-i18n="fa_b3">Maintenance · month after month</span></div>
             </div>
 
-            <div class="stats">
-                <div class="stat"><div class="l" data-i18n="stat_l1">Specialists</div><div class="v">6+</div><div class="d" data-i18n="stat_d1">per project, at the cost of one in-house hire</div></div>
-                <div class="stat"><div class="l" data-i18n="stat_l2">Point of contact</div><div class="v">1</div><div class="d" data-i18n="stat_d2">we align the team, you talk to one person</div></div>
-                <div class="stat"><div class="l" data-i18n="stat_l3">Billing surprises</div><div class="v">0</div><div class="d" data-i18n="stat_d3">fixed monthly price, frozen for 6 months</div></div>
-                <div class="stat"><div class="l" data-i18n="stat_l4">Diagnosis</div><div class="v grad" data-i18n="stat_v4">Free</div><div class="d" data-i18n="stat_d4">30–45 minutes, no commitment</div></div>
+            <div class="ed-chap" data-from="0.10" data-to="0.155"><p class="ed-big" data-i18n="fa_c1">Software is built like a building.</p></div>
+            <div class="ed-chap low" data-from="0.17" data-to="0.24"><span class="mono" data-i18n="fa_c2l">01 — Architecture</span><p class="ed-big" data-i18n="fa_c2">It stands on its foundations.</p></div>
+            <div class="ed-chap low" data-from="0.34" data-to="0.58"><span class="mono" data-i18n="fa_c3l">02 — Development</span><p class="ed-big" data-i18n="fa_c3">And it grows floor by floor.</p></div>
+            <div class="ed-chap low" data-from="0.63" data-to="0.70"><span class="mono" data-i18n="fa_c4l">03 — Your business</span><p class="ed-big" data-i18n="fa_c4">Before writing code, we understand your business.</p></div>
+            <div class="ed-chap low" data-from="0.75" data-to="0.81"><span class="mono" data-i18n="fa_c5l">04 — Scale</span><p class="ed-big" data-i18n="fa_c5">Want to reach the top?</p></div>
+            <div class="ed-chap" data-from="0.84" data-to="0.90"><p class="ed-big" data-i18n="fa_c6">We build it with you.</p></div>
+            <div class="ed-chap ed-end" data-from="0.925" data-to="1.2">
+                <div class="ed-brand"><img src="image_2025-12-16_083018257-removebg-preview%20(1).png" alt="CometaX" width="668" height="373"></div>
+                <div class="ed-company"><span class="euro-style">COMETAX</span><span class="euro-style ed-co2">COMPANY</span></div>
+                <p class="ed-endtag" data-i18n="fa_t1x">FUTURE ENGINEERED.</p>
+                <div class="ed-ctas">
+                    <a href="diagnostico/" class="pill pill-light"><span data-i18n="hero_cta">Get a free diagnosis</span> <span class="arr">↗</span></a>
+                    <a href="#products" class="pill pill-ghost"><span data-i18n="fa_cta2">See what we have built</span></a>
+                </div>
             </div>
+            <!-- indicación de que el recorrido avanza con el scroll -->
+            <div class="ed-cue" id="faCue" aria-hidden="true"><span class="ed-mouse"><i></i></span><span data-i18n="fa_cue">Scroll to continue</span></div>
+            <div class="ed-progress" aria-hidden="true"><i id="faBar"></i></div>
         </div>
-    </header>
+    </section>
 
     <!-- ============ PRODUCTOS PROPIOS: laptop + celular en 3D (Eventotes → RanKIT) ============ -->
     <section class="showcase" id="products">
@@ -1185,7 +1240,26 @@
                     "footer_connect": "Connect",
                     "proj_title": "VENTURES",
                     "privacy": "Privacy Policy",
-                    "terms": "Terms of Service"
+                    "terms": "Terms of Service",
+                    "fa_l2": "( Custom software )",
+                    "fa_t1": "FUTURE",
+                    "fa_t2": "ENGINEERED.",
+                    "fa_tag": "Architecture, development and maintenance for SMBs.",
+                    "fa_b1": "Architecture · from the foundations",
+                    "fa_b3": "Maintenance · month after month",
+                    "fa_c1": "Software is built like a building.",
+                    "fa_c2l": "01 — Architecture",
+                    "fa_c2": "It stands on its foundations.",
+                    "fa_c3l": "02 — Development",
+                    "fa_c3": "And it grows floor by floor.",
+                    "fa_c4l": "03 — Your business",
+                    "fa_c4": "Before writing code, we understand your business.",
+                    "fa_c5l": "04 — Scale",
+                    "fa_c5": "Want to reach the top?",
+                    "fa_c6": "We build it with you.",
+                    "fa_cta2": "See what we have built",
+                    "fa_cue": "Scroll to continue",
+                    "fa_t1x": "FUTURE ENGINEERED."
             },
             "es": {
                     "nav_services": "Servicios",
@@ -1368,7 +1442,26 @@
                     "footer_connect": "Conectar",
                     "proj_title": "PROYECTOS",
                     "privacy": "Política de Privacidad",
-                    "terms": "Términos de Servicio"
+                    "terms": "Términos de Servicio",
+                    "fa_l2": "( Software a la medida )",
+                    "fa_t1": "FUTURO",
+                    "fa_t2": "DISEÑADO.",
+                    "fa_tag": "Arquitectura, desarrollo y mantenimiento para PYMES.",
+                    "fa_b1": "Arquitectura · desde los cimientos",
+                    "fa_b3": "Mantenimiento · mes a mes",
+                    "fa_c1": "Un software se construye como un edificio.",
+                    "fa_c2l": "01 — Arquitectura",
+                    "fa_c2": "Se sostiene en sus cimientos.",
+                    "fa_c3l": "02 — Desarrollo",
+                    "fa_c3": "Y crece piso por piso.",
+                    "fa_c4l": "03 — Tu negocio",
+                    "fa_c4": "Antes de programar, entendemos tu negocio.",
+                    "fa_c5l": "04 — Escala",
+                    "fa_c5": "¿Quieres llegar a la cima?",
+                    "fa_c6": "Lo construimos contigo.",
+                    "fa_cta2": "Ver lo que hemos construido",
+                    "fa_cue": "Desliza para avanzar",
+                    "fa_t1x": "FUTURO DISEÑADO."
             }
     };
     let currentLang = 'en';
@@ -1496,7 +1589,7 @@
     const LOGO_SVG = "<svg version=\"1.0\" xmlns=\"http://www.w3.org/2000/svg\" width=\"282.000000pt\" height=\"223.000000pt\" viewBox=\"0 0 282.000000 223.000000\" preserveAspectRatio=\"xMidYMid meet\"> <g transform=\"translate(0.000000,223.000000) scale(0.100000,-0.100000)\" fill=\"#000000\" stroke=\"none\"> <path d=\"M2536 2160 c-5 -25 -19 -68 -32 -97 -26 -54 -55 -73 -137 -88 -57 -11 -53 -22 10 -35 99 -20 133 -61 158 -188 8 -40 25 -32 25 12 0 46 46 134 81 151 15 8 51 20 79 26 27 6 48 14 46 18 -3 4 -30 13 -61 20 -37 8 -66 23 -88 44 -30 30 -40 51 -65 147 l-9 35 -7 -45z\"/> <path d=\"M2135 1944 c-27 -8 -66 -19 -85 -24 -373 -103 -867 -309 -1270 -530 -63 -34 -140 -76 -171 -93 -30 -16 -66 -38 -80 -48 -13 -10 77 32 201 94 124 62 290 141 370 176 80 35 168 74 195 87 144 64 513 200 785 289 80 26 149 51 155 56 14 13 -42 9 -100 -7z\"/> <path d=\"M2240 1810 c-155 -30 -343 -84 -505 -146 -38 -14 -87 -33 -107 -40 -306 -112 -791 -354 -1068 -532 -101 -65 -340 -239 -390 -283 -38 -33 -45 -37 172 104 47 32 89 57 92 57 3 0 29 15 58 34 124 78 436 239 593 306 44 18 84 37 90 42 12 11 25 10 25 -1 0 -5 -10 -13 -21 -16 -22 -7 -330 -183 -339 -194 -3 -3 -32 -24 -65 -45 -228 -149 -474 -366 -576 -510 -64 -90 -90 -162 -91 -248 0 -59 4 -75 28 -115 36 -58 106 -107 192 -134 143 -44 395 -48 612 -8 176 32 185 37 60 32 -137 -6 -250 12 -336 54 -192 93 -216 251 -71 453 58 81 238 254 377 361 125 96 376 268 465 318 28 15 101 58 164 94 62 37 115 67 116 67 1 0 40 21 86 46 46 26 185 99 309 162 124 63 237 121 252 129 71 37 28 42 -122 13z m-995 -440 c-3 -5 -12 -10 -18 -10 -7 0 -6 4 3 10 19 12 23 12 15 0z m-974 -917 c-25 -90 -3 -171 63 -236 54 -52 166 -101 258 -113 27 -4 48 -10 48 -13 0 -12 -141 9 -203 30 -79 27 -131 63 -167 117 -25 38 -30 56 -30 105 0 33 8 81 17 108 20 56 29 58 14 2z\"/> <path d=\"M2345 1613 c-44 -25 -102 -58 -130 -73 -27 -15 -75 -42 -105 -59 -30 -18 -65 -37 -77 -43 -24 -12 -39 -45 -99 -223 -19 -55 -39 -109 -43 -120 -5 -11 -23 -60 -40 -110 -67 -197 -82 -230 -141 -310 -73 -97 -176 -178 -317 -249 -131 -67 -222 -95 -375 -116 -49 -7 -88 -16 -88 -22 0 -19 29 -64 62 -95 37 -35 119 -63 185 -63 56 0 212 34 305 66 295 103 503 275 625 519 29 57 328 933 321 940 -2 2 -39 -17 -83 -42z\"/> </g> </svg>";
     const loadScript = src => new Promise((ok, ko) => { const s = document.createElement('script'); s.src = src; s.async = true; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
     function boot3D() {
-        if (LITE) return;
+        if (LITE || !document.getElementById('logo3d')) return;
         const go = () => loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js')
             .then(() => loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/SVGLoader.js'))
             .then(initLogo3D)
@@ -1720,6 +1813,96 @@
     }
     initShowcase();
 
+    // ================= HERO · OPCIÓN A: recorrido filmado por scroll =================
+    // Misma mecánica que el MVP de pádel: un cuadro por posición de scroll, la película arranca en una
+    // ventana vertical al centro que crece hasta llenar la pantalla y el título se parte hacia los lados.
+    (function filmHero() {
+        const sec = document.getElementById('filmhero');
+        if (!sec) return;
+        const canvas = document.getElementById('faFilm'), ctx = canvas.getContext('2d');
+        const T1 = document.getElementById('faT1'), T2 = document.getElementById('faT2'), intro = document.getElementById('faIntro'), bar = document.getElementById('faBar'), cue = document.getElementById('faCue');
+        const chaps = [...sec.querySelectorAll('.ed-chap')];
+        const TOTAL = 190, DIR = 'assets/hero/';
+        // Modo ligero: solo 1 de cada 10 cuadros (16 imágenes) con fundido entre ellos
+        const STEP = LITE ? 10 : 1;
+        const frames = new Array(TOTAL);
+        const want = [];
+        for (let i = 0; i < TOTAL; i += 8) want.push(i);                 // primero una pasada gruesa
+        for (let i = 0; i < TOTAL; i += STEP) if (!want.includes(i)) want.push(i);
+        let qi = 0;
+        const loadNext = () => {
+            if (qi >= want.length) return;
+            const i = want[qi++], im = new Image();
+            im.onload = () => { frames[i] = im; if (i === 0) paint(true); loadNext(); };
+            im.onerror = loadNext;
+            im.src = DIR + 'c' + String(i + 1).padStart(4, '0') + '.jpg';
+        };
+        for (let k = 0; k < 4; k++) loadNext();                          // 4 descargas en paralelo
+
+        const nearest = i => { for (let d = 0; d < TOTAL; d++) { if (frames[i - d]) return frames[i - d]; if (frames[i + d]) return frames[i + d]; } return null; };
+        const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+        const ease = x => x * x * (3 - 2 * x);
+        let W = 0, H = 0;
+        function resize() { const d = Math.min(devicePixelRatio || 1, 1.5); W = canvas.width = innerWidth * d; H = canvas.height = innerHeight * d; paint(true); }
+        function cover(im, a) {
+            const r = Math.max(W / im.naturalWidth, H / im.naturalHeight) * 1.03;
+            const w = im.naturalWidth * r, h = im.naturalHeight * r;
+            ctx.globalAlpha = a; ctx.drawImage(im, (W - w) / 2, (H - h) / 2, w, h); ctx.globalAlpha = 1;
+        }
+        let smooth = 0, target = 0, last = -1;
+        function progress() { const r = sec.getBoundingClientRect(); const tot = sec.offsetHeight - innerHeight; return tot > 0 ? clamp(-r.top / tot) : 0; }
+        function paint(force) {
+            const p = smooth;
+            const f = p * (TOTAL - 1), a = Math.floor(f / STEP) * STEP, b = Math.min(TOTAL - 1, a + STEP), u = (f - a) / STEP;
+            const key = Math.round(f * 4);
+            if (!force && key === last) return;
+            last = key;
+            ctx.fillStyle = '#050506'; ctx.fillRect(0, 0, W, H);
+            const A = frames[a] || nearest(a), B = frames[b] || null;
+            if (A) cover(A, 1);
+            if (B && u > 0) cover(B, u);
+        }
+        function apply() {
+            const p = smooth;
+            // intro: ventana vertical → pantalla completa
+            const e = ease(clamp(p / 0.10));
+            const mob = innerWidth < 820;
+            const cw0 = mob ? innerWidth * .62 : Math.min(innerWidth * .26, 420), ch0 = Math.min(cw0 * 1.42, innerHeight * .62);
+            const ix = (innerWidth - cw0) / 2 * (1 - e), iy = (innerHeight - ch0) / 2 * (1 - e);
+            canvas.style.clipPath = e >= 1 ? 'none' : `inset(${iy.toFixed(1)}px ${ix.toFixed(1)}px ${iy.toFixed(1)}px ${ix.toFixed(1)}px round ${(14 * (1 - e)).toFixed(1)}px)`;
+            const sep = e * innerWidth * (mob ? .0 : .3), op = (1 - clamp(e * 1.3)).toFixed(3);
+            T1.style.transform = mob ? `translateY(${-e * 30}vh)` : `translateX(${-sep}px)`;
+            T2.style.transform = mob ? `translateY(${e * 30}vh)` : `translateX(${sep}px)`;
+            T1.style.opacity = T2.style.opacity = op;
+            intro.querySelectorAll('.ed-top, .ed-bot, .ed-tag, .ed-brand').forEach(el => { el.style.opacity = (1 - clamp(p * 9)).toFixed(3); });
+            // capítulos que entran y salen con el recorrido
+            chaps.forEach(c => {
+                const from = +c.dataset.from, to = +c.dataset.to;
+                const k = clamp((p - from) / 0.03) * (1 - clamp((p - to) / 0.03));
+                c.style.opacity = k.toFixed(3);
+                c.style.translate = `0 ${((1 - k) * 18).toFixed(1)}px`;
+                c.classList.toggle('on', k > .5);
+            });
+            bar.style.transform = `scaleX(${p.toFixed(3)})`;
+            cue.style.opacity = (1 - clamp((p - 0.88) / 0.04)).toFixed(3);   // visible hasta el cierre
+            paint(false);
+        }
+        resize(); addEventListener('resize', resize);
+        const onScroll = () => { target = progress(); if (REDUCE) { smooth = target; apply(); } };
+        addEventListener('scroll', onScroll, { passive: true });
+        onScroll(); smooth = target; apply();
+        let raf = 0, prev = performance.now();
+        const loop = now => {
+            const dt = Math.min(.05, (now - prev) / 1000); prev = now;
+            smooth += (target - smooth) * Math.min(1, dt * 7);
+            if (Math.abs(target - smooth) < 0.0004) smooth = target;
+            apply();
+            raf = requestAnimationFrame(loop);
+        };
+        new IntersectionObserver(([en]) => { cancelAnimationFrame(raf); if (en.isIntersecting) { prev = performance.now(); raf = requestAnimationFrame(loop); } }).observe(sec);
+        // para capturas desde un navegador sin cabeza
+        window.__faGo = p => { const tot = sec.offsetHeight - innerHeight; scrollTo(0, sec.offsetTop + tot * p); target = smooth = p; last = -1; apply(); };
+    })();
 </script>
 </body>
 </html>

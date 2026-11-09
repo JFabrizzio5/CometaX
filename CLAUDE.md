@@ -11,6 +11,10 @@ por CDN, ninguna ruta local que pueda dar 404.
 > `index.backup-1109-v1.html`.
 
 - `index.html` — **el sitio (v2)**. HTML + CSS + JS inline, sin Tailwind. Usa `assets/`.
+- Hero (2026-11-09): recorrido por scroll tipo el MVP de pádel. 190 cuadros en `assets/hero/` armados con ffmpeg
+  desde tomas ya hechas (CometaX-Promo + `Marcas-Promo/cometax/gemini-cometa.mp4`); el script y las propuestas viven en
+  `~/Documents/GitHub/CometaX-Hero-Opciones/` (`hero-a/armar.sh`, `build.py`). **No usar tomas de Joseph programando.**
+  Ojo: la clase `.fa` choca con Font Awesome; el hero usa prefijo `ed-`.
 - `assets/` — capturas reales de Eventotes y RanKIT, clips de fondo (Higgsfield, desaturados),
   `logo-3d.webp` (imagen fija del logo 3D), fotos del equipo (de LinkedIn).
 - `diagnostico/index.html` — cuestionario de 16 preguntas que recomienda un plan
