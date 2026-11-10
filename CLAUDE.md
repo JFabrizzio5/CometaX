@@ -120,10 +120,10 @@ La bio y los casos van **generales a propósito**: sin giros de clientes ni núm
 
 Precios desde 2026-11-10 (6 meses / mes a mes, MXN): Essential 20,000 / 23,500,
 Growth 43,000 / 50,500, Enterprise 61,000 / 72,000; vigencia dic 2026 – ene 2027.
-**Los planes llevan el IVA incluido; los servicios extra (proyectos, IA, landings) van más IVA.**
+**Los planes llevan el IVA incluido; los servicios extra (proyectos, IA, landings) van sin IVA incluido.**
 Se dice en grande: aviso `pl_vat_big` arriba de los planes, `vat_incl` ("IVA incl.") junto a cada
 precio de plan en la landing y el comparativo, y `vat_big` al inicio del plan recomendado en
-`diagnostico/`; ahí `vat_short` ("+ IVA") queda solo para los servicios.
+`diagnostico/`; ahí `vat_short` ("sin IVA") queda solo para los servicios.
 
 ⚠️ Este archivo se publica en cometax.click/CLAUDE.md: no escribir aquí nada interno.
 
