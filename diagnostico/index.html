@@ -300,7 +300,7 @@
             q_msg: 'Tell us the problem in your own words', s_msg: "What's happening, what you've tried and what success would look like. Optional, but it helps a lot.",
             ph_msg: 'E.g. we bill by hand in Excel and it takes us two days every month…',
 
-            rec_kicker: 'Recommended for you', rec_why: 'Why', rec_fit: 'Fit with your answers', rec_frozen: 'MXN + VAT / month · frozen 6 months', rec_m2m: 'Month to month MXN', vat_short: '+ VAT', vat_big: 'All prices in Mexican pesos plus VAT (16%)',
+            rec_kicker: 'Recommended for you', rec_why: 'Why', rec_fit: 'Fit with your answers', rec_frozen: 'MXN / month · VAT incl. · frozen 6 months', rec_m2m: 'Month to month MXN', vat_short: '+ VAT', vat_incl: 'VAT incl.', vat_big: 'Plans include VAT · extra services plus VAT (16%)',
             rec_project_price: 'Quoted', rec_project_terms: 'Down payment and staged deliveries',
             rec_project_after: 'When we deliver it, it can move to a Growth or Enterprise plan and the same team stays in charge.',
             rec_disclaimer: 'An automatic recommendation based on your answers. We confirm it on the call.',
@@ -420,7 +420,7 @@
             q_msg: 'Cuéntanos el problema con tus palabras', s_msg: 'Qué está pasando, qué has intentado y cómo se vería el éxito. Es opcional, pero ayuda mucho.',
             ph_msg: 'Ej. facturamos a mano en Excel y cada mes nos toma dos días…',
 
-            rec_kicker: 'Recomendado para ti', rec_why: 'Por qué', rec_fit: 'Afinidad con tus respuestas', rec_frozen: 'MXN + IVA / mes · congelado 6 meses', rec_m2m: 'Mes a mes MXN', vat_short: '+ IVA', vat_big: 'Todos los precios en pesos más IVA (16 %)',
+            rec_kicker: 'Recomendado para ti', rec_why: 'Por qué', rec_fit: 'Afinidad con tus respuestas', rec_frozen: 'MXN / mes · IVA incluido · congelado 6 meses', rec_m2m: 'Mes a mes MXN', vat_short: '+ IVA', vat_incl: 'IVA incl.', vat_big: 'Planes con IVA incluido · servicios extra más IVA (16 %)',
             rec_project_price: 'Cotización', rec_project_terms: 'Anticipo y entregas por etapas',
             rec_project_after: 'Al entregarlo, puede pasar a un plan Growth o Enterprise y el mismo equipo sigue a cargo.',
             rec_disclaimer: 'Es una recomendación automática con tus respuestas. La confirmamos en la llamada.',
@@ -696,7 +696,7 @@
                 `<div class="euro-wrapper"><div class="euro-style name">${esc(t('p_' + p))}</div></div><div class="line">${esc(t('t_' + p))}</div>`;
         h += p === 'project'
             ? `<div class="price"><b>${esc(t('rec_project_price'))}</b><span>${esc(t('rec_project_terms'))}</span></div>`
-            : `<div class="price"><b>MXN ${PRICES[p][0]}</b><span>${esc(t('rec_frozen'))} · ${esc(t('rec_m2m'))} ${PRICES[p][1]} ${esc(t('vat_short'))}</span></div>`;
+            : `<div class="price"><b>MXN ${PRICES[p][0]}</b><span>${esc(t('rec_frozen'))} · ${esc(t('rec_m2m'))} ${PRICES[p][1]} ${esc(t('vat_incl'))}</span></div>`;
         const reasons = r.reasons.length ? r.reasons : ['generic'];
         h += `<ul class="why">${reasons.map(w => `<li><i class="fas fa-check"></i><span>${esc(w === 'generic' ? t('rec_generic') : t('why_' + w))}</span></li>`).join('')}</ul>`;
         if (p === 'project') h += `<p class="disclaimer" style="color:#c9c8d2">${esc(t('rec_project_after'))}</p>`;
@@ -711,7 +711,7 @@
             h += `<div class="pcard${k === p ? ' best' : ''}${on ? ' on' : ''}">` +
                  (k === p ? `<span class="badge">${esc(t('rec_badge'))}</span>` : '') +
                  `<div class="pname">${esc(t('p_' + k))}</div><div class="ptag">${esc(t('t_' + k))}</div>` +
-                 `<div class="pprice"><b>MXN ${PRICES[k][0]}</b> <span>${esc(t('rec_frozen'))}</span></div><div class="pm2m">${esc(t('rec_m2m'))} ${PRICES[k][1]} ${esc(t('vat_short'))}</div>` +
+                 `<div class="pprice"><b>MXN ${PRICES[k][0]}</b> <span>${esc(t('rec_frozen'))}</span></div><div class="pm2m">${esc(t('rec_m2m'))} ${PRICES[k][1]} ${esc(t('vat_incl'))}</div>` +
                  `<div class="fl" style="margin:14px 0 8px">${esc(t('rec_includes'))}</div><ul class="inc">` +
                  [1, 2, 3, 4, 5].map(i => `<li><i class="fas fa-check"></i>${esc(t('inc_' + k + '_' + i))}</li>`).join('') + `</ul>` +
                  `<p class="pno">${esc(t('no_' + k))}</p>` +
