@@ -364,9 +364,13 @@
         .plan.pro .pbox { background: rgba(124,58,237,.14); border-color: rgba(168,85,247,.35); }
         .plan .pfz { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #d6d6de; }
         .plan .price { font-family: 'Archivo Black'; font-style: italic; font-size: 34px; display: inline-block; margin: 6px 0 2px; }
-        .plan .pmo { font-size: 12px; color: #8d8c98; }
+        .plan .pmo { font-size: 13px; color: #c4b5fd; white-space: nowrap; display: inline-block; }
         .plan .pm2m { font-size: 11px; color: #8d8c98; }
         .plan .psave { font-size: 12px; color: #86efac; margin-top: 6px; }
+        .vat-big { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 12px; margin: 26px auto 0; padding: 14px 24px; border: 1px solid rgba(168,85,247,.55); background: rgba(124,58,237,.16); border-radius: 16px; font-family: 'Archivo Black'; font-style: italic; font-size: clamp(17px, 2.3vw, 26px); line-height: 1.15; text-transform: uppercase; color: #fff; text-align: center; }
+        .vat-big i { color: #c4b5fd; font-style: normal; font-size: .85em; }
+        .vat-big b { color: #c4b5fd; font-weight: 400; }
+        .price .vat { font-family: var(--mono); font-style: normal; font-size: .38em; letter-spacing: .04em; color: var(--violet); vertical-align: .6em; margin-left: 6px; }
         .plan .pno { font-size: 12px; color: #77768a; margin: -12px 0 20px; line-height: 1.5; }
         .plan ul { list-style: none; padding: 18px 0 0; margin: 18px 0 26px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 14px; color: #d6d6de; flex-grow: 1; }
         .plan li { display: flex; gap: 10px; }
@@ -753,9 +757,9 @@
                 <p class="sub" data-i18n="cases_sub">We don't promise. We deliver. A few systems we've built, rescued and scaled.</p>
             </div>
             <div class="grid3">
-                <div class="card reveal d1"><div class="tagpill">Fiscal · Scale</div><h3 data-i18n="case1_title">Millions of invoices, zero downtime</h3><p data-i18n="case1_desc">Migrated a Laravel monolith to a multi-tenant, multi-service architecture handling millions of SAT XML invoices. Fully auditable for fiscal compliance, with Redis Streams and real-time WebSockets.</p></div>
+                <div class="card reveal d1"><div class="tagpill">Data · Scale</div><h3 data-i18n="case1_title">Millions of documents, zero downtime</h3><p data-i18n="case1_desc">Migrated a Laravel monolith to a multi-tenant, multi-service architecture processing millions of documents. Fully auditable, with Redis Streams and real-time WebSockets.</p></div>
                 <div class="card reveal d2"><div class="tagpill" style="color:#a5f3fc;border-color:rgba(34,211,238,.35)">Rescue · AWS</div><h3 data-i18n="case2_title">An insurer rescued without its source code</h3><p data-i18n="case2_desc">Migrated a legacy VB.NET system to AWS with no access to the original codebase — rebuilt by behavior. Payment microservices moved with 100% uptime and zero disruption to production.</p></div>
-                <div class="card reveal d3"><div class="tagpill" style="color:#fde68a;border-color:rgba(251,191,36,.35)">Enterprise · Resilience</div><h3 data-i18n="case3_title">Resilient architecture for 16 fuel stations</h3><p data-i18n="case3_desc">Led a Java Spring Boot + Angular platform across 16 gas stations: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.</p></div>
+                <div class="card reveal d3"><div class="tagpill" style="color:#fde68a;border-color:rgba(251,191,36,.35)">Enterprise · Resilience</div><h3 data-i18n="case3_title">Resilient multi-location architecture</h3><p data-i18n="case3_desc">Led a Java Spring Boot + Angular platform for a multi-location operation: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.</p></div>
             </div>
             <div class="grid3 reveal" style="margin-top:16px">
                 <div class="card" style="padding:22px 26px"><div class="euro-style eo-l" style="font-size:40px">+50</div><p data-i18n="stat_projects">Projects delivered</p></div>
@@ -788,7 +792,7 @@
                     </div>
                     <div class="lcard reveal d2">
                         <div class="t" style="color:var(--ink)">✓ <span data-i18n="cmp_b_tag">CometaX · Essential</span></div>
-                        <div class="price">$16,500</div>
+                        <div class="price">$20,000<span class="vat" data-i18n="vat_short">+ VAT</span></div>
                         <div class="mono" style="font-size:12px;color:#4b4a55" data-i18n="cmp_unit">MXN / month · frozen 6 months</div>
                         <p style="font-size:13px;color:#4b4a55;margin:14px 0 0" data-i18n="cmp_b_note">keep it running: fixes, maintenance, incidents</p>
                         <ul>
@@ -800,7 +804,7 @@
                     <div class="lcard pro reveal d3">
                         <div class="flag" data-i18n="cmp_c_badge">Recommended</div>
                         <div class="t" style="color:var(--ink)">✓ <span data-i18n="cmp_c_tag">CometaX · Growth</span></div>
-                        <div class="price">$39,500</div>
+                        <div class="price">$43,000<span class="vat" data-i18n="vat_short">+ VAT</span></div>
                         <div class="mono" style="font-size:12px;color:#4b4a55" data-i18n="cmp_unit">MXN / month · frozen 6 months</div>
                         <p style="font-size:13px;color:#34333d;margin:14px 0 0" data-i18n="cmp_c_note">make it better every month: automation, integrations, improvements</p>
                         <ul>
@@ -829,6 +833,7 @@
                 <div class="euro-wrapper"><h2 class="euro-style eo-l h2" data-i18n="plans_title">PLANS</h2></div>
                 <p class="sub" data-i18n="plans_sub">Monthly plans with the price frozen for 6 months, or a quote for one-off projects. One contact, 6+ specialists behind it.</p>
             </div>
+            <div class="vat-big reveal"><i class="fas fa-receipt"></i><span data-i18n="pl_vat_big">All prices in Mexican pesos <b>plus VAT (16%)</b></span></div>
             <div class="grid3" style="align-items:stretch">
                 <div class="card plan reveal">
                     <span class="ptag" data-i18n="pl_e_tag">Keep everything running</span>
@@ -836,9 +841,9 @@
                     <p class="pfor" data-i18n="pl_e_for">For companies that need their systems to keep working properly.</p>
                     <div class="pbox">
                         <span class="pfz" data-i18n="pl_frozen">Frozen price · 6 months</span>
-                        <div><span class="price">MXN 16,500</span> <span class="mono pmo" data-i18n="pl_mo">/ month</span></div>
-                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 19,500</div>
-                        <div class="psave" data-i18n="pl_e_save">You save MXN 18,000 in 6 months</div>
+                        <div><span class="price">MXN 20,000</span> <span class="mono pmo" data-i18n="pl_mo">+ VAT / month</span></div>
+                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 23,500</div>
+                        <div class="psave" data-i18n="pl_e_save">You save MXN 21,000 in 6 months</div>
                     </div>
                     <ul>
                         <li><i class="fas fa-check"></i><span data-i18n="pl_e_1">Bug fixing</span></li>
@@ -857,9 +862,9 @@
                     <p class="pfor" data-i18n="pl_g_for">For companies that need to keep improving and evolving their systems.</p>
                     <div class="pbox">
                         <span class="pfz" data-i18n="pl_frozen">Frozen price · 6 months</span>
-                        <div><span class="price">MXN 39,500</span> <span class="mono pmo" data-i18n="pl_mo">/ month</span></div>
-                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 46,500</div>
-                        <div class="psave" data-i18n="pl_g_save">You save MXN 42,000 in 6 months</div>
+                        <div><span class="price">MXN 43,000</span> <span class="mono pmo" data-i18n="pl_mo">+ VAT / month</span></div>
+                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 50,500</div>
+                        <div class="psave" data-i18n="pl_g_save">You save MXN 45,000 in 6 months</div>
                     </div>
                     <ul>
                         <li><i class="fas fa-check"></i><span data-i18n="pl_g_1">Everything in Essential</span></li>
@@ -877,9 +882,9 @@
                     <p class="pfor" data-i18n="pl_x_for">For companies that need strategic technology direction and support.</p>
                     <div class="pbox">
                         <span class="pfz" data-i18n="pl_frozen">Frozen price · 6 months</span>
-                        <div><span class="price">MXN 54,000</span> <span class="mono pmo" data-i18n="pl_mo">/ month</span></div>
-                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 63,500</div>
-                        <div class="psave" data-i18n="pl_x_save">You save MXN 57,000 in 6 months</div>
+                        <div><span class="price">MXN 61,000</span> <span class="mono pmo" data-i18n="pl_mo">+ VAT / month</span></div>
+                        <div class="mono pm2m"><span data-i18n="pl_m2m">Month to month</span> MXN 72,000</div>
+                        <div class="psave" data-i18n="pl_x_save">You save MXN 66,000 in 6 months</div>
                     </div>
                     <ul>
                         <li><i class="fas fa-check"></i><span data-i18n="pl_x_1">Everything in Growth</span></li>
@@ -947,7 +952,7 @@
                     <div>
                         <h3 style="margin:0">Joseph Fabrizzio</h3>
                         <div class="role">CEO &amp; Founder · Ex-Sr. Tech Lead</div>
-                        <p data-i18n="bio_joseph">Software architect. Led a fiscal system handling millions of invoices, rescued an insurer's platform on AWS without its source code, and designed resilient architecture for 16 fuel stations. Self-taught since 2016.</p>
+                        <p data-i18n="bio_joseph">Software architect. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient architecture for multi-location businesses. Self-taught since 2016.</p>
                     </div>
                 </div>
                 <div class="card leader reveal d2">
@@ -1074,9 +1079,9 @@
                     "hero_head": "Technology that gets delivered,<br>not just promised.",
                     "hero_lead": "We take SMBs where a single developer can't — architecture, development and maintenance from a team of 6+ specialists, at the cost of one in-house hire.",
                     "hero_cta": "Get a free diagnosis",
-                    "case1_title": "Millions of invoices, zero downtime",
+                    "case1_title": "Millions of documents, zero downtime",
                     "case2_title": "An insurer rescued without its source code",
-                    "case3_title": "Resilient architecture for 16 fuel stations",
+                    "case3_title": "Resilient multi-location architecture",
                     "stat_l1": "Specialists",
                     "stat_d1": "per project, at the cost of one in-house hire",
                     "stat_l2": "Point of contact",
@@ -1124,9 +1129,9 @@
                     "svc_cta": "Get a free diagnosis",
                     "cases_title": "PROVEN TRACK RECORD",
                     "cases_sub": "We don't promise. We deliver. A few systems we've built, rescued and scaled.",
-                    "case1_desc": "Migrated a Laravel monolith to a multi-tenant, multi-service architecture handling millions of SAT XML invoices. Fully auditable for fiscal compliance, with Redis Streams and real-time WebSockets.",
+                    "case1_desc": "Migrated a Laravel monolith to a multi-tenant, multi-service architecture processing millions of documents. Fully auditable, with Redis Streams and real-time WebSockets.",
                     "case2_desc": "Migrated a legacy VB.NET system to AWS with no access to the original codebase — rebuilt by behavior. Payment microservices moved with 100% uptime and zero disruption to production.",
-                    "case3_desc": "Led a Java Spring Boot + Angular platform across 16 gas stations: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.",
+                    "case3_desc": "Led a Java Spring Boot + Angular platform for a multi-location operation: resilient architecture design, client negotiation and multi-million-peso budgets, delivered end to end.",
                     "stat_projects": "Projects delivered",
                     "stat_years_u": "yrs",
                     "stat_years": "Combined experience",
@@ -1162,9 +1167,11 @@
                     "pl_e_tag": "Keep everything running",
                     "pl_e_for": "For companies that need their systems to keep working properly.",
                     "pl_frozen": "Frozen price · 6 months",
-                    "pl_mo": "/ month",
+                    "pl_mo": "+ VAT / month",
+                    "pl_vat_big": "All prices in Mexican pesos <b>plus VAT (16%)</b>",
+                    "vat_short": "+ VAT",
                     "pl_m2m": "Month to month",
-                    "pl_e_save": "You save MXN 18,000 in 6 months",
+                    "pl_e_save": "You save MXN 21,000 in 6 months",
                     "pl_e_1": "Bug fixing",
                     "pl_e_2": "Preventive maintenance and technical updates",
                     "pl_e_3": "Performance and backup checks",
@@ -1175,7 +1182,7 @@
                     "plan_recommended": "Recommended",
                     "pl_g_tag": "Your system improves every month",
                     "pl_g_for": "For companies that need to keep improving and evolving their systems.",
-                    "pl_g_save": "You save MXN 42,000 in 6 months",
+                    "pl_g_save": "You save MXN 45,000 in 6 months",
                     "pl_g_1": "Everything in Essential",
                     "pl_g_2": "Improvements to existing features",
                     "pl_g_3": "Process automation",
@@ -1184,7 +1191,7 @@
                     "pl_g_no": "Doesn't include full platforms or extraordinary projects.",
                     "pl_x_tag": "Your tech department, with direction",
                     "pl_x_for": "For companies that need strategic technology direction and support.",
-                    "pl_x_save": "You save MXN 57,000 in 6 months",
+                    "pl_x_save": "You save MXN 66,000 in 6 months",
                     "pl_x_1": "Everything in Growth",
                     "pl_x_2": "External technical direction",
                     "pl_x_3": "Software architecture and technology planning",
@@ -1221,7 +1228,7 @@
                     "guarantee_t": "Freeze your price for 6 months",
                     "guarantee_d": "List prices are updated every semester for exchange rate, tooling costs and inflation. With the 6-month contract your monthly fee stays fixed for the whole term, and if you renew you keep that same price for another 6 months.",
                     "lead_title": "CORE LEADERSHIP",
-                    "bio_joseph": "Software architect. Led a fiscal system handling millions of invoices, rescued an insurer's platform on AWS without its source code, and designed resilient architecture for 16 fuel stations. Self-taught since 2016.",
+                    "bio_joseph": "Software architect. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient architecture for multi-location businesses. Self-taught since 2016.",
                     "bio_jose": "Global Growth Strategist. Bridging complex technology with real-world market demands.",
                     "alliances_sub": "Clients · Partners · Impact",
                     "alliances_title": "LET'S TALK",
@@ -1277,9 +1284,9 @@
                     "hero_head": "Tecnología que se entrega,<br>no que se promete.",
                     "hero_lead": "Llevamos a las pymes donde un solo desarrollador no puede — arquitectura, desarrollo y mantenimiento con un equipo de 6+ especialistas, al costo de una sola contratación.",
                     "hero_cta": "Diagnóstico gratuito",
-                    "case1_title": "Millones de facturas, cero caídas",
+                    "case1_title": "Millones de documentos, cero caídas",
                     "case2_title": "Una aseguradora rescatada sin su código fuente",
-                    "case3_title": "Arquitectura resiliente para 16 gasolineras",
+                    "case3_title": "Arquitectura resiliente multisucursal",
                     "stat_l1": "Especialistas",
                     "stat_d1": "por proyecto, al costo de una sola contratación",
                     "stat_l2": "Punto de contacto",
@@ -1327,9 +1334,9 @@
                     "svc_cta": "Diagnóstico gratuito",
                     "cases_title": "CASOS REALES",
                     "cases_sub": "No prometemos. Entregamos. Algunos sistemas que construimos, rescatamos y escalamos.",
-                    "case1_desc": "Migramos un monolito Laravel a una arquitectura multi-tenant y multi-servicio que maneja millones de facturas XML del SAT. Totalmente auditable para cumplimiento fiscal, con Redis Streams y WebSockets en tiempo real.",
+                    "case1_desc": "Migramos un monolito Laravel a una arquitectura multi-tenant y multi-servicio que procesa millones de documentos. Totalmente auditable, con Redis Streams y WebSockets en tiempo real.",
                     "case2_desc": "Migramos un sistema VB.NET heredado a AWS sin acceso al código original — reconstruido por comportamiento. Microservicios de pago migrados con 100% de uptime y cero interrupción en producción.",
-                    "case3_desc": "Lideramos una plataforma Java Spring Boot + Angular en 16 gasolineras: diseño de arquitectura resiliente, negociación con el cliente y presupuestos multimillonarios, entregado de punta a punta.",
+                    "case3_desc": "Lideramos una plataforma Java Spring Boot + Angular para una operación con varias sucursales: diseño de arquitectura resiliente, negociación con el cliente y presupuestos multimillonarios, entregado de punta a punta.",
                     "stat_projects": "Proyectos entregados",
                     "stat_years_u": "años",
                     "stat_years": "Experiencia combinada",
@@ -1365,9 +1372,11 @@
                     "pl_e_tag": "Que todo siga funcionando",
                     "pl_e_for": "Para empresas que necesitan mantener sus sistemas funcionando correctamente.",
                     "pl_frozen": "Precio congelado · 6 meses",
-                    "pl_mo": "/ mes",
+                    "pl_mo": "+ IVA / mes",
+                    "pl_vat_big": "Todos los precios en pesos <b>más IVA (16 %)</b>",
+                    "vat_short": "+ IVA",
                     "pl_m2m": "Mes a mes",
-                    "pl_e_save": "Ahorras MXN 18,000 en 6 meses",
+                    "pl_e_save": "Ahorras MXN 21,000 en 6 meses",
                     "pl_e_1": "Corrección de errores",
                     "pl_e_2": "Mantenimiento preventivo y actualizaciones técnicas",
                     "pl_e_3": "Revisión de rendimiento y verificación de respaldos",
@@ -1378,7 +1387,7 @@
                     "plan_recommended": "Recomendado",
                     "pl_g_tag": "Que tu sistema mejore cada mes",
                     "pl_g_for": "Para empresas que necesitan mejorar y evolucionar sus sistemas continuamente.",
-                    "pl_g_save": "Ahorras MXN 42,000 en 6 meses",
+                    "pl_g_save": "Ahorras MXN 45,000 en 6 meses",
                     "pl_g_1": "Todo lo de Essential",
                     "pl_g_2": "Mejoras a funcionalidades existentes",
                     "pl_g_3": "Automatización de procesos",
@@ -1387,7 +1396,7 @@
                     "pl_g_no": "No incluye plataformas completas ni proyectos extraordinarios.",
                     "pl_x_tag": "Tu área de tecnología, con dirección",
                     "pl_x_for": "Para empresas que necesitan dirección y acompañamiento tecnológico estratégico.",
-                    "pl_x_save": "Ahorras MXN 57,000 en 6 meses",
+                    "pl_x_save": "Ahorras MXN 66,000 en 6 meses",
                     "pl_x_1": "Todo lo de Growth",
                     "pl_x_2": "Dirección técnica externa",
                     "pl_x_3": "Arquitectura de software y planeación tecnológica",
@@ -1424,7 +1433,7 @@
                     "guarantee_t": "Congela tu precio por 6 meses",
                     "guarantee_d": "Los precios de lista se actualizan cada semestre por tipo de cambio, costo de herramientas e inflación. Con el contrato de 6 meses tu mensualidad queda fija durante todo el plazo y, si renuevas, conservas ese mismo precio otros 6 meses.",
                     "lead_title": "LIDERAZGO",
-                    "bio_joseph": "Arquitecto de software. Lideró un sistema fiscal que maneja millones de facturas, rescató la plataforma de una aseguradora en AWS sin su código fuente, y diseñó arquitectura resiliente para 16 gasolineras. Autodidacta desde 2016.",
+                    "bio_joseph": "Arquitecto de software. Lideró plataformas que procesan millones de documentos, rescató sistemas críticos en la nube sin su código fuente y diseñó arquitectura resiliente para empresas con varias sucursales. Autodidacta desde 2016.",
                     "bio_jose": "Estratega de Crecimiento Global. Conectando tecnología compleja con las demandas reales del mercado.",
                     "alliances_sub": "Clientes · Aliados · Impacto",
                     "alliances_title": "HABLEMOS",

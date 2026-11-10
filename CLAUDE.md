@@ -114,8 +114,17 @@ tipo Formspree.
   Soriano (co-founder, comercial)
 
 **No inventes cifras ni casos.** Los casos que se muestran son reales y salen
-del CV de Joseph: facturación SAT con millones de XML, rescate de una aseguradora
-migrada a AWS sin código fuente, y arquitectura resiliente para 16 gasolineras.
+del CV de Joseph: plataforma con millones de documentos, rescate de una aseguradora
+migrada a AWS sin código fuente, y arquitectura resiliente multisucursal.
+La bio y los casos van **generales a propósito**: sin giros de clientes ni número de sucursales.
+
+Precios desde 2026-11-10 (6 meses / mes a mes, MXN + IVA): Essential 20,000 / 23,500,
+Growth 43,000 / 50,500, Enterprise 61,000 / 72,000; vigencia dic 2026 – ene 2027.
+**Todo va MÁS IVA y se dice en grande**: aviso `pl_vat_big` arriba de los planes, `vat_short`
+("+ IVA") junto a cada precio de la landing y del comparativo, y `vat_big` al inicio del plan
+recomendado en `diagnostico/`.
+
+⚠️ Este archivo se publica en cometax.click/CLAUDE.md: no escribir aquí nada interno.
 
 ## Cómo verificar cambios
 
