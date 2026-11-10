@@ -25,6 +25,9 @@ por CDN, ninguna ruta local que pueda dar 404.
   **los clientes van sin nombre de empresa** ("Cliente confidencial · giro"), con marcas y datos sensibles
   difuminados en las capturas; las capturas de prototipos son de cuentas demo locales.
 - `index.backup-1109-v1.html` — la landing anterior (con Social Hub y chatbot).
+- `catalogo/` — PDFs que se descargan desde los botones bajo los planes (`pdf_plans`, `pdf_extra`):
+  planes (IVA incluido) y servicios extra (sin IVA incluido). Se generan fuera del repo en
+  `~/Documents/GitHub/CometaX-Consultoria/servicios-2026/` y se copian aquí; si cambian precios, actualizar los dos.
 - `Landing/index.html` — copia de la **v1**; no se actualizó (la v2 depende de `assets/`).
 - `index.backup-*.html` — respaldo previo a la reescritura de julio 2026.
 - `frontend/`, `backend/` — otra app (Vite + TS), **no** es la landing.
@@ -48,7 +51,7 @@ con `showPage('home'|'hub')`.
 `translations = { en: {...}, es: {...} }` con `data-i18n="clave"` en el HTML.
 El literal del HTML es el **inglés**; el español vive solo en el diccionario.
 
-- **Las dos listas deben tener exactamente las mismas claves** (hoy 203 c/u). Si
+- **Las dos listas deben tener exactamente las mismas claves** (hoy 205 c/u). Si
   agregas texto nuevo, agrégalo a EN **y** ES o el toggle mostrará inglés suelto.
 - `toggleLanguage()` cambia el texto dentro de un `setTimeout(..., 200)`. Si
   verificas por script, **espera >300 ms** o leerás el valor viejo y creerás que

@@ -370,6 +370,8 @@
         .vat-big { display: flex; width: fit-content; max-width: 100%; align-items: center; gap: 12px; margin: 26px auto 0; padding: 14px 24px; border: 1px solid rgba(168,85,247,.55); background: rgba(124,58,237,.16); border-radius: 16px; font-family: 'Archivo Black'; font-style: italic; font-size: clamp(17px, 2.3vw, 26px); line-height: 1.15; text-transform: uppercase; color: #fff; text-align: center; }
         .vat-big i { color: #c4b5fd; font-style: normal; font-size: .85em; }
         .vat-big b { color: #c4b5fd; font-weight: 400; }
+        .pdf-dl { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin: 22px auto 0; }
+        .pdf-dl .pill i { color: #c4b5fd; }
         .price .vat { font-family: var(--mono); font-style: normal; font-size: .38em; letter-spacing: .04em; color: var(--violet); vertical-align: .6em; margin-left: 6px; }
         .plan .pno { font-size: 12px; color: #77768a; margin: -12px 0 20px; line-height: 1.5; }
         .plan ul { list-style: none; padding: 18px 0 0; margin: 18px 0 26px; border-top: 1px solid var(--line); display: grid; gap: 12px; font-size: 14px; color: #d6d6de; flex-grow: 1; }
@@ -898,6 +900,10 @@
                 </div>
             </div>
             <p class="mono reveal" style="text-align:center;font-size:11px;color:#8d8c98;margin:28px auto 0;line-height:1.7;max-width:980px" data-i18n="plans_note">Prices in MXN with VAT included, paid monthly in advance. Frozen price: 6-month term, renew at the same price; ending early costs 1.5 monthly payments or the remaining months, whichever is less. Month to month: 3-month minimum at the current list price. Infrastructure, licenses and third-party services not included. Your code is yours.</p>
+            <div class="pdf-dl reveal">
+                <a href="catalogo/CometaX-Planes-2026.pdf" class="pill pill-ghost" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i><span data-i18n="pdf_plans">Download plans (PDF · Spanish)</span></a>
+                <a href="catalogo/CometaX-Servicios-Extra-2026.pdf" class="pill pill-ghost" target="_blank" rel="noopener"><i class="fas fa-file-pdf"></i><span data-i18n="pdf_extra">Extra services (PDF · Spanish)</span></a>
+            </div>
         </div>
     </section>
 
@@ -952,7 +958,7 @@
                     <div>
                         <h3 style="margin:0">Joseph Fabrizzio</h3>
                         <div class="role">CEO &amp; Founder · Ex-Sr. Tech Lead</div>
-                        <p data-i18n="bio_joseph">Software architect. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient architecture for multi-location businesses. Self-taught since 2016.</p>
+                        <p data-i18n="bio_joseph">Software architect with 7+ years of experience in financial, pharmaceutical and distribution systems. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient multi-location architecture. Self-taught since 2016.</p>
                     </div>
                 </div>
                 <div class="card leader reveal d2">
@@ -1199,6 +1205,8 @@
                     "pl_x_5": "Developer coordination and technical debt management",
                     "pl_x_no": "Doesn't include dedicated staff or projects outside the agreed scope.",
                     "plans_note": "Prices in MXN with VAT included, paid monthly in advance. Frozen price: 6-month term, renew at the same price; ending early costs 1.5 monthly payments or the remaining months, whichever is less. Month to month: 3-month minimum at the current list price. Infrastructure, licenses and third-party services not included. Your code is yours.",
+                    "pdf_plans": "Download plans (PDF · Spanish)",
+                    "pdf_extra": "Extra services (PDF · Spanish)",
                     "method_title": "HOW WE WORK",
                     "method_sub": "You always have visibility. Your systems, repos and deliverables stay under your control.",
                     "step1_t": "Diagnosis",
@@ -1228,7 +1236,7 @@
                     "guarantee_t": "Freeze your price for 6 months",
                     "guarantee_d": "List prices are updated every semester for exchange rate, tooling costs and inflation. With the 6-month contract your monthly fee stays fixed for the whole term, and if you renew you keep that same price for another 6 months.",
                     "lead_title": "CORE LEADERSHIP",
-                    "bio_joseph": "Software architect. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient architecture for multi-location businesses. Self-taught since 2016.",
+                    "bio_joseph": "Software architect with 7+ years of experience in financial, pharmaceutical and distribution systems. Led platforms processing millions of documents, rescued critical cloud systems without their source code, and designed resilient multi-location architecture. Self-taught since 2016.",
                     "bio_jose": "Global Growth Strategist. Bridging complex technology with real-world market demands.",
                     "alliances_sub": "Clients · Partners · Impact",
                     "alliances_title": "LET'S TALK",
@@ -1404,6 +1412,8 @@
                     "pl_x_5": "Coordinación técnica de desarrolladores y gestión de deuda técnica",
                     "pl_x_no": "No incluye personal exclusivo ni proyectos fuera del alcance acordado.",
                     "plans_note": "Precios en pesos con IVA incluido, pago mensual por adelantado. Precio congelado: plazo de 6 meses y renuevas al mismo precio; si terminas antes se pagan 1.5 mensualidades o los meses que falten, lo que resulte menor. Mes a mes: mínimo 3 meses al precio de lista vigente. Infraestructura, licencias y servicios de terceros no incluidos. El código es tuyo.",
+                    "pdf_plans": "Descargar planes (PDF)",
+                    "pdf_extra": "Servicios extra (PDF)",
                     "method_title": "CÓMO TRABAJAMOS",
                     "method_sub": "Siempre tienes visibilidad. Tus sistemas, repos y entregables quedan bajo tu control.",
                     "step1_t": "Diagnóstico",
@@ -1433,7 +1443,7 @@
                     "guarantee_t": "Congela tu precio por 6 meses",
                     "guarantee_d": "Los precios de lista se actualizan cada semestre por tipo de cambio, costo de herramientas e inflación. Con el contrato de 6 meses tu mensualidad queda fija durante todo el plazo y, si renuevas, conservas ese mismo precio otros 6 meses.",
                     "lead_title": "LIDERAZGO",
-                    "bio_joseph": "Arquitecto de software. Lideró plataformas que procesan millones de documentos, rescató sistemas críticos en la nube sin su código fuente y diseñó arquitectura resiliente para empresas con varias sucursales. Autodidacta desde 2016.",
+                    "bio_joseph": "Arquitecto de software con más de 7 años de experiencia en sistemas financieros, farmacéuticos y de distribución. Lideró plataformas que procesan millones de documentos, rescató sistemas críticos en la nube sin su código fuente y diseñó arquitectura resiliente multisucursal. Autodidacta desde 2016.",
                     "bio_jose": "Estratega de Crecimiento Global. Conectando tecnología compleja con las demandas reales del mercado.",
                     "alliances_sub": "Clientes · Aliados · Impacto",
                     "alliances_title": "HABLEMOS",
